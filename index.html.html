@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="타투메이킹 - 부산 블랙&그레이 리얼리즘 타투 전문, 미니타투부터 대형작업까지">
+    <meta name="keywords" content="부산타투, 타투메이킹, 블랙앤그레이, 이레즈미, 폴리네시안, 리얼리즘, 미니타투">
+    <title>TATTOO MAKING | 타투메이킹</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- Netlify Identity Widget -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+</head>
+<body>
+    <!-- Top Logo -->
+    <div class="top-logo">
+        <h1>TATTOO MAKING</h1>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#home" class="nav-link">HOME</a></li>
+                <li><a href="#portfolio" class="nav-link">포트폴리오</a></li>
+                <li><a href="#design" class="nav-link">작업 도안</a></li>
+                <li><a href="#pricing" class="nav-link">가격</a></li>
+                <li><a href="#reviews" class="nav-link">후기</a></li>
+                <li><a href="#contact" class="nav-link">예약</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-background">
+            <!-- 블랙앤그레이 리얼리즘 - 외국 배우 등판 -->
+            <div class="hero-image active" style="background-image: url('https://images.unsplash.com/photo-1568515387631-8b650bbcdb90?w=1920&q=80');">
+                <div class="hero-image-caption">블랙&그레이 리얼리즘</div>
+            </div>
+            <!-- 폴리네시안 타투 -->
+            <div class="hero-image" style="background-image: url('https://images.unsplash.com/photo-1590246814883-57c511a8c828?w=1920&q=80');">
+                <div class="hero-image-caption">폴리네시안 트라이벌</div>
+            </div>
+            <!-- 이레즈미 -->
+            <div class="hero-image" style="background-image: url('https://images.unsplash.com/photo-1611501275019-9b5cda53c1af?w=1920&q=80');">
+                <div class="hero-image-caption">이레즈미</div>
+            </div>
+            <!-- 대형 작업 -->
+            <div class="hero-image" style="background-image: url('https://images.unsplash.com/photo-1598974357801-cbce8c0e2415?w=1920&q=80');">
+                <div class="hero-image-caption">대형 작업</div>
+            </div>
+        </div>
+        <div class="hero-overlay"></div>
+        
+        <!-- Hero Buttons -->
+        <div class="hero-buttons">
+            <a href="https://open.kakao.com/o/s6IlPGxb" target="_blank" class="btn-hero btn-primary">
+                <i class="fas fa-comment-dots"></i> 예약 문의
+            </a>
+            <a href="#portfolio" class="btn-hero btn-secondary">
+                <i class="fas fa-images"></i> 포트폴리오
+            </a>
+        </div>
+        
+        <div class="scroll-indicator">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section class="portfolio-section" id="portfolio">
+        <div class="container">
+            <h2 class="section-title">PORTFOLIO</h2>
+            <p class="section-subtitle">장르별 시술 이미지</p>
+
+            <div class="portfolio-filters">
+                <button class="filter-btn active" data-filter="all">전체</button>
+                <button class="filter-btn" data-filter="irezumi">이레즈미</button>
+                <button class="filter-btn" data-filter="polynesian">폴리네시안</button>
+                <button class="filter-btn" data-filter="realism">리얼리즘</button>
+                <button class="filter-btn" data-filter="mini">미니 & 감성</button>
+                <button class="filter-btn" data-filter="large">대형작업</button>
+            </div>
+
+            <div class="portfolio-grid">
+                <!-- 이레즈미 -->
+                <div class="portfolio-item" data-category="irezumi">
+                    <img src="https://images.unsplash.com/photo-1565058935817-a3b8a2f5d0c4?w=800&q=80" alt="이레즈미 - 용">
+                    <div class="portfolio-overlay">
+                        <h3>이레즈미 - 용</h3>
+                        <p>풀슬리브</p>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-category="irezumi">
+                    <img src="https://images.unsplash.com/photo-1611501275019-9b5cda53c1af?w=800&q=80" alt="이레즈미 - 호랑이">
+                    <div class="portfolio-overlay">
+                        <h3>이레즈미 - 호랑이</h3>
+                        <p>등판</p>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-category="irezumi">
+                    <img src="https://images.unsplash.com/photo-1598974357801-cbce8c0e2415?w=800&q=80" alt="이레즈미 - 사무라이">
+                    <div class="portfolio-overlay">
+                        <h3>이레즈미 - 사무라이</h3>
+                        <p>가슴</p>
+                    </div>
+                </div>
+
+                <!-- 폴리네시안 -->
+                <div class="portfolio-item" data-category="polynesian">
+                    <img src="https://images.unsplash.com/photo-1565058935817-a3b8a2f5d0c4?w=800&q=80" alt="폴리네시안 - 트라이벌">
+                    <div class="portfolio-overlay">
+                        <h3>폴리네시안</h3>
+                        <p>슬리브</p>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-category="polynesian">
+                    <img src="https://images.unsplash.com/photo-1590246814883-57c511a8c828?w=800&q=80" alt="폴리네시안 패턴">
+                    <div class="portfolio-overlay">
+                        <h3>폴리네시안 패턴</h3>
+                        <p>어깨</p>
+                    </div>
+                </div>
+
+                <!-- 리얼리즘 -->
+                <div class="portfolio-item" data-category="realism">
+                    <img src="https://images.unsplash.com/photo-1568515387631-8b650bbcdb90?w=800&q=80" alt="블랙앤그레이 초상화">
+                    <div class="portfolio-overlay">
+                        <h3>초상화</h3>
+                        <p>리얼리즘</p>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-category="realism">
+                    <img src="https://images.unsplash.com/photo-1611501275019-9b5cda53c1af?w=800&q=80" alt="동물 리얼리즘">
+                    <div class="portfolio-overlay">
+                        <h3>동물 리얼리즘</h3>
+                        <p>블랙&그레이</p>
+                    </div>
+                </div>
+
+                <!-- 미니 & 감성 -->
+                <div class="portfolio-item" data-category="mini">
+                    <img src="https://images.unsplash.com/photo-1565058935817-a3b8a2f5d0c4?w=800&q=80" alt="미니 레터링">
+                    <div class="portfolio-overlay">
+                        <h3>미니 레터링</h3>
+                        <p>손목</p>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-category="mini">
+                    <img src="https://images.unsplash.com/photo-1590246814883-57c511a8c828?w=800&q=80" alt="감성 라인워크">
+                    <div class="portfolio-overlay">
+                        <h3>감성 라인워크</h3>
+                        <p>팔</p>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-category="mini">
+                    <img src="https://images.unsplash.com/photo-1598974357801-cbce8c0e2415?w=800&q=80" alt="미니멀 심볼">
+                    <div class="portfolio-overlay">
+                        <h3>미니멀 심볼</h3>
+                        <p>발목</p>
+                    </div>
+                </div>
+
+                <!-- 대형작업 -->
+                <div class="portfolio-item" data-category="large">
+                    <img src="https://images.unsplash.com/photo-1611501275019-9b5cda53c1af?w=800&q=80" alt="풀슬리브">
+                    <div class="portfolio-overlay">
+                        <h3>풀슬리브</h3>
+                        <p>대형 작업</p>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-category="large">
+                    <img src="https://images.unsplash.com/photo-1598974357801-cbce8c0e2415?w=800&q=80" alt="등판">
+                    <div class="portfolio-overlay">
+                        <h3>등판</h3>
+                        <p>대형 작업</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Design Section -->
+    <section class="design-section" id="design">
+        <div class="container">
+            <h2 class="section-title">DESIGN</h2>
+            <p class="section-subtitle">작업 도안</p>
+
+            <div class="design-grid">
+                <div class="design-item">
+                    <img src="https://images.unsplash.com/photo-1590246814883-57c511a8c828?w=600&q=80" alt="도안 1">
+                    <div class="design-overlay">
+                        <h3>커스텀 도안</h3>
+                    </div>
+                </div>
+                <div class="design-item">
+                    <img src="https://images.unsplash.com/photo-1611501275019-9b5cda53c1af?w=600&q=80" alt="도안 2">
+                    <div class="design-overlay">
+                        <h3>커스텀 도안</h3>
+                    </div>
+                </div>
+                <div class="design-item">
+                    <img src="https://images.unsplash.com/photo-1598974357801-cbce8c0e2415?w=600&q=80" alt="도안 3">
+                    <div class="design-overlay">
+                        <h3>커스텀 도안</h3>
+                    </div>
+                </div>
+                <div class="design-item">
+                    <img src="https://images.unsplash.com/photo-1565058935817-a3b8a2f5d0c4?w=600&q=80" alt="도안 4">
+                    <div class="design-overlay">
+                        <h3>커스텀 도안</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="design-note">
+                <p><i class="fas fa-pencil-ruler"></i> 모든 도안은 1:1 맞춤 제작됩니다</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing-section" id="pricing">
+        <div class="container">
+            <h2 class="section-title">PRICING</h2>
+            <p class="section-subtitle">참고 가격 안내</p>
+
+            <div class="pricing-note">
+                <p><i class="fas fa-exclamation-circle"></i> 디자인 복잡도와 작업 시간에 따라 달라질 수 있습니다</p>
+            </div>
+
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-icon">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <h3>미니 사이즈</h3>
+                    <p class="pricing-size">1cm ~ 5cm</p>
+                    <p class="pricing-price">10만원 ~</p>
+                    <ul class="pricing-features">
+                        <li>간단한 레터링</li>
+                        <li>심플 라인워크</li>
+                        <li>작은 심볼</li>
+                    </ul>
+                </div>
+
+                <div class="pricing-card">
+                    <div class="pricing-icon">
+                        <i class="fas fa-hand-paper"></i>
+                    </div>
+                    <h3>손바닥 사이즈</h3>
+                    <p class="pricing-size">5cm ~ 10cm</p>
+                    <p class="pricing-price">20만원 ~</p>
+                    <ul class="pricing-features">
+                        <li>미디엄 디테일</li>
+                        <li>레터링 + 도안</li>
+                        <li>동물/인물</li>
+                    </ul>
+                </div>
+
+                <div class="pricing-card featured">
+                    <div class="pricing-badge">인기</div>
+                    <div class="pricing-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3>A4 사이즈</h3>
+                    <p class="pricing-size">10cm ~ 20cm</p>
+                    <p class="pricing-price">40만원 ~</p>
+                    <ul class="pricing-features">
+                        <li>풀 디테일</li>
+                        <li>복잡한 구도</li>
+                        <li>하이 퀄리티</li>
+                    </ul>
+                </div>
+
+                <div class="pricing-card">
+                    <div class="pricing-icon">
+                        <i class="fas fa-fire"></i>
+                    </div>
+                    <h3>대형 사이즈</h3>
+                    <p class="pricing-size">20cm 이상</p>
+                    <p class="pricing-price">80만원 ~</p>
+                    <ul class="pricing-features">
+                        <li>풀슬리브</li>
+                        <li>등판/가슴</li>
+                        <li>초정밀 작업</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pricing-additional">
+                <h3>추가 서비스</h3>
+                <ul>
+                    <li><i class="fas fa-check"></i> 커버업: 기존 타투 상태에 따라 견적</li>
+                    <li><i class="fas fa-check"></i> 리터치: 무료 (시술 후 1개월 이내)</li>
+                    <li><i class="fas fa-check"></i> 도안 제작: 별도 문의</li>
+                    <li><i class="fas fa-check"></i> 카드 결제 가능</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section class="reviews-section" id="reviews">
+        <div class="container">
+            <h2 class="section-title">REVIEWS</h2>
+            <p class="section-subtitle">고객 후기</p>
+
+            <div class="reviews-grid">
+                <div class="review-card">
+                    <div class="review-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="review-text">"디테일이 정말 섬세하고 꼼꼼하게 작업해주셨어요. 블랙앤그레이 최고입니다!"</p>
+                    <p class="review-author">김** 님</p>
+                    <p class="review-work">이레즈미 풀슬리브</p>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="review-text">"처음 타투였는데 친절하게 설명해주시고 위생적으로 작업해주셔서 만족합니다."</p>
+                    <p class="review-author">이** 님</p>
+                    <p class="review-work">미니 레터링</p>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="review-text">"폴리네시안 패턴 정말 멋지게 나왔어요. 기대 이상입니다!"</p>
+                    <p class="review-author">박** 님</p>
+                    <p class="review-work">폴리네시안 슬리브</p>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="review-text">"커버업 작업 완벽하게 해주셨어요. 이제 옛날 타투는 안 보입니다!"</p>
+                    <p class="review-author">최** 님</p>
+                    <p class="review-work">커버업</p>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="review-text">"대형 작업인데도 통증 관리 잘 해주시고 퀄리티가 엄청납니다."</p>
+                    <p class="review-author">정** 님</p>
+                    <p class="review-work">등판 이레즈미</p>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="review-text">"감성 타투 너무 예뻐요. 주변에서 물어보면 추천하고 있어요!"</p>
+                    <p class="review-author">강** 님</p>
+                    <p class="review-work">감성 라인워크</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section" id="contact">
+        <div class="container">
+            <h2 class="section-title">CONTACT</h2>
+            <p class="section-subtitle">예약 및 문의</p>
+
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3>타투메이킹</h3>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h4>위치</h4>
+                            <p>부산광역시</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <h4>전화</h4>
+                            <p><a href="tel:010-2254-0690">010-2254-0690</a></p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-comment"></i>
+                        <div>
+                            <h4>카카오톡</h4>
+                            <p>ID: making9</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fab fa-instagram"></i>
+                        <div>
+                            <h4>인스타그램</h4>
+                            <p><a href="https://www.instagram.com/tattoo_making" target="_blank">@tattoo_making</a></p>
+                        </div>
+                    </div>
+
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/tattoo_making" target="_blank" aria-label="인스타그램">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="tel:010-2254-0690" aria-label="전화">
+                            <i class="fas fa-phone"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="contact-cta">
+                    <h3>지금 바로 예약하세요</h3>
+                    <p>오픈채팅방에서 빠르고 편리하게 상담받으세요</p>
+                    <a href="https://open.kakao.com/o/s6IlPGxb" target="_blank" class="btn-kakao">
+                        <i class="fas fa-comment-dots"></i> 오픈채팅 예약 문의
+                    </a>
+                    <p class="contact-note">* 실시간 상담 가능 * 작업물 확인 가능</p>
+                </div>
+
+                <div class="contact-map">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d204419.44310813413!2d128.94630425!3d35.179554449999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3568eb490233e2ff%3A0xf4f76d7e7c2cf000!2z67aA7IKw6rSR7Jet7IucIOu2gOyCsOq1rA!5e0!3m2!1sko!2skr!4v1234567890123!5m2!1sko!2skr" 
+                        width="100%" 
+                        height="400" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 TATTOO MAKING. All Rights Reserved.</p>
+            <p>부산 블랙&그레이 리얼리즘 타투 전문</p>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <button id="scrollTopBtn" class="scroll-top-btn" aria-label="맨 위로">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- JavaScript -->
+    <script src="js/main.js"></script>
+    
+    <!-- Netlify Identity Widget -->
+    <script>
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on("init", user => {
+          if (!user) {
+            window.netlifyIdentity.on("login", () => {
+              document.location.href = "/admin/";
+            });
+          }
+        });
+      }
+    </script>
+</body>
+</html>

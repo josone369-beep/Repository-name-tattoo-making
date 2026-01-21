@@ -1,0 +1,76 @@
+     1	backend:
+     2	  name: git-gateway
+     3	  branch: main
+     4	
+     5	media_folder: "images/uploads"
+     6	public_folder: "/images/uploads"
+     7	
+     8	collections:
+     9	  - name: "portfolio"
+    10	    label: "포트폴리오"
+    11	    folder: "content/portfolio"
+    12	    create: true
+    13	    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    14	    fields:
+    15	      - {label: "제목", name: "title", widget: "string"}
+    16	      - {label: "카테고리", name: "category", widget: "select", options: ["irezumi", "polynesian", "realism", "mini", "large"]}
+    17	      - {label: "설명", name: "description", widget: "string"}
+    18	      - {label: "이미지", name: "image", widget: "image"}
+    19	      - {label: "게시일", name: "date", widget: "datetime"}
+    20	
+    21	  - name: "hero"
+    22	    label: "메인 슬라이더"
+    23	    folder: "content/hero"
+    24	    create: true
+    25	    slug: "{{slug}}"
+    26	    fields:
+    27	      - {label: "캡션", name: "caption", widget: "string"}
+    28	      - {label: "이미지", name: "image", widget: "image"}
+    29	      - {label: "순서", name: "order", widget: "number", default: 1}
+    30	
+    31	  - name: "design"
+    32	    label: "작업 도안"
+    33	    folder: "content/design"
+    34	    create: true
+    35	    slug: "{{slug}}"
+    36	    fields:
+    37	      - {label: "제목", name: "title", widget: "string"}
+    38	      - {label: "이미지", name: "image", widget: "image"}
+    39	
+    40	  - name: "reviews"
+    41	    label: "고객 후기"
+    42	    folder: "content/reviews"
+    43	    create: true
+    44	    slug: "{{slug}}"
+    45	    fields:
+    46	      - {label: "고객명", name: "author", widget: "string"}
+    47	      - {label: "후기 내용", name: "text", widget: "text"}
+    48	      - {label: "작업 내용", name: "work", widget: "string"}
+    49	      - {label: "평점", name: "rating", widget: "number", default: 5, min: 1, max: 5}
+    50	
+    51	  - name: "settings"
+    52	    label: "홈페이지 설정"
+    53	    files:
+    54	      - label: "연락처 정보"
+    55	        name: "contact"
+    56	        file: "content/settings/contact.json"
+    57	        fields:
+    58	          - {label: "전화번호", name: "phone", widget: "string"}
+    59	          - {label: "카카오톡 ID", name: "kakao_id", widget: "string"}
+    60	          - {label: "오픈채팅 URL", name: "openchat_url", widget: "string"}
+    61	          - {label: "인스타그램", name: "instagram", widget: "string"}
+    62	          - {label: "주소", name: "address", widget: "string"}
+    63	      
+    64	      - label: "가격 정보"
+    65	        name: "pricing"
+    66	        file: "content/settings/pricing.json"
+    67	        fields:
+    68	          - label: "가격표"
+    69	            name: "prices"
+    70	            widget: "list"
+    71	            fields:
+    72	              - {label: "이름", name: "name", widget: "string"}
+    73	              - {label: "사이즈", name: "size", widget: "string"}
+    74	              - {label: "가격", name: "price", widget: "string"}
+    75	              - {label: "설명", name: "features", widget: "list"}
+    76	
