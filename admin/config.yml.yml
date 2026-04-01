@@ -1,0 +1,17 @@
+backend:
+  name: test-repo
+
+media_folder: "images/uploads"
+public_folder: "/images/uploads"
+
+locale: 'ko'
+
+collections:
+  - name: "portfolio"
+    label: "포트폴리오"
+    folder: "content/portfolio"
+    create: true
+    fields:
+      - {label: "제목", name: "title", widget: "string"}
+      - {label: "카테고리", name: "category", widget: "select", options: ["이레즈미", "블랙워크", "리얼리즘", "폴리네시안", "커버업", "대형작업"]}
+      - {label: "이미지", name: "image", widget: "image"}
