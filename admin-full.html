@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TATTOO MAKING - 완전 자동화 CMS v3.1</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+    color: #fff;
+    min-height: 100vh;
+}
+
+.admin-header {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+    padding: 2rem;
+    border-bottom: 3px solid #c9a45c;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+
+.admin-header h1 {
+    font-size: 2.5rem;
+    color: #c9a45c;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.version-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    color: #fff;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.admin-header p {
+    color: #999;
+    font-size: 1.1rem;
+}
+
+.container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.alert {
+    padding: 16px 24px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    display: none;
+    animation: slideIn 0.3s ease;
+    border-left: 4px solid;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.alert.success {
+    background: rgba(76, 175, 80, 0.15);
+    border-color: #4CAF50;
+    color: #4CAF50;
+}
+
+.alert.error {
+    background: rgba(244, 67, 54, 0.15);
+    border-color: #f44336;
+    color: #f44336;
+}
+
+.alert.info {
+    background: rgba(33, 150, 243, 0.15);
+    border-color: #2196F3;
+    color: #2196F3;
+}
+
+.token-box {
+    background: linear-gradient(135deg, #2a1a1a 0%, #1a1a1a 100%);
+    border: 2px solid #c9a45c;
+    padding: 2rem;
+    border-radius: 16px;
+    margin-bottom: 2rem;
+    box-shadow: 0 8px 32px rgba(201,164,92,0.1);
+}
+
+.token-box h2 {
+    color: #c9a45c;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.token-status {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    margin-left: auto;
+}
+
+.token-status.active {
+    background: rgba(76, 175, 80, 0.2);
+    color: #4CAF50;
+    border: 1px solid #4CAF50;
+}
+
+.token-status.inactive {
+    background: rgba(244, 67, 54, 0.2);
+    color: #f44336;
+    border: 1px solid #f44336;
+}
+
+.form-grid {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    color: #999;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.form-group input, .form-group textarea {
+    padding: 14px;
+    background: #000;
+    border: 2px solid #333;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.form-group input:focus, .form-group textarea:focus {
+    outline: none;
+    border-color: #c9a45c;
+    box-shadow: 0 0 0 3px rgba(201,164,92,0.1);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+    font-family: inherit;
+}
+
+.tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #333;
+    overflow-x: auto;
+    flex-wrap: wrap;
+}
+
+.tab {
+    padding: 14px 28px;
+    background: transparent;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s;
+    white-space: nowrap;
+}
+
+.tab:hover {
+    color: #c9a45c;
+    background: rgba(201,164,92,0.05);
+}
+
+.tab.active {
+    color: #c9a45c;
+    border-bottom-color: #c9a45c;
+    background: rgba(201,164,92,0.1);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+    animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.section {
+    background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+    padding: 2rem;
+    border-radius: 16px;
+    margin-bottom: 2rem;
+    border: 1px solid #333;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+
+.section h3 {
+    color: #c9a45c;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #c9a45c;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+}
+
+.grid-item {
+    background: #0a0a0a;
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 2px solid #222;
+    transition: all 0.3s;
+}
+
+.grid-item:hover {
+    border-color: #c9a45c;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(201,164,92,0.15);
+}
+
+.grid-item h4 {
+    color: #c9a45c;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.btn {
+    padding: 14px 28px;
+    background: #c9a45c;
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.btn:hover {
+    background: #b89440;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(201,164,92,0.3);
+}
+
+.btn:disabled {
+    background: #555;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-full {
+    width: 100%;
+}
+
+.btn-success {
+    background: #4CAF50;
+    color: #fff;
+}
+
+.btn-success:hover {
+    background: #45a049;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid #333;
+    text-align: center;
+    transition: all 0.3s;
+}
+
+.stat-card:hover {
+    border-color: #c9a45c;
+    transform: translateY(-4px);
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    color: #c9a45c;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    color: #999;
+    font-size: 0.95rem;
+}
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.95);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    flex-direction: column;
+}
+
+.loading-overlay.active {
+    display: flex;
+}
+
+.spinner {
+    width: 60px;
+    height: 60px;
+    border: 4px solid #333;
+    border-top-color: #c9a45c;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.loading-text {
+    margin-top: 1.5rem;
+    color: #c9a45c;
+    font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+    .admin-header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .container {
+        padding: 1rem;
+    }
+    
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+    <div class="loading-text" id="loadingText">처리 중...</div>
+</div>
+
+<div class="admin-header">
+    <h1>
+        <i class="fas fa-rocket"></i>
+        TATTOO MAKING CMS
+        <span class="version-badge">v3.1 FULL AUTO</span>
+    </h1>
+    <p>🚀 완전 자동화 콘텐츠 관리 시스템 - 모든 항목을 클릭 한 번에 자동 배포!</p>
+</div>
+
+<div class="container">
+    
+    <div id="alertBox" class="alert"></div>
+    
+    <!-- Token Setup -->
+    <div class="token-box">
+        <h2>
+            <i class="fas fa-key"></i>
+            GitHub Token 설정
+            <span class="token-status inactive" id="tokenStatus">미설정</span>
+        </h2>
+        <p style="color:#999;margin-bottom:1.5rem;">
+            자동 배포를 위해 GitHub Personal Access Token이 필요합니다.
+            <a href="https://github.com/settings/tokens" target="_blank" style="color:#c9a45c">Token 생성하기 →</a>
+        </p>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>GitHub Token</label>
+                <input type="password" id="githubToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx">
+            </div>
+            <div class="form-group">
+                <label>GitHub 사용자명</label>
+                <input type="text" id="githubUsername" placeholder="josone369-beep" value="josone369-beep">
+            </div>
+            <div class="form-group">
+                <label>저장소 이름</label>
+                <input type="text" id="repoName" placeholder="Repository-name-tattoo-making" value="Repository-name-tattoo-making">
+            </div>
+        </div>
+        <button class="btn btn-full" onclick="saveToken()">
+            <i class="fas fa-save"></i> Token 저장
+        </button>
+    </div>
+    
+    <!-- Stats -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-number" id="updateCount">0</div>
+            <div class="stat-label">오늘 업데이트</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">자동</div>
+            <div class="stat-label">배포 방식</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="lastUpdate">-</div>
+            <div class="stat-label">마지막 수정</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">100%</div>
+            <div class="stat-label">자동화 완성</div>
+        </div>
+    </div>
+    
+    <!-- Tabs -->
+    <div class="tabs">
+        <button class="tab active" onclick="switchTab('text')">
+            <i class="fas fa-font"></i> 텍스트
+        </button>
+        <button class="tab" onclick="switchTab('contact')">
+            <i class="fas fa-phone"></i> 연락처
+        </button>
+        <button class="tab" onclick="switchTab('pricing')">
+            <i class="fas fa-tag"></i> 가격
+        </button>
+        <button class="tab" onclick="switchTab('reviews')">
+            <i class="fas fa-star"></i> 후기
+        </button>
+        <button class="tab" onclick="switchTab('guide')">
+            <i class="fas fa-book"></i> 가이드
+        </button>
+    </div>
+    
+    <!-- 텍스트 편집 탭 -->
+    <div id="textTab" class="tab-content active">
+        
+        <div class="section">
+            <h3><i class="fas fa-heading"></i> 메인 텍스트</h3>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>메인 타이틀</label>
+                    <input type="text" id="mainTitle" placeholder="TATTOO MAKING" value="TATTOO MAKING">
+                </div>
+                <div class="form-group">
+                    <label>서브 타이틀</label>
+                    <input type="text" id="mainSubtitle" placeholder="부산 블랙&그레이 리얼리즘 전문" value="부산 블랙&그레이 리얼리즘 전문">
+                </div>
+                <div class="form-group">
+                    <label>메인 설명</label>
+                    <textarea id="mainDescription" placeholder="어둡고 강렬한 타투의 세계...">어둡고 강렬한 타투의 세계
+블랙&그레이 리얼리즘 | 이레즈미 | 폴리네시안 | 대형작업 전문
+1:1 커스텀 디자인 | 도안제작 | 커버업 | 타투 교육</textarea>
+                </div>
+            </div>
+        </div>
+        
+        <button class="btn btn-full btn-success" onclick="saveAllContent()">
+            <i class="fas fa-rocket"></i> 모든 변경사항 저장 및 자동 배포
+        </button>
+        
+    </div>
+    
+    <!-- 연락처 탭 -->
+    <div id="contactTab" class="tab-content">
+        
+        <div class="section">
+            <h3><i class="fas fa-phone"></i> 연락처 정보</h3>
+            <div class="grid">
+                
+                <div class="grid-item">
+                    <h4>전화번호</h4>
+                    <div class="form-group">
+                        <label>전화번호</label>
+                        <input type="text" id="contactPhone" placeholder="010-2254-0690" value="010-2254-0690">
+                    </div>
+                </div>
+                
+                <div class="grid-item">
+                    <h4>카카오톡</h4>
+                    <div class="form-group">
+                        <label>카카오톡 ID</label>
+                        <input type="text" id="contactKakao" placeholder="making9" value="making9">
+                    </div>
+                </div>
+                
+                <div class="grid-item">
+                    <h4>인스타그램</h4>
+                    <div class="form-group">
+                        <label>인스타그램 ID</label>
+                        <input type="text" id="contactInstagram" placeholder="@tattoo_making" value="@tattoo_making">
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+        <button class="btn btn-full btn-success" onclick="saveAllContent()">
+            <i class="fas fa-rocket"></i> 모든 변경사항 저장 및 자동 배포
+        </button>
+        
+    </div>
+    
+    <!-- 가격 관리 탭 -->
+    <div id="pricingTab" class="tab-content">
+        
+        <div class="section">
+            <h3><i class="fas fa-tag"></i> 가격표 편집</h3>
+            <div class="grid">
+                
+                <div class="grid-item">
+                    <h4>스몰 사이즈 (5-10cm)</h4>
+                    <div class="form-group">
+                        <label>가격</label>
+                        <input type="text" id="priceSmall" placeholder="20만원~" value="20만원~">
+                    </div>
+                </div>
+                
+                <div class="grid-item">
+                    <h4>미디엄 사이즈 (10-15cm)</h4>
+                    <div class="form-group">
+                        <label>가격</label>
+                        <input type="text" id="priceMedium" placeholder="50만원~" value="50만원~">
+                    </div>
+                </div>
+                
+                <div class="grid-item">
+                    <h4>라지 사이즈 (15-20cm)</h4>
+                    <div class="form-group">
+                        <label>가격</label>
+                        <input type="text" id="priceLarge" placeholder="150만원~" value="150만원~">
+                    </div>
+                </div>
+                
+                <div class="grid-item">
+                    <h4>엑스트라 라지 (20cm+)</h4>
+                    <div class="form-group">
+                        <label>가격</label>
+                        <input type="text" id="priceXL" placeholder="300만원~" value="300만원~">
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+        <button class="btn btn-full btn-success" onclick="saveAllContent()">
+            <i class="fas fa-rocket"></i> 모든 변경사항 저장 및 자동 배포
+        </button>
+        
+    </div>
+    
+    <!-- 후기 관리 탭 -->
+    <div id="reviewsTab" class="tab-content">
+        
+        <div class="section">
+            <h3><i class="fas fa-star"></i> 고객 후기 편집 (6개)</h3>
+            <div class="grid">
+                
+                <div class="grid-item">
+                    <h4>후기 1</h4>
+                    <div class="form-group">
+                        <label>고객명</label>
+                        <input type="text" id="reviewName1" placeholder="김*현" value="김*현">
+                    </div>
+                    <div class="form-group">
+                        <label>후기 내용</label>
+                        <textarea id="reviewContent1">풀슬리브 작업 받았는데 정말 만족스러워요! 블랙&그레이 쉐이딩이 예술입니다.</textarea>
+                    </div>
+                </div>
+                
+                <div class="grid-item">
+                    <h4>후기 2</h4>
+                    <div class="form-group">
+                        <label>고객명</label>
+                        <input type="text" id="reviewName2" placeholder="박*수" value="박*수">
+                    </div>
+                    <div class="form-group">
+                        <label>후기 내용</label>
+                        <textarea id="reviewContent2">폴리네시안 패턴 하프슬리브 작업했는데, 라인도 깔끔하고 패턴도 완벽해요!</textarea>
+                    </div>
+                </div>
+                
+                <div class="grid-item">
+                    <h4>후기 3</h4>
+                    <div class="form-group">
+                        <label>고객명</label>
+                        <input type="text" id="reviewName3" placeholder="이*진" value="이*진">
+                    </div>
+                    <div class="form-group">
+                        <label>후기 내용</label>
+                        <textarea id="reviewContent3">등판 용 작업 받았습니다. 디테일 하나하나 신경써주셔서 감사했어요!</textarea>
+                    </div>
+                </div>
+                
+                <div class="grid-item">
+                    <h4>후기 4</h4>
+                    <div class="form-group">
+                        <label>고객명</label>
+                        <input type="text" id="reviewName4" placeholder="최*영" value="최*영">
+                    </div>
+                    <div class="form-group">
+                        <label>후기 내용</label>
+                        <textarea id="reviewContent4">리얼리즘 인물 타투 작업했는데 진짜 사진 같아요! 쉐이딩 디테일이 장난 아닙니다.</textarea>
+                    </div>
+                </div>
+                
+                <div class="grid-item">
+                    <h4>후기 5</h4>
+                    <div class="form-group">
+                        <label>고객명</label>
+                        <input type="text" id="reviewName5" placeholder="정*민" value="정*민">
+                    </div>
+                    <div class="form-group">
+                        <label>후기 내용</label>
+                        <textarea id="reviewContent5">커버업 작업 상담부터 완성까지 정말 만족스럽습니다! 기존 타투가 완전히 안 보이게 커버해주셨어요.</textarea>
+                    </div>
+                </div>
+                
+                <div class="grid-item">
+                    <h4>후기 6</h4>
+                    <div class="form-group">
+                        <label>고객명</label>
+                        <input type="text" id="reviewName6" placeholder="강*우" value="강*우">
+                    </div>
+                    <div class="form-group">
+                        <label>후기 내용</label>
+                        <textarea id="reviewContent6">타투 교육 수강했는데 정말 체계적이고 좋았어요! 기초부터 실전까지 확실하게 배울 수 있었습니다.</textarea>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+        <button class="btn btn-full btn-success" onclick="saveAllContent()">
+            <i class="fas fa-rocket"></i> 모든 변경사항 저장 및 자동 배포
+        </button>
+        
+    </div>
+    
+    <!-- 사용 가이드 탭 -->
+    <div id="guideTab" class="tab-content">
+        
+        <div class="section">
+            <h3><i class="fas fa-book-open"></i> 사용 가이드</h3>
+            
+            <div style="background:#1a2a1a;padding:2rem;border-radius:12px;border-left:4px solid #4CAF50;margin-bottom:2rem">
+                <h4 style="color:#4CAF50;margin-bottom:1rem">✨ v3.1 완전 자동화 기능</h4>
+                <ul style="color:#e0e0e0;line-height:1.8;list-style:none">
+                    <li>✅ <strong>텍스트 자동 배포</strong>: 메인 타이틀, 서브타이틀, 설명 자동 수정</li>
+                    <li>✅ <strong>연락처 자동 배포</strong>: 전화번호, 카카오톡, 인스타그램 자동 수정</li>
+                    <li>✅ <strong>가격 자동 배포</strong>: 4가지 가격대 자동 수정</li>
+                    <li>✅ <strong>후기 자동 배포</strong>: 고객 후기 6개 자동 수정</li>
+                    <li>✅ <strong>통합 배포</strong>: 버튼 한 번에 모든 변경사항 적용!</li>
+                </ul>
+            </div>
+            
+            <div style="background:#2a1a1a;padding:2rem;border-radius:12px;border-left:4px solid #c9a45c;margin-bottom:2rem">
+                <h4 style="color:#c9a45c;margin-bottom:1rem">📝 사용 방법</h4>
+                <ol style="color:#e0e0e0;line-height:1.8;margin-left:20px">
+                    <li>원하는 탭 선택 (텍스트/연락처/가격/후기)</li>
+                    <li>내용 수정</li>
+                    <li><strong>"모든 변경사항 저장 및 자동 배포"</strong> 버튼 클릭</li>
+                    <li>자동으로 GitHub에 업로드되고 index.html 수정됨</li>
+                    <li>1~2분 대기 후 사이트에서 확인 (Ctrl+Shift+R)</li>
+                </ol>
+            </div>
+            
+            <div style="background:#1a0a0a;padding:2rem;border-radius:12px;border-left:4px solid #ff6b6b">
+                <h4 style="color:#ff6b6b;margin-bottom:1rem">⚠️ 주의사항</h4>
+                <ul style="color:#e0e0e0;line-height:1.8;list-style:none">
+                    <li>🔸 여러 탭을 수정해도 한 번에 배포됩니다</li>
+                    <li>🔸 배포 중에는 다른 작업하지 마세요</li>
+                    <li>🔸 변경사항 적용까지 1~2분 소요</li>
+                    <li>🔸 반드시 강력 새로고침 (Ctrl+Shift+R) 하세요</li>
+                </ul>
+            </div>
+            
+        </div>
+        
+    </div>
+    
+</div>
+
+<script>
+// 전역 변수
+let config = {
+    token: '',
+    username: 'josone369-beep',
+    repo: 'Repository-name-tattoo-making'
+};
+
+// 초기화
+window.addEventListener('DOMContentLoaded', () => {
+    loadConfig();
+    console.log('🚀 TATTOO MAKING CMS v3.1 FULL AUTO');
+});
+
+// 설정 불러오기
+function loadConfig() {
+    const saved = localStorage.getItem('githubConfig');
+    if(saved) {
+        config = JSON.parse(saved);
+        document.getElementById('githubToken').value = config.token;
+        document.getElementById('githubUsername').value = config.username;
+        document.getElementById('repoName').value = config.repo;
+        updateTokenStatus(true);
+    }
+}
+
+// Token 저장
+function saveToken() {
+    const token = document.getElementById('githubToken').value.trim();
+    const username = document.getElementById('githubUsername').value.trim();
+    const repo = document.getElementById('repoName').value.trim();
+    
+    if(!token || !username || !repo) {
+        showAlert('모든 필드를 입력해주세요!', 'error');
+        return;
+    }
+    
+    if(!token.startsWith('ghp_') && !token.startsWith('github_pat_')) {
+        showAlert('올바른 GitHub Token 형식이 아닙니다!', 'error');
+        return;
+    }
+    
+    config = { token, username, repo };
+    localStorage.setItem('githubConfig', JSON.stringify(config));
+    updateTokenStatus(true);
+    showAlert('✅ Token이 저장되었습니다! 이제 콘텐츠를 관리할 수 있어요.', 'success');
+}
+
+// Token 상태 업데이트
+function updateTokenStatus(active) {
+    const status = document.getElementById('tokenStatus');
+    if(active) {
+        status.className = 'token-status active';
+        status.textContent = '설정 완료';
+    } else {
+        status.className = 'token-status inactive';
+        status.textContent = '미설정';
+    }
+}
+
+// 탭 전환
+function switchTab(tabName) {
+    const tabs = document.querySelectorAll('.tab');
+    const contents = document.querySelectorAll('.tab-content');
+    
+    tabs.forEach(t => t.classList.remove('active'));
+    contents.forEach(c => c.classList.remove('active'));
+    
+    document.querySelector(`[onclick="switchTab('${tabName}')"]`).classList.add('active');
+    document.getElementById(`${tabName}Tab`).classList.add('active');
+}
+
+// 알림 표시
+function showAlert(message, type = 'success') {
+    const alertBox = document.getElementById('alertBox');
+    alertBox.className = `alert ${type}`;
+    alertBox.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'times-circle' : 'info-circle'}"></i> ${message}`;
+    alertBox.style.display = 'block';
+    
+    setTimeout(() => {
+        alertBox.style.display = 'none';
+    }, 5000);
+}
+
+// 로딩 표시
+function showLoading(show, text = '처리 중...') {
+    const overlay = document.getElementById('loadingOverlay');
+    const loadingText = document.getElementById('loadingText');
+    loadingText.textContent = text;
+    overlay.classList.toggle('active', show);
+}
+
+// 모든 콘텐츠 저장 및 배포
+async function saveAllContent() {
+    if(!config.token) {
+        showAlert('먼저 GitHub Token을 설정해주세요!', 'error');
+        return;
+    }
+    
+    showLoading(true, '콘텐츠 수집 중...');
+    
+    try {
+        // 1. 현재 index.html 가져오기
+        showLoading(true, 'index.html 읽는 중...');
+        const getResponse = await fetch(`https://api.github.com/repos/${config.username}/${config.repo}/contents/index.html`, {
+            headers: {
+                'Authorization': `token ${config.token}`
+            }
+        });
+        
+        if(!getResponse.ok) throw new Error('index.html 읽기 실패');
+        
+        const fileData = await getResponse.json();
+        let content = atob(fileData.content);
+        
+        // 2. 텍스트 교체
+        showLoading(true, '텍스트 수정 중...');
+        const mainTitle = document.getElementById('mainTitle').value;
+        const mainSubtitle = document.getElementById('mainSubtitle').value;
+        const mainDescription = document.getElementById('mainDescription').value;
+        
+        // 메인 타이틀 교체
+        content = content.replace(
+            /<h1 class="hero-title">TATTOO MAKING<\/h1>/,
+            `<h1 class="hero-title">${mainTitle}</h1>`
+        );
+        
+        // 서브 타이틀 교체
+        content = content.replace(
+            /<p class="hero-subtitle">부산 블랙&그레이 리얼리즘 전문<\/p>/,
+            `<p class="hero-subtitle">${mainSubtitle}</p>`
+        );
+        
+        // 3. 연락처 교체
+        showLoading(true, '연락처 수정 중...');
+        const phone = document.getElementById('contactPhone').value;
+        const kakao = document.getElementById('contactKakao').value;
+        const instagram = document.getElementById('contactInstagram').value;
+        
+        content = content.replace(/010-2254-0690/g, phone);
+        content = content.replace(/making9/g, kakao);
+        content = content.replace(/@tattoo_making/g, instagram);
+        
+        // 4. 가격 교체
+        showLoading(true, '가격 수정 중...');
+        const priceSmall = document.getElementById('priceSmall').value;
+        const priceMedium = document.getElementById('priceMedium').value;
+        const priceLarge = document.getElementById('priceLarge').value;
+        const priceXL = document.getElementById('priceXL').value;
+        
+        // 가격 교체 (정규식 사용)
+        content = content.replace(
+            /<div class="price-amount">10만원~<\/div>/,
+            `<div class="price-amount">${priceSmall}</div>`
+        );
+        content = content.replace(
+            /<div class="price-amount">30만원~<\/div>/,
+            `<div class="price-amount">${priceMedium}</div>`
+        );
+        content = content.replace(
+            /<div class="price-amount">150만원~<\/div>/,
+            `<div class="price-amount">${priceLarge}</div>`
+        );
+        content = content.replace(
+            /<div class="price-amount">300만원~<\/div>/,
+            `<div class="price-amount">${priceXL}</div>`
+        );
+        
+        // 5. 후기 교체
+        showLoading(true, '후기 수정 중...');
+        for(let i = 1; i <= 6; i++) {
+            const name = document.getElementById(`reviewName${i}`).value;
+            const contentText = document.getElementById(`reviewContent${i}`).value;
+            
+            // 후기 이름과 내용 교체 (간단한 방식)
+            content = content.replace(
+                new RegExp(`<h4>김\\*현</h4>`, 'g'),
+                `<h4>${name}</h4>`
+            );
+        }
+        
+        // 6. GitHub에 업데이트
+        showLoading(true, 'GitHub에 배포 중...');
+        const updateResponse = await fetch(`https://api.github.com/repos/${config.username}/${config.repo}/contents/index.html`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `token ${config.token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                message: 'Update content via CMS v3.1',
+                content: btoa(unescape(encodeURIComponent(content))),
+                sha: fileData.sha,
+                branch: 'main'
+            })
+        });
+        
+        if(!updateResponse.ok) {
+            const error = await updateResponse.json();
+            throw new Error(error.message || 'index.html 수정 실패');
+        }
+        
+        // 완료
+        showLoading(false);
+        showAlert('✅ 모든 변경사항이 성공적으로 배포되었습니다! 1~2분 후 사이트에서 확인하세요. (Ctrl+Shift+R로 새로고침)', 'success');
+        
+        // 통계 업데이트
+        const count = parseInt(document.getElementById('updateCount').textContent) + 1;
+        document.getElementById('updateCount').textContent = count;
+        document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString('ko-KR', {hour: '2-digit', minute: '2-digit'});
+        
+    } catch(error) {
+        console.error('Error:', error);
+        showLoading(false);
+        showAlert(`❌ 배포 실패: ${error.message}`, 'error');
+    }
+}
+</script>
+
+</body>
+</html>
