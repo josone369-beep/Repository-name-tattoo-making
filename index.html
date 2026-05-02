@@ -1,199 +1,334 @@
-     1	<!DOCTYPE html>
-     2	<html lang="ko">
-     3	<head>
-     4	<meta charset="UTF-8">
-     5	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-     6	<meta name="naver-site-verification" content="17cb875e0cdf1f3651901f6ebdffb30e13c547d4">
-     7	<meta name="google-site-verification" content="6YbU8co5rNcgyb7e-NxWB5JVMVcqexrgv1KfKud1rR0">
-     8	<title>TATTOO MAKING - 부산 블랙&그레이 리얼리즘 타투샵</title>
-     9	<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖤</text></svg>">
-    10	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
-    11	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
-    12	</head>
-    13	<body style="margin:0;padding:0;font-family:'Noto Sans KR',sans-serif;background:#000;color:#fff;overflow-x:hidden">
-    14	
-    15	<!-- 로딩 화면 -->
-    16	<div id="loading" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#000;display:flex;align-items:center;justify-content:center;z-index:9999">
-    17	<div style="text-align:center">
-    18	<div style="font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;color:#c9a45c;margin-bottom:20px">TATTOO MAKING</div>
-    19	<div style="width:50px;height:50px;border:3px solid rgba(201,164,92,0.2);border-top-color:#c9a45c;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto"></div>
-    20	</div>
-    21	</div>
-    22	
-    23	<!-- 네비게이션 -->
-    24	<nav style="position:fixed;top:0;left:0;width:100%;background:rgba(0,0,0,0.95);backdrop-filter:blur(10px);z-index:1000;padding:15px 0;border-bottom:1px solid rgba(201,164,92,0.2)">
-    25	<div style="max-width:1400px;margin:0 auto;padding:0 30px;display:flex;justify-content:space-between;align-items:center">
-    26	<a href="#home" style="font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;color:#c9a45c;text-decoration:none">TATTOO MAKING</a>
-    27	<div style="display:flex;gap:30px">
-    28	<a href="#home" style="color:#e0e0e0;text-decoration:none;font-weight:500">HOME</a>
-    29	<a href="#portfolio" style="color:#e0e0e0;text-decoration:none;font-weight:500">포트폴리오</a>
-    30	<a href="#designs" style="color:#e0e0e0;text-decoration:none;font-weight:500">작업 도안</a>
-    31	<a href="#class" style="color:#e0e0e0;text-decoration:none;font-weight:500">수강 안내</a>
-    32	<a href="#pricing" style="color:#e0e0e0;text-decoration:none;font-weight:500">가격 안내</a>
-    33	<a href="#reviews" style="color:#e0e0e0;text-decoration:none;font-weight:500">고객 후기</a>
-    34	<a href="#contact" style="color:#e0e0e0;text-decoration:none;font-weight:500">CONTACT</a>
-    35	</div>
-    36	</div>
-    37	</nav>
-    38	
-    39	<!-- 히어로 섹션 -->
-    40	<section id="home" style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#000 0%,#121212 100%);padding-top:80px">
-    41	<div style="text-align:center;z-index:1">
-    42	<p style="font-size:1rem;color:#c9a45c;letter-spacing:0.3em;margin-bottom:15px;text-transform:uppercase">Busan Black & Grey Realism</p>
-    43	<h1 style="font-family:'Playfair Display',serif;font-size:6rem;font-weight:900;margin-bottom:30px;color:#fff;text-transform:uppercase">TATTOO MAKING</h1>
-    44	<p style="font-size:1.3rem;color:#e0e0e0;max-width:600px;margin:0 auto 50px;line-height:1.8">부산 블랙&그레이 리얼리즘 전문<br>1:1 맞춤 디자인으로 당신만의 특별한 이야기를 새깁니다</p>
-    45	<div style="display:flex;gap:15px;justify-content:center">
-    46	<a href="#portfolio" style="padding:15px 30px;background:#c9a45c;color:#000;text-decoration:none;font-weight:600;border-radius:4px;display:inline-flex;align-items:center;gap:8px"><i class="fas fa-images"></i> 포트폴리오 보기</a>
-    47	<a href="https://open.kakao.com/o/s6IlPGxb" target="_blank" style="padding:15px 30px;background:transparent;color:#c9a45c;border:2px solid #c9a45c;text-decoration:none;font-weight:600;border-radius:4px;display:inline-flex;align-items:center;gap:8px"><i class="fas fa-comment-dots"></i> 상담 문의하기</a>
-    48	</div>
-    49	</div>
-    50	</section>
-    51	
-    52	<!-- ABOUT 섹션 -->
-    53	<section id="about" style="padding:100px 0;background:#121212">
-    54	<div style="max-width:1400px;margin:0 auto;padding:0 30px">
-    55	<h2 style="font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;text-align:center;margin-bottom:60px;color:#fff">ABOUT</h2>
-    56	<div style="max-width:800px;margin:0 auto;text-align:center">
-    57	<p style="font-size:1.2rem;color:#e0e0e0;line-height:1.8;margin-bottom:60px">부산에 위치한 블랙&그레이 리얼리즘 전문 타투샵 TATTOO MAKING입니다.<br>1:1 맞춤 디자인 제작, 커버업, 타투 교육까지<br>10년 이상의 경험으로 고객님의 이야기를 예술작품으로 새겨드립니다.</p>
-    58	<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:30px">
-    59	<div style="padding:30px;background:#1a1a1a;border-radius:8px;border:1px solid rgba(201,164,92,0.2)">
-    60	<div style="font-family:'Playfair Display',serif;font-size:3rem;font-weight:700;color:#c9a45c;margin-bottom:10px">1000+</div>
-    61	<div style="color:#999">완성된 작업</div>
-    62	</div>
-    63	<div style="padding:30px;background:#1a1a1a;border-radius:8px;border:1px solid rgba(201,164,92,0.2)">
-    64	<div style="font-family:'Playfair Display',serif;font-size:3rem;font-weight:700;color:#c9a45c;margin-bottom:10px">10+</div>
-    65	<div style="color:#999">년 경력</div>
-    66	</div>
-    67	<div style="padding:30px;background:#1a1a1a;border-radius:8px;border:1px solid rgba(201,164,92,0.2)">
-    68	<div style="font-family:'Playfair Display',serif;font-size:3rem;font-weight:700;color:#c9a45c;margin-bottom:10px">100%</div>
-    69	<div style="color:#999">고객 만족도</div>
-    70	</div>
-    71	</div>
-    72	</div>
-    73	</div>
-    74	</section>
-    75	
-    76	<!-- PORTFOLIO 섹션 -->
-    77	<section id="portfolio" style="padding:100px 0;background:#000">
-    78	<div style="max-width:1400px;margin:0 auto;padding:0 30px">
-    79	<h2 style="font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;text-align:center;margin-bottom:60px;color:#fff">PORTFOLIO</h2>
-    80	<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:30px">
-    81	<div style="position:relative;overflow:hidden;border-radius:8px;aspect-ratio:1;background:#121212">
-    82	<img src="https://images.unsplash.com/photo-1565058379802-bbe93b2f703f?w=800&h=800&fit=crop" alt="이레즈미" style="width:100%;height:100%;object-fit:cover">
-    83	</div>
-    84	<div style="position:relative;overflow:hidden;border-radius:8px;aspect-ratio:1;background:#121212">
-    85	<img src="https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?w=800&h=800&fit=crop" alt="폴리네시안" style="width:100%;height:100%;object-fit:cover">
-    86	</div>
-    87	<div style="position:relative;overflow:hidden;border-radius:8px;aspect-ratio:1;background:#121212">
-    88	<img src="https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?w=800&h=800&fit=crop" alt="리얼리즘" style="width:100%;height:100%;object-fit:cover">
-    89	</div>
-    90	</div>
-    91	<div style="margin-top:60px;text-align:center">
-    92	<a href="https://www.instagram.com/tattoo_making" target="_blank" style="padding:15px 30px;background:#c9a45c;color:#000;text-decoration:none;font-weight:600;border-radius:4px;display:inline-flex;align-items:center;gap:8px"><i class="fab fa-instagram"></i> Instagram에서 더 많은 작업 보기</a>
-    93	</div>
-    94	</div>
-    95	</section>
-    96	
-    97	<!-- PRICING 섹션 -->
-    98	<section id="pricing" style="padding:100px 0;background:#121212">
-    99	<div style="max-width:1400px;margin:0 auto;padding:0 30px">
-   100	<h2 style="font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;text-align:center;margin-bottom:60px;color:#fff">가격 안내</h2>
-   101	<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:30px">
-   102	<div style="background:#1a1a1a;padding:40px;border-radius:16px;border:2px solid rgba(201,164,92,0.2);text-align:center">
-   103	<h3 style="font-size:1.5rem;font-weight:700;margin-bottom:10px">소형</h3>
-   104	<p style="color:#999;margin-bottom:30px">5cm 이하</p>
-   105	<div style="font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:700;color:#c9a45c;margin-bottom:10px">10만원~</div>
-   106	<p style="color:#999">미니 타투</p>
-   107	</div>
-   108	<div style="background:#1a1a1a;padding:40px;border-radius:16px;border:2px solid rgba(201,164,92,0.2);text-align:center">
-   109	<h3 style="font-size:1.5rem;font-weight:700;margin-bottom:10px">중형</h3>
-   110	<p style="color:#999;margin-bottom:30px">5~15cm</p>
-   111	<div style="font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:700;color:#c9a45c;margin-bottom:10px">30만원~</div>
-   112	<p style="color:#999">일반 사이즈</p>
-   113	</div>
-   114	<div style="background:#1a1a1a;padding:40px;border-radius:16px;border:2px solid #c9a45c;text-align:center;position:relative">
-   115	<span style="position:absolute;top:-15px;left:50%;transform:translateX(-50%);background:#c9a45c;color:#000;padding:5px 20px;border-radius:20px;font-size:0.85rem;font-weight:700">인기</span>
-   116	<h3 style="font-size:1.5rem;font-weight:700;margin-bottom:10px">대형</h3>
-   117	<p style="color:#999;margin-bottom:30px">하프슬리브</p>
-   118	<div style="font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:700;color:#c9a45c;margin-bottom:10px">150만원~</div>
-   119	<p style="color:#999">팔 반</p>
-   120	</div>
-   121	<div style="background:#1a1a1a;padding:40px;border-radius:16px;border:2px solid rgba(201,164,92,0.2);text-align:center">
-   122	<h3 style="font-size:1.5rem;font-weight:700;margin-bottom:10px">특대형</h3>
-   123	<p style="color:#999;margin-bottom:30px">풀슬리브/등판</p>
-   124	<div style="font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:700;color:#c9a45c;margin-bottom:10px">300만원~</div>
-   125	<p style="color:#999">대형 작업</p>
-   126	</div>
-   127	</div>
-   128	</div>
-   129	</section>
-   130	
-   131	<!-- CONTACT 섹션 -->
-   132	<section id="contact" style="padding:100px 0;background:#121212">
-   133	<div style="max-width:1400px;margin:0 auto;padding:0 30px">
-   134	<h2 style="font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;text-align:center;margin-bottom:60px;color:#fff">CONTACT</h2>
-   135	<div style="display:grid;grid-template-columns:1fr 1fr;gap:60px">
-   136	<div style="background:#1a1a1a;padding:40px;border-radius:8px;border:1px solid rgba(201,164,92,0.2)">
-   137	<h3 style="color:#c9a45c;margin-bottom:30px;font-size:1.5rem">상담 문의</h3>
-   138	<div style="margin-bottom:30px">
-   139	<i class="fas fa-phone" style="color:#c9a45c;margin-right:10px"></i>
-   140	<span>010-2254-0690</span>
-   141	<p style="margin-left:28px;margin-top:5px;font-size:0.9rem;color:#999">평일 12:00-21:00<br>주말 예약제 운영</p>
-   142	</div>
-   143	<div style="margin-bottom:30px">
-   144	<i class="fas fa-comment-dots" style="color:#c9a45c;margin-right:10px"></i>
-   145	<span>카카오톡 ID: making91</span>
-   146	<p style="margin-left:28px;margin-top:5px">
-   147	<a href="https://open.kakao.com/o/s6IlPGxb" target="_blank" style="color:#c9a45c">오픈채팅 바로가기 →</a>
-   148	</p>
-   149	</div>
-   150	<div style="margin-bottom:30px">
-   151	<i class="fab fa-instagram" style="color:#c9a45c;margin-right:10px"></i>
-   152	<a href="https://www.instagram.com/tattoo_making" target="_blank" style="color:#e0e0e0;text-decoration:none">@tattoo_making</a>
-   153	</div>
-   154	<div style="display:flex;gap:15px;margin-top:30px">
-   155	<a href="https://www.instagram.com/tattoo_making" target="_blank" style="width:50px;height:50px;border-radius:50%;background:#0a0a0a;border:2px solid rgba(201,164,92,0.2);display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:#c9a45c;text-decoration:none"><i class="fab fa-instagram"></i></a>
-   156	<a href="https://open.kakao.com/o/s6IlPGxb" target="_blank" style="width:50px;height:50px;border-radius:50%;background:#0a0a0a;border:2px solid rgba(201,164,92,0.2);display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:#c9a45c;text-decoration:none"><i class="fas fa-comment"></i></a>
-   157	<a href="https://linktr.ee/tattoo_making" target="_blank" style="width:50px;height:50px;border-radius:50%;background:#0a0a0a;border:2px solid rgba(201,164,92,0.2);display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:#c9a45c;text-decoration:none"><i class="fas fa-link"></i></a>
-   158	</div>
-   159	</div>
-   160	<div style="border-radius:8px;overflow:hidden;height:100%;min-height:400px">
-   161	<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3262.8234567890123!2d128.8784972!3d35.1795543!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzXCsDEwJzQ2LjQiTiAxMjjCsDUyJzQyLjYiRQ!5e0!3m2!1sko!2skr!4v1234567890123!5m2!1sko!2skr" style="width:100%;height:100%;border:none" allowfullscreen loading="lazy"></iframe>
-   162	</div>
-   163	</div>
-   164	</div>
-   165	</section>
-   166	
-   167	<!-- FOOTER -->
-   168	<footer style="background:#000;padding:60px 0 30px;border-top:1px solid rgba(201,164,92,0.2)">
-   169	<div style="max-width:1400px;margin:0 auto;padding:0 30px">
-   170	<div style="text-align:center;padding-top:30px;border-top:1px solid rgba(201,164,92,0.2);color:#999;font-size:0.9rem">
-   171	<p>&copy; 2024 TATTOO MAKING. All rights reserved.</p>
-   172	</div>
-   173	</div>
-   174	</footer>
-   175	
-   176	<!-- TOP 버튼 -->
-   177	<div id="scrollTop" style="position:fixed;bottom:30px;right:30px;width:50px;height:50px;background:#c9a45c;color:#000;border-radius:50%;display:none;align-items:center;justify-content:center;font-size:1.5rem;cursor:pointer;z-index:999">
-   178	<i class="fas fa-arrow-up"></i>
-   179	</div>
-   180	
-   181	<style>
-   182	@keyframes spin{to{transform:rotate(360deg)}}
-   183	a{transition:all 0.3s ease}
-   184	a:hover{opacity:0.8}
-   185	</style>
-   186	
-   187	<script>
-   188	setTimeout(function(){document.getElementById('loading').style.display='none'},1000);
-   189	window.addEventListener('scroll',function(){
-   190	if(window.scrollY>500){document.getElementById('scrollTop').style.display='flex'}else{document.getElementById('scrollTop').style.display='none'}
-   191	});
-   192	document.getElementById('scrollTop').addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
-   193	document.querySelectorAll('a[href^="#"]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();var t=document.querySelector(a.getAttribute('href'));if(t)window.scrollTo({top:t.offsetTop-80,behavior:'smooth'})})});
-   194	console.log('🖤 TATTOO MAKING 🖤');
-   195	</script>
-   196	
-   197	</body>
-   198	</html>
-   199	
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="naver-site-verification" content="17cb875e0cdf1f3651901f6ebdffb30e13c547d4">
+<meta name="google-site-verification" content="6YbU8co5rNcgyb7e-NxWB5JVMVcqexrgv1KfKud1rR0">
+<title>TATTOO MAKING - 부산 블랙&그레이 리얼리즘 타투샵</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖤</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+</head>
+<body style="margin:0;padding:0;font-family:'Noto Sans KR',sans-serif;background:#000;color:#fff;overflow-x:hidden">
+
+<!-- 네비게이션 -->
+<nav style="position:fixed;top:0;left:0;width:100%;background:rgba(0,0,0,0.95);backdrop-filter:blur(10px);z-index:1000;padding:15px 0;border-bottom:1px solid rgba(201,164,92,0.2)">
+<div style="max-width:1400px;margin:0 auto;padding:0 30px;display:flex;justify-content:space-between;align-items:center">
+<a href="#home" style="font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;color:#c9a45c;text-decoration:none">TATTOO MAKING</a>
+<div style="display:flex;gap:30px">
+<a href="#home" style="color:#e0e0e0;text-decoration:none;font-weight:500;transition:color 0.3s">HOME</a>
+<a href="#about" style="color:#e0e0e0;text-decoration:none;font-weight:500;transition:color 0.3s">소개</a>
+<a href="#portfolio" style="color:#e0e0e0;text-decoration:none;font-weight:500;transition:color 0.3s">포트폴리오</a>
+<a href="#class" style="color:#e0e0e0;text-decoration:none;font-weight:500;transition:color 0.3s">수강 안내</a>
+<a href="#pricing" style="color:#e0e0e0;text-decoration:none;font-weight:500;transition:color 0.3s">가격 안내</a>
+<a href="#reviews" style="color:#e0e0e0;text-decoration:none;font-weight:500;transition:color 0.3s">고객 후기</a>
+<a href="#contact" style="color:#e0e0e0;text-decoration:none;font-weight:500;transition:color 0.3s">CONTACT</a>
+</div>
+</div>
+</nav>
+
+<!-- 히어로 섹션 -->
+<section id="home" style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#000 0%,#121212 100%);padding-top:80px">
+<div style="text-align:center;padding:20px">
+<p style="font-size:1rem;color:#c9a45c;letter-spacing:0.3em;margin-bottom:15px;text-transform:uppercase">Busan Black & Grey Realism</p>
+<h1 style="font-family:'Playfair Display',serif;font-size:5rem;font-weight:900;margin:30px 0;color:#fff;text-transform:uppercase;line-height:1.2">TATTOO MAKING</h1>
+<p style="font-size:1.3rem;color:#e0e0e0;max-width:600px;margin:0 auto 50px;line-height:1.8">부산 블랙&그레이 리얼리즘 전문<br>1:1 맞춤 디자인으로 당신만의 특별한 이야기를 새깁니다</p>
+<div style="display:flex;gap:15px;justify-content:center;flex-wrap:wrap">
+<a href="#portfolio" style="padding:15px 30px;background:#c9a45c;color:#000;text-decoration:none;font-weight:600;border-radius:4px;display:inline-flex;align-items:center;gap:8px;transition:all 0.3s"><i class="fas fa-images"></i> 포트폴리오 보기</a>
+<a href="https://open.kakao.com/o/s6IlPGxb" target="_blank" style="padding:15px 30px;background:transparent;color:#c9a45c;border:2px solid #c9a45c;text-decoration:none;font-weight:600;border-radius:4px;display:inline-flex;align-items:center;gap:8px;transition:all 0.3s"><i class="fas fa-comment-dots"></i> 상담 문의하기</a>
+</div>
+</div>
+</section>
+
+<!-- ABOUT 섹션 -->
+<section id="about" style="padding:100px 20px;background:#121212">
+<div style="max-width:1400px;margin:0 auto">
+<h2 style="font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;text-align:center;margin-bottom:20px;color:#fff">ABOUT</h2>
+<div style="width:80px;height:4px;background:#c9a45c;margin:0 auto 60px"></div>
+<div style="max-width:800px;margin:0 auto;text-align:center">
+<p style="font-size:1.2rem;color:#e0e0e0;line-height:1.8;margin-bottom:60px">부산에 위치한 블랙&그레이 리얼리즘 전문 타투샵 TATTOO MAKING입니다.<br>1:1 맞춤 디자인 제작, 커버업, 타투 교육까지<br>10년 이상의 경험으로 고객님의 이야기를 예술작품으로 새겨드립니다.</p>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:30px">
+<div style="padding:30px;background:#1a1a1a;border-radius:8px;border:1px solid rgba(201,164,92,0.2)">
+<div style="font-family:'Playfair Display',serif;font-size:3rem;font-weight:700;color:#c9a45c;margin-bottom:10px">1000+</div>
+<div style="color:#999">완성된 작업</div>
+</div>
+<div style="padding:30px;background:#1a1a1a;border-radius:8px;border:1px solid rgba(201,164,92,0.2)">
+<div style="font-family:'Playfair Display',serif;font-size:3rem;font-weight:700;color:#c9a45c;margin-bottom:10px">10+</div>
+<div style="color:#999">년 경력</div>
+</div>
+<div style="padding:30px;background:#1a1a1a;border-radius:8px;border:1px solid rgba(201,164,92,0.2)">
+<div style="font-family:'Playfair Display',serif;font-size:3rem;font-weight:700;color:#c9a45c;margin-bottom:10px">100%</div>
+<div style="color:#999">고객 만족도</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- PORTFOLIO 섹션 -->
+<section id="portfolio" style="padding:100px 20px;background:#000">
+<div style="max-width:1400px;margin:0 auto">
+<h2 style="font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;text-align:center;margin-bottom:20px;color:#fff">PORTFOLIO</h2>
+<div style="width:80px;height:4px;background:#c9a45c;margin:0 auto 60px"></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;margin-bottom:60px">
+<div style="position:relative;overflow:hidden;border-radius:8px;aspect-ratio:1;background:#121212">
+<img src="https://images.unsplash.com/photo-1565058379802-bbe93b2f703f?w=800&h=800&fit=crop" alt="이레즈미" style="width:100%;height:100%;object-fit:cover">
+<div style="position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(to top,rgba(0,0,0,0.9),transparent)">
+<span style="color:#c9a45c;font-size:0.9rem;text-transform:uppercase;letter-spacing:0.1em">이레즈미</span>
+<h3 style="color:#fff;font-size:1.3rem;margin-top:5px">풀슬리브 이레즈미</h3>
+</div>
+</div>
+<div style="position:relative;overflow:hidden;border-radius:8px;aspect-ratio:1;background:#121212">
+<img src="https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?w=800&h=800&fit=crop" alt="폴리네시안" style="width:100%;height:100%;object-fit:cover">
+<div style="position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(to top,rgba(0,0,0,0.9),transparent)">
+<span style="color:#c9a45c;font-size:0.9rem;text-transform:uppercase;letter-spacing:0.1em">폴리네시안</span>
+<h3 style="color:#fff;font-size:1.3rem;margin-top:5px">폴리네시안 하프슬리브</h3>
+</div>
+</div>
+<div style="position:relative;overflow:hidden;border-radius:8px;aspect-ratio:1;background:#121212">
+<img src="https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?w=800&h=800&fit=crop" alt="리얼리즘" style="width:100%;height:100%;object-fit:cover">
+<div style="position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(to top,rgba(0,0,0,0.9),transparent)">
+<span style="color:#c9a45c;font-size:0.9rem;text-transform:uppercase;letter-spacing:0.1em">리얼리즘</span>
+<h3 style="color:#fff;font-size:1.3rem;margin-top:5px">블랙&그레이 초상화</h3>
+</div>
+</div>
+<div style="position:relative;overflow:hidden;border-radius:8px;aspect-ratio:1;background:#121212">
+<img src="https://images.unsplash.com/photo-1567427018141-0584cfcbf1b8?w=800&h=800&fit=crop" alt="대형작업" style="width:100%;height:100%;object-fit:cover">
+<div style="position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(to top,rgba(0,0,0,0.9),transparent)">
+<span style="color:#c9a45c;font-size:0.9rem;text-transform:uppercase;letter-spacing:0.1em">대형작업</span>
+<h3 style="color:#fff;font-size:1.3rem;margin-top:5px">등판 대형 작업</h3>
+</div>
+</div>
+<div style="position:relative;overflow:hidden;border-radius:8px;aspect-ratio:1;background:#121212">
+<img src="https://images.unsplash.com/photo-1611195974226-ef22beb97142?w=800&h=800&fit=crop" alt="이레즈미" style="width:100%;height:100%;object-fit:cover">
+<div style="position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(to top,rgba(0,0,0,0.9),transparent)">
+<span style="color:#c9a45c;font-size:0.9rem;text-transform:uppercase;letter-spacing:0.1em">이레즈미</span>
+<h3 style="color:#fff;font-size:1.3rem;margin-top:5px">일본 전통 문양</h3>
+</div>
+</div>
+<div style="position:relative;overflow:hidden;border-radius:8px;aspect-ratio:1;background:#121212">
+<img src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=800&h=800&fit=crop" alt="리얼리즘" style="width:100%;height:100%;object-fit:cover">
+<div style="position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(to top,rgba(0,0,0,0.9),transparent)">
+<span style="color:#c9a45c;font-size:0.9rem;text-transform:uppercase;letter-spacing:0.1em">리얼리즘</span>
+<h3 style="color:#fff;font-size:1.3rem;margin-top:5px">동물 리얼리즘</h3>
+</div>
+</div>
+</div>
+<div style="text-align:center">
+<a href="https://www.instagram.com/tattoo_making" target="_blank" style="padding:15px 30px;background:#c9a45c;color:#000;text-decoration:none;font-weight:600;border-radius:4px;display:inline-flex;align-items:center;gap:8px;transition:all 0.3s"><i class="fab fa-instagram"></i> Instagram에서 더 많은 작업 보기</a>
+</div>
+</div>
+</section>
+
+<!-- 수강 안내 섹션 -->
+<section id="class" style="padding:100px 20px;background:#121212">
+<div style="max-width:1400px;margin:0 auto">
+<h2 style="font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;text-align:center;margin-bottom:20px;color:#fff">타투 수강 안내</h2>
+<div style="width:80px;height:4px;background:#c9a45c;margin:0 auto 60px"></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:30px">
+<div style="background:#1a1a1a;padding:40px;border-radius:16px;border:2px solid rgba(201,164,92,0.2)">
+<h3 style="font-size:1.8rem;font-weight:700;color:#c9a45c;margin-bottom:10px;text-align:center">기초반</h3>
+<p style="color:#999;text-align:center;margin-bottom:30px">4주 / 주 2회</p>
+<ul style="list-style:none;padding:0;margin:0">
+<li style="padding:10px 0;color:#e0e0e0">✓ 타투 머신 다루기</li>
+<li style="padding:10px 0;color:#e0e0e0">✓ 기초 라인 워크</li>
+<li style="padding:10px 0;color:#e0e0e0">✓ 쉐이딩 기법</li>
+<li style="padding:10px 0;color:#e0e0e0">✓ 위생 관리</li>
+<li style="padding:10px 0;color:#e0e0e0">✓ 실습용 재료 제공</li>
+</ul>
+</div>
+<div style="background:#1a1a1a;padding:40px;border-radius:16px;border:2px solid rgba(201,164,92,0.2)">
+<h3 style="font-size:1.8rem;font-weight:700;color:#c9a45c;margin-bottom:10px;text-align:center">심화반</h3>
+<p style="color:#999;text-align:center;margin-bottom:30px">8주 / 주 3회</p>
+<ul style="list-style:none;padding:0;margin:0">
+<li style="padding:10px 0;color:#e0e0e0">✓ 블랙&그레이 리얼리즘</li>
+<li style="padding:10px 0;color:#e0e0e0">✓ 디자인 제작 실습</li>
+<li style="padding:10px 0;color:#e0e0e0">✓ 커버업 기법</li>
+<li style="padding:10px 0;color:#e0e0e0">✓ 실제 작업 참관</li>
+<li style="padding:10px 0;color:#e0e0e0">✓ 포트폴리오 제작</li>
+</ul>
+</div>
+<div style="background:#1a1a1a;padding:40px;border-radius:16px;border:2px solid rgba(201,164,92,0.2)">
+<h3 style="font-size:1.8rem;font-weight:700;color:#c9a45c;margin-bottom:10px;text-align:center">이레즈미 특화반</h3>
+<p style="color:#999;text-align:center;margin-bottom:30px">12주 / 주 2회</p>
+<ul style="list-style:none;padding:0;margin:0">
+<li style="padding:10px 0;color:#e0e0e0">✓ 일본 전통 문양 이해</li>
+<li style="padding:10px 0;color:#e0e0e0">✓ 이레즈미 기법</li>
+<li style="padding:10px 0;color:#e0e0e0">✓ 대형 작업 기획</li>
+<li style="padding:10px 0;color:#e0e0e0">✓ 1:1 맞춤 지도</li>
+<li style="padding:10px 0;color:#e0e0e0">✓ 수료 후 멘토링</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+
+<!-- PRICING 섹션 -->
+<section id="pricing" style="padding:100px 20px;background:#000">
+<div style="max-width:1400px;margin:0 auto">
+<h2 style="font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;text-align:center;margin-bottom:20px;color:#fff">가격 안내</h2>
+<div style="width:80px;height:4px;background:#c9a45c;margin:0 auto 60px"></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:30px;margin-bottom:40px">
+<div style="background:#1a1a1a;padding:40px;border-radius:16px;border:2px solid rgba(201,164,92,0.2);text-align:center">
+<h3 style="font-size:1.5rem;font-weight:700;margin-bottom:10px;color:#fff">소형</h3>
+<p style="color:#999;margin-bottom:30px">5cm 이하</p>
+<div style="font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:700;color:#c9a45c;margin-bottom:10px">10만원~</div>
+<p style="color:#999">미니 타투</p>
+</div>
+<div style="background:#1a1a1a;padding:40px;border-radius:16px;border:2px solid rgba(201,164,92,0.2);text-align:center">
+<h3 style="font-size:1.5rem;font-weight:700;margin-bottom:10px;color:#fff">중형</h3>
+<p style="color:#999;margin-bottom:30px">5~15cm</p>
+<div style="font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:700;color:#c9a45c;margin-bottom:10px">30만원~</div>
+<p style="color:#999">일반 사이즈</p>
+</div>
+<div style="background:#1a1a1a;padding:40px;border-radius:16px;border:2px solid #c9a45c;text-align:center;position:relative">
+<span style="position:absolute;top:-15px;left:50%;transform:translateX(-50%);background:#c9a45c;color:#000;padding:5px 20px;border-radius:20px;font-size:0.85rem;font-weight:700">인기</span>
+<h3 style="font-size:1.5rem;font-weight:700;margin-bottom:10px;color:#fff">대형</h3>
+<p style="color:#999;margin-bottom:30px">하프슬리브</p>
+<div style="font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:700;color:#c9a45c;margin-bottom:10px">150만원~</div>
+<p style="color:#999">팔 반</p>
+</div>
+<div style="background:#1a1a1a;padding:40px;border-radius:16px;border:2px solid rgba(201,164,92,0.2);text-align:center">
+<h3 style="font-size:1.5rem;font-weight:700;margin-bottom:10px;color:#fff">특대형</h3>
+<p style="color:#999;margin-bottom:30px">풀슬리브/등판</p>
+<div style="font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:700;color:#c9a45c;margin-bottom:10px">300만원~</div>
+<p style="color:#999">대형 작업</p>
+</div>
+</div>
+<div style="background:#1a1a1a;padding:30px;border-radius:8px;border:1px solid rgba(201,164,92,0.2);text-align:center">
+<h3 style="color:#c9a45c;margin-bottom:20px;font-size:1.2rem">참고사항</h3>
+<ul style="list-style:none;padding:0;margin:0">
+<li style="padding:8px 0;color:#e0e0e0">✓ 커버업 작업은 기존 가격의 +20%</li>
+<li style="padding:8px 0;color:#e0e0e0">✓ 컬러 작업은 기존 가격의 +30%</li>
+<li style="padding:8px 0;color:#e0e0e0">✓ 카드 결제 가능 (무이자 할부 가능)</li>
+<li style="padding:8px 0;color:#e0e0e0">✓ 최종 금액은 디자인 상담 후 결정</li>
+</ul>
+</div>
+</div>
+</section>
+
+<!-- 고객 후기 섹션 -->
+<section id="reviews" style="padding:100px 20px;background:#121212">
+<div style="max-width:1400px;margin:0 auto">
+<h2 style="font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;text-align:center;margin-bottom:20px;color:#fff">고객 후기</h2>
+<div style="width:80px;height:4px;background:#c9a45c;margin:0 auto 60px"></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px">
+<div style="background:#1a1a1a;padding:30px;border-radius:8px;border:1px solid rgba(201,164,92,0.2)">
+<div style="color:#c9a45c;font-size:1.2rem;margin-bottom:15px">★★★★★</div>
+<p style="color:#e0e0e0;line-height:1.8;margin-bottom:20px">"처음 타투를 하는 거라 많이 긴장했는데, 친절하게 상담해주시고 제가 원하는 디자인으로 완벽하게 만들어주셔서 너무 만족합니다!"</p>
+<div style="display:flex;justify-content:space-between;padding-top:15px;border-top:1px solid rgba(201,164,92,0.2)">
+<span style="font-weight:700;color:#c9a45c">김** 님</span>
+<span style="color:#999">블랙워크</span>
+</div>
+</div>
+<div style="background:#1a1a1a;padding:30px;border-radius:8px;border:1px solid rgba(201,164,92,0.2)">
+<div style="color:#c9a45c;font-size:1.2rem;margin-bottom:15px">★★★★★</div>
+<p style="color:#e0e0e0;line-height:1.8;margin-bottom:20px">"풀슬리브 이레즈미 작업 받았습니다. 10개월 동안 정말 정성스럽게 작업해주셔서 최고의 결과물이 나왔어요. 감사합니다!"</p>
+<div style="display:flex;justify-content:space-between;padding-top:15px;border-top:1px solid rgba(201,164,92,0.2)">
+<span style="font-weight:700;color:#c9a45c">박** 님</span>
+<span style="color:#999">풀슬리브 이레즈미</span>
+</div>
+</div>
+<div style="background:#1a1a1a;padding:30px;border-radius:8px;border:1px solid rgba(201,164,92,0.2)">
+<div style="color:#c9a45c;font-size:1.2rem;margin-bottom:15px">★★★★★</div>
+<p style="color:#e0e0e0;line-height:1.8;margin-bottom:20px">"예전에 다른 곳에서 한 타투가 마음에 안 들어서 커버업 받았는데, 완전히 새로운 디자인으로 바꿔주셔서 정말 감사합니다."</p>
+<div style="display:flex;justify-content:space-between;padding-top:15px;border-top:1px solid rgba(201,164,92,0.2)">
+<span style="font-weight:700;color:#c9a45c">이** 님</span>
+<span style="color:#999">커버업</span>
+</div>
+</div>
+<div style="background:#1a1a1a;padding:30px;border-radius:8px;border:1px solid rgba(201,164,92,0.2)">
+<div style="color:#c9a45c;font-size:1.2rem;margin-bottom:15px">★★★★★</div>
+<p style="color:#e0e0e0;line-height:1.8;margin-bottom:20px">"리얼리즘 타투 너무 잘 받았어요! 사진보다 실물이 훨씬 더 멋있습니다. 주변 친구들한테도 추천했어요."</p>
+<div style="display:flex;justify-content:space-between;padding-top:15px;border-top:1px solid rgba(201,164,92,0.2)">
+<span style="font-weight:700;color:#c9a45c">최** 님</span>
+<span style="color:#999">리얼리즘</span>
+</div>
+</div>
+<div style="background:#1a1a1a;padding:30px;border-radius:8px;border:1px solid rgba(201,164,92,0.2)">
+<div style="color:#c9a45c;font-size:1.2rem;margin-bottom:15px">★★★★★</div>
+<p style="color:#e0e0e0;line-height:1.8;margin-bottom:20px">"타투 수강생입니다. 꼼꼼하게 가르쳐주시고, 실습도 많이 시켜주셔서 실력이 많이 늘었어요. 강력 추천합니다!"</p>
+<div style="display:flex;justify-content:space-between;padding-top:15px;border-top:1px solid rgba(201,164,92,0.2)">
+<span style="font-weight:700;color:#c9a45c">정** 님</span>
+<span style="color:#999">타투 교육</span>
+</div>
+</div>
+<div style="background:#1a1a1a;padding:30px;border-radius:8px;border:1px solid rgba(201,164,92,0.2)">
+<div style="color:#c9a45c;font-size:1.2rem;margin-bottom:15px">★★★★★</div>
+<p style="color:#e0e0e0;line-height:1.8;margin-bottom:20px">"위생 관리도 철저하고, 작업 중에도 계속 확인해주셔서 안심하고 받을 수 있었어요. 결과도 대만족!"</p>
+<div style="display:flex;justify-content:space-between;padding-top:15px;border-top:1px solid rgba(201,164,92,0.2)">
+<span style="font-weight:700;color:#c9a45c">강** 님</span>
+<span style="color:#999">폴리네시안</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- CONTACT 섹션 -->
+<section id="contact" style="padding:100px 20px;background:#000">
+<div style="max-width:1400px;margin:0 auto">
+<h2 style="font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;text-align:center;margin-bottom:20px;color:#fff">CONTACT</h2>
+<div style="width:80px;height:4px;background:#c9a45c;margin:0 auto 60px"></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:60px">
+<div style="background:#1a1a1a;padding:40px;border-radius:8px;border:1px solid rgba(201,164,92,0.2)">
+<h3 style="color:#c9a45c;margin-bottom:30px;font-size:1.5rem">상담 문의</h3>
+<div style="margin-bottom:30px">
+<p style="margin-bottom:10px"><i class="fas fa-phone" style="color:#c9a45c;margin-right:10px"></i><strong>010-2254-0690</strong></p>
+<p style="margin-left:28px;font-size:0.9rem;color:#999">평일 12:00-21:00<br>주말 예약제 운영</p>
+</div>
+<div style="margin-bottom:30px">
+<p style="margin-bottom:10px"><i class="fas fa-comment-dots" style="color:#c9a45c;margin-right:10px"></i><strong>카카오톡 ID: making91</strong></p>
+<p style="margin-left:28px">
+<a href="https://open.kakao.com/o/s6IlPGxb" target="_blank" style="color:#c9a45c;text-decoration:none">오픈채팅 바로가기 →</a>
+</p>
+</div>
+<div style="margin-bottom:30px">
+<p><i class="fab fa-instagram" style="color:#c9a45c;margin-right:10px"></i>
+<a href="https://www.instagram.com/tattoo_making" target="_blank" style="color:#e0e0e0;text-decoration:none">@tattoo_making</a></p>
+</div>
+<div style="display:flex;gap:15px;margin-top:30px">
+<a href="https://www.instagram.com/tattoo_making" target="_blank" style="width:50px;height:50px;border-radius:50%;background:#0a0a0a;border:2px solid rgba(201,164,92,0.2);display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:#c9a45c;text-decoration:none;transition:all 0.3s"><i class="fab fa-instagram"></i></a>
+<a href="https://open.kakao.com/o/s6IlPGxb" target="_blank" style="width:50px;height:50px;border-radius:50%;background:#0a0a0a;border:2px solid rgba(201,164,92,0.2);display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:#c9a45c;text-decoration:none;transition:all 0.3s"><i class="fas fa-comment"></i></a>
+<a href="https://linktr.ee/tattoo_making" target="_blank" style="width:50px;height:50px;border-radius:50%;background:#0a0a0a;border:2px solid rgba(201,164,92,0.2);display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:#c9a45c;text-decoration:none;transition:all 0.3s"><i class="fas fa-link"></i></a>
+</div>
+</div>
+<div style="border-radius:8px;overflow:hidden;min-height:400px">
+<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3262.8234567890123!2d128.8784972!3d35.1795543!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzXCsDEwJzQ2LjQiTiAxMjjCsDUyJzQyLjYiRQ!5e0!3m2!1sko!2skr!4v1234567890123!5m2!1sko!2skr" style="width:100%;height:100%;border:none" allowfullscreen loading="lazy"></iframe>
+</div>
+</div>
+</div>
+</section>
+
+<!-- FOOTER -->
+<footer style="background:#000;padding:60px 20px 30px;border-top:1px solid rgba(201,164,92,0.2)">
+<div style="max-width:1400px;margin:0 auto">
+<div style="text-align:center;color:#999;font-size:0.9rem">
+<p style="margin-bottom:10px;font-family:'Playfair Display',serif;font-size:1.5rem;color:#c9a45c;font-weight:900">TATTOO MAKING</p>
+<p>부산 블랙&그레이 리얼리즘 전문 타투샵</p>
+<p style="margin-top:20px">&copy; 2024 TATTOO MAKING. All rights reserved.</p>
+</div>
+</div>
+</footer>
+
+<script>
+document.querySelectorAll('a[href^="#"]').forEach(function(anchor){
+anchor.addEventListener('click',function(e){
+e.preventDefault();
+var target=document.querySelector(this.getAttribute('href'));
+if(target){
+window.scrollTo({
+top:target.offsetTop-70,
+behavior:'smooth'
+});
+}
+});
+});
+console.log('🖤 TATTOO MAKING 🖤');
+console.log('부산 블랙&그레이 리얼리즘 전문 타투샵');
+console.log('📞 010-2254-0690 | 📷 @tattoo_making');
+</script>
+
+</body>
+</html>
