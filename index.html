@@ -3,1639 +3,212 @@
      3	<head>
      4	    <meta charset="UTF-8">
      5	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     6	    
-     7	    <!-- SEO Meta Tags -->
-     8	    <meta name="naver-site-verification" content="17cb875e0cdf1f3651901f6ebdffb30e13c547d4">
-     9	    <meta name="google-site-verification" content="6YbU8co5rNcgyb7e-NxWB5JVMVcqexrgv1KfKud1rR0">
-    10	    <meta name="description" content="부산 타투메이킹 - 블랙&그레이 리얼리즘 전문 타투샵. 이레즈미, 폴리네시안, 리얼리즘, 블랙워크 등 다양한 스타일. 1:1 맞춤 디자인, 커버업, 타투 교육 수강 가능. 부산 동래구 위치.">
-    11	    <meta name="keywords" content="부산타투, 타투메이킹, 이레즈미, 블랙워크, 리얼리즘타투, 폴리네시안타투, 풀슬리브, 타투수강">
-    12	    
-    13	    <title>TATTOO MAKING - 부산 블랙&그레이 리얼리즘 타투샵</title>
-    14	    
-    15	    <!-- Favicon -->
-    16	    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖤</text></svg>">
-    17	    
-    18	    <!-- Google Fonts -->
-    19	    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
-    20	    
-    21	    <!-- Font Awesome -->
-    22	    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
-    23	
-    24	<style>
-    25	/* ======================
-    26	   Variables & Reset
-    27	   ====================== */
-    28	:root {
-    29	    --color-black: #000000;
-    30	    --color-dark: #0a0a0a;
-    31	    --color-dark-secondary: #121212;
-    32	    --color-dark-tertiary: #1a1a1a;
-    33	    --color-accent: #c9a45c;
-    34	    --color-accent-dark: #a08040;
-    35	    --color-white: #ffffff;
-    36	    --color-text-light: #e0e0e0;
-    37	    --color-text-gray: #999999;
-    38	    --color-border: rgba(201, 164, 92, 0.2);
-    39	    
-    40	    --font-primary: 'Noto Sans KR', sans-serif;
-    41	    --font-display: 'Playfair Display', serif;
-    42	    
-    43	    --spacing-xs: 0.5rem;
-    44	    --spacing-sm: 1rem;
-    45	    --spacing-md: 2rem;
-    46	    --spacing-lg: 4rem;
-    47	    --spacing-xl: 6rem;
-    48	    
-    49	    --transition-fast: 0.2s ease;
-    50	    --transition-normal: 0.3s ease;
-    51	    --transition-slow: 0.5s ease;
-    52	    
-    53	    --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
-    54	    --shadow-md: 0 4px 16px rgba(0,0,0,0.4);
-    55	    --shadow-lg: 0 8px 32px rgba(0,0,0,0.5);
-    56	    
-    57	    --radius-sm: 4px;
-    58	    --radius-md: 8px;
-    59	    --radius-lg: 16px;
-    60	}
-    61	
-    62	* {
-    63	    margin: 0;
-    64	    padding: 0;
-    65	    box-sizing: border-box;
-    66	}
-    67	
-    68	html {
-    69	    scroll-behavior: smooth;
-    70	}
-    71	
-    72	body {
-    73	    font-family: var(--font-primary);
-    74	    background: var(--color-black);
-    75	    color: var(--color-white);
-    76	    line-height: 1.6;
-    77	    overflow-x: hidden;
-    78	}
-    79	
-    80	img {
-    81	    max-width: 100%;
-    82	    height: auto;
-    83	    display: block;
-    84	}
-    85	
-    86	a {
-    87	    color: inherit;
-    88	    text-decoration: none;
-    89	    transition: var(--transition-normal);
-    90	}
-    91	
-    92	ul {
-    93	    list-style: none;
-    94	}
-    95	
-    96	button {
-    97	    font-family: inherit;
-    98	    border: none;
-    99	    cursor: pointer;
-   100	    transition: var(--transition-normal);
-   101	}
-   102	
-   103	.container {
-   104	    max-width: 1400px;
-   105	    margin: 0 auto;
-   106	    padding: 0 var(--spacing-md);
-   107	}
-   108	
-   109	section {
-   110	    padding: var(--spacing-xl) 0;
-   111	}
-   112	
-   113	.section-title {
-   114	    font-family: var(--font-display);
-   115	    font-size: clamp(2rem, 5vw, 3.5rem);
-   116	    font-weight: 900;
-   117	    text-align: center;
-   118	    margin-bottom: var(--spacing-lg);
-   119	    letter-spacing: 0.05em;
-   120	    color: var(--color-white);
-   121	}
-   122	
-   123	.section-title::after {
-   124	    content: '';
-   125	    display: block;
-   126	    width: 80px;
-   127	    height: 4px;
-   128	    background: var(--color-accent);
-   129	    margin: var(--spacing-sm) auto 0;
-   130	}
-   131	
-   132	/* ======================
-   133	   Loading Screen
-   134	   ====================== */
-   135	.loading-screen {
-   136	    position: fixed;
-   137	    top: 0;
-   138	    left: 0;
-   139	    width: 100%;
-   140	    height: 100%;
-   141	    background: var(--color-black);
-   142	    display: flex;
-   143	    align-items: center;
-   144	    justify-content: center;
-   145	    z-index: 9999;
-   146	    transition: opacity 0.5s ease, visibility 0.5s ease;
-   147	}
-   148	
-   149	.loading-screen.hidden {
-   150	    opacity: 0;
-   151	    visibility: hidden;
-   152	}
-   153	
-   154	.loading-content {
-   155	    text-align: center;
-   156	}
-   157	
-   158	.loading-logo {
-   159	    font-family: var(--font-display);
-   160	    font-size: clamp(2rem, 6vw, 4rem);
-   161	    font-weight: 900;
-   162	    color: var(--color-accent);
-   163	    margin-bottom: var(--spacing-md);
-   164	    letter-spacing: 0.1em;
-   165	}
-   166	
-   167	.loading-spinner {
-   168	    width: 50px;
-   169	    height: 50px;
-   170	    border: 3px solid rgba(201, 164, 92, 0.2);
-   171	    border-top-color: var(--color-accent);
-   172	    border-radius: 50%;
-   173	    animation: spin 1s linear infinite;
-   174	    margin: 0 auto;
-   175	}
-   176	
-   177	@keyframes spin {
-   178	    to { transform: rotate(360deg); }
-   179	}
-   180	
-   181	/* ======================
-   182	   Navigation
-   183	   ====================== */
-   184	.navbar {
-   185	    position: fixed;
-   186	    top: 0;
-   187	    left: 0;
-   188	    width: 100%;
-   189	    background: rgba(0, 0, 0, 0.95);
-   190	    backdrop-filter: blur(10px);
-   191	    z-index: 1000;
-   192	    padding: var(--spacing-sm) 0;
-   193	    border-bottom: 1px solid var(--color-border);
-   194	    transition: var(--transition-normal);
-   195	}
-   196	
-   197	.navbar.scrolled {
-   198	    background: rgba(0, 0, 0, 0.98);
-   199	    box-shadow: var(--shadow-md);
-   200	}
-   201	
-   202	.nav-container {
-   203	    display: flex;
-   204	    justify-content: space-between;
-   205	    align-items: center;
-   206	    max-width: 1400px;
-   207	    margin: 0 auto;
-   208	    padding: 0 var(--spacing-md);
-   209	}
-   210	
-   211	.nav-logo {
-   212	    font-family: var(--font-display);
-   213	    font-size: clamp(1.5rem, 3vw, 2rem);
-   214	    font-weight: 900;
-   215	    letter-spacing: 0.1em;
-   216	    color: var(--color-accent);
-   217	    transition: var(--transition-normal);
-   218	}
-   219	
-   220	.nav-logo:hover {
-   221	    color: var(--color-white);
-   222	}
-   223	
-   224	.nav-menu {
-   225	    display: flex;
-   226	    gap: var(--spacing-md);
-   227	}
-   228	
-   229	.nav-menu a {
-   230	    font-size: 0.95rem;
-   231	    font-weight: 500;
-   232	    color: var(--color-text-light);
-   233	    padding: var(--spacing-xs) var(--spacing-sm);
-   234	    position: relative;
-   235	}
-   236	
-   237	.nav-menu a::before {
-   238	    content: '';
-   239	    position: absolute;
-   240	    bottom: 0;
-   241	    left: 50%;
-   242	    transform: translateX(-50%);
-   243	    width: 0;
-   244	    height: 2px;
-   245	    background: var(--color-accent);
-   246	    transition: width var(--transition-normal);
-   247	}
-   248	
-   249	.nav-menu a:hover,
-   250	.nav-menu a.active {
-   251	    color: var(--color-accent);
-   252	}
-   253	
-   254	.nav-menu a:hover::before,
-   255	.nav-menu a.active::before {
-   256	    width: 100%;
-   257	}
-   258	
-   259	.mobile-toggle {
-   260	    display: none;
-   261	    flex-direction: column;
-   262	    gap: 5px;
-   263	    background: none;
-   264	    border: none;
-   265	    cursor: pointer;
-   266	}
-   267	
-   268	.mobile-toggle span {
-   269	    width: 25px;
-   270	    height: 2px;
-   271	    background: var(--color-accent);
-   272	    transition: var(--transition-normal);
-   273	}
-   274	
-   275	/* ======================
-   276	   Hero Section
-   277	   ====================== */
-   278	.hero-section {
-   279	    min-height: 100vh;
-   280	    display: flex;
-   281	    align-items: center;
-   282	    justify-content: center;
-   283	    position: relative;
-   284	    background: linear-gradient(180deg, var(--color-black) 0%, var(--color-dark-secondary) 100%);
-   285	    padding-top: 80px;
-   286	}
-   287	
-   288	.hero-section::before {
-   289	    content: '';
-   290	    position: absolute;
-   291	    top: 0;
-   292	    left: 0;
-   293	    width: 100%;
-   294	    height: 100%;
-   295	    background: 
-   296	        radial-gradient(circle at 20% 50%, rgba(201, 164, 92, 0.03) 0%, transparent 50%),
-   297	        radial-gradient(circle at 80% 80%, rgba(201, 164, 92, 0.03) 0%, transparent 50%);
-   298	    pointer-events: none;
-   299	}
-   300	
-   301	.hero-content {
-   302	    text-align: center;
-   303	    z-index: 1;
-   304	}
-   305	
-   306	.hero-subtitle {
-   307	    font-size: clamp(0.9rem, 2vw, 1.1rem);
-   308	    color: var(--color-accent);
-   309	    letter-spacing: 0.3em;
-   310	    margin-bottom: var(--spacing-sm);
-   311	    text-transform: uppercase;
-   312	}
-   313	
-   314	.hero-title {
-   315	    font-family: var(--font-display);
-   316	    font-size: clamp(3rem, 10vw, 7rem);
-   317	    font-weight: 900;
-   318	    line-height: 1.1;
-   319	    margin-bottom: var(--spacing-md);
-   320	    letter-spacing: 0.05em;
-   321	    color: var(--color-white);
-   322	    text-transform: uppercase;
-   323	    background: linear-gradient(180deg, #ffffff 0%, #e0e0e0 100%);
-   324	    -webkit-background-clip: text;
-   325	    -webkit-text-fill-color: transparent;
-   326	    background-clip: text;
-   327	}
-   328	
-   329	.hero-description {
-   330	    font-size: clamp(1rem, 2vw, 1.3rem);
-   331	    color: var(--color-text-light);
-   332	    max-width: 600px;
-   333	    margin: 0 auto var(--spacing-lg);
-   334	    line-height: 1.8;
-   335	}
-   336	
-   337	.hero-buttons {
-   338	    display: flex;
-   339	    gap: var(--spacing-sm);
-   340	    justify-content: center;
-   341	    flex-wrap: wrap;
-   342	}
-   343	
-   344	.btn {
-   345	    padding: var(--spacing-sm) var(--spacing-md);
-   346	    font-size: 1rem;
-   347	    font-weight: 600;
-   348	    border-radius: var(--radius-sm);
-   349	    transition: var(--transition-normal);
-   350	    display: inline-flex;
-   351	    align-items: center;
-   352	    gap: 0.5rem;
-   353	}
-   354	
-   355	.btn-primary {
-   356	    background: var(--color-accent);
-   357	    color: var(--color-black);
-   358	}
-   359	
-   360	.btn-primary:hover {
-   361	    background: var(--color-accent-dark);
-   362	    transform: translateY(-2px);
-   363	    box-shadow: var(--shadow-md);
-   364	}
-   365	
-   366	.btn-secondary {
-   367	    background: transparent;
-   368	    color: var(--color-accent);
-   369	    border: 2px solid var(--color-accent);
-   370	}
-   371	
-   372	.btn-secondary:hover {
-   373	    background: var(--color-accent);
-   374	    color: var(--color-black);
-   375	    transform: translateY(-2px);
-   376	}
-   377	
-   378	/* ======================
-   379	   About Section
-   380	   ====================== */
-   381	.about-section {
-   382	    background: var(--color-dark-secondary);
-   383	}
-   384	
-   385	.about-content {
-   386	    max-width: 800px;
-   387	    margin: 0 auto;
-   388	    text-align: center;
-   389	}
-   390	
-   391	.about-description {
-   392	    font-size: clamp(1rem, 2vw, 1.2rem);
-   393	    color: var(--color-text-light);
-   394	    line-height: 1.8;
-   395	    margin-bottom: var(--spacing-lg);
-   396	}
-   397	
-   398	.about-stats {
-   399	    display: grid;
-   400	    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-   401	    gap: var(--spacing-md);
-   402	    margin-top: var(--spacing-lg);
-   403	}
-   404	
-   405	.stat-item {
-   406	    padding: var(--spacing-md);
-   407	    background: var(--color-dark-tertiary);
-   408	    border-radius: var(--radius-md);
-   409	    border: 1px solid var(--color-border);
-   410	}
-   411	
-   412	.stat-number {
-   413	    font-family: var(--font-display);
-   414	    font-size: clamp(2rem, 4vw, 3rem);
-   415	    font-weight: 700;
-   416	    color: var(--color-accent);
-   417	    margin-bottom: var(--spacing-xs);
-   418	}
-   419	
-   420	.stat-label {
-   421	    font-size: 1rem;
-   422	    color: var(--color-text-gray);
-   423	}
-   424	
-   425	/* ======================
-   426	   Portfolio Section
-   427	   ====================== */
-   428	.portfolio-section {
-   429	    background: var(--color-black);
-   430	}
-   431	
-   432	.portfolio-filters {
-   433	    display: flex;
-   434	    justify-content: center;
-   435	    gap: var(--spacing-sm);
-   436	    margin-bottom: var(--spacing-lg);
-   437	    flex-wrap: wrap;
-   438	}
-   439	
-   440	.filter-btn {
-   441	    padding: var(--spacing-xs) var(--spacing-md);
-   442	    background: var(--color-dark-tertiary);
-   443	    color: var(--color-text-light);
-   444	    border: 1px solid var(--color-border);
-   445	    border-radius: var(--radius-sm);
-   446	    font-size: 0.95rem;
-   447	    font-weight: 500;
-   448	    cursor: pointer;
-   449	    transition: var(--transition-normal);
-   450	}
-   451	
-   452	.filter-btn:hover,
-   453	.filter-btn.active {
-   454	    background: var(--color-accent);
-   455	    color: var(--color-black);
-   456	    border-color: var(--color-accent);
-   457	}
-   458	
-   459	.portfolio-grid {
-   460	    display: grid;
-   461	    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-   462	    gap: var(--spacing-md);
-   463	}
-   464	
-   465	.portfolio-item {
-   466	    position: relative;
-   467	    overflow: hidden;
-   468	    border-radius: var(--radius-md);
-   469	    aspect-ratio: 1;
-   470	    cursor: pointer;
-   471	    background: var(--color-dark-secondary);
-   472	}
-   473	
-   474	.portfolio-item img {
-   475	    width: 100%;
-   476	    height: 100%;
-   477	    object-fit: cover;
-   478	    transition: transform 0.5s ease;
-   479	}
-   480	
-   481	.portfolio-item:hover img {
-   482	    transform: scale(1.1);
-   483	}
-   484	
-   485	.portfolio-overlay {
-   486	    position: absolute;
-   487	    top: 0;
-   488	    left: 0;
-   489	    width: 100%;
-   490	    height: 100%;
-   491	    background: rgba(0, 0, 0, 0.8);
-   492	    display: flex;
-   493	    flex-direction: column;
-   494	    align-items: center;
-   495	    justify-content: center;
-   496	    opacity: 0;
-   497	    transition: opacity var(--transition-normal);
-   498	    padding: var(--spacing-md);
-   499	}
-   500	
-   501	.portfolio-item:hover .portfolio-overlay {
-   502	    opacity: 1;
-   503	}
-   504	
-   505	.portfolio-category {
-   506	    font-size: 0.9rem;
-   507	    color: var(--color-accent);
-   508	    margin-bottom: var(--spacing-xs);
-   509	    text-transform: uppercase;
-   510	    letter-spacing: 0.1em;
-   511	}
-   512	
-   513	.portfolio-title {
-   514	    font-size: 1.5rem;
-   515	    font-weight: 700;
-   516	    text-align: center;
-   517	}
-   518	
-   519	.portfolio-cta {
-   520	    margin-top: var(--spacing-lg);
-   521	    text-align: center;
-   522	}
-   523	
-   524	/* ======================
-   525	   Designs Section
-   526	   ====================== */
-   527	.designs-section {
-   528	    background: var(--color-dark-secondary);
-   529	}
-   530	
-   531	.designs-grid {
-   532	    display: grid;
-   533	    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-   534	    gap: var(--spacing-md);
-   535	}
-   536	
-   537	.design-card {
-   538	    background: var(--color-dark-tertiary);
-   539	    border-radius: var(--radius-md);
-   540	    overflow: hidden;
-   541	    border: 1px solid var(--color-border);
-   542	    transition: var(--transition-normal);
-   543	}
-   544	
-   545	.design-card:hover {
-   546	    transform: translateY(-5px);
-   547	    box-shadow: var(--shadow-lg);
-   548	}
-   549	
-   550	.design-image {
-   551	    width: 100%;
-   552	    aspect-ratio: 1;
-   553	    object-fit: cover;
-   554	    background: var(--color-dark);
-   555	}
-   556	
-   557	.design-info {
-   558	    padding: var(--spacing-md);
-   559	}
-   560	
-   561	.design-title {
-   562	    font-size: 1.2rem;
-   563	    font-weight: 700;
-   564	    margin-bottom: var(--spacing-xs);
-   565	    color: var(--color-accent);
-   566	}
-   567	
-   568	.design-description {
-   569	    font-size: 0.95rem;
-   570	    color: var(--color-text-gray);
-   571	    line-height: 1.6;
-   572	}
-   573	
-   574	/* ======================
-   575	   Class Section
-   576	   ====================== */
-   577	.class-section {
-   578	    background: var(--color-black);
-   579	}
-   580	
-   581	.class-grid {
-   582	    display: grid;
-   583	    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-   584	    gap: var(--spacing-lg);
-   585	}
-   586	
-   587	.class-card {
-   588	    background: var(--color-dark-secondary);
-   589	    padding: var(--spacing-lg);
-   590	    border-radius: var(--radius-lg);
-   591	    border: 2px solid var(--color-border);
-   592	    transition: var(--transition-normal);
-   593	}
-   594	
-   595	.class-card:hover {
-   596	    border-color: var(--color-accent);
-   597	    transform: translateY(-5px);
-   598	}
-   599	
-   600	.class-header {
-   601	    text-align: center;
-   602	    margin-bottom: var(--spacing-md);
-   603	}
-   604	
-   605	.class-name {
-   606	    font-size: 1.8rem;
-   607	    font-weight: 700;
-   608	    color: var(--color-accent);
-   609	    margin-bottom: var(--spacing-xs);
-   610	}
-   611	
-   612	.class-duration {
-   613	    font-size: 1rem;
-   614	    color: var(--color-text-gray);
-   615	}
-   616	
-   617	.class-features {
-   618	    list-style: none;
-   619	    margin: var(--spacing-md) 0;
-   620	}
-   621	
-   622	.class-features li {
-   623	    padding: var(--spacing-xs) 0;
-   624	    color: var(--color-text-light);
-   625	    display: flex;
-   626	    align-items: center;
-   627	    gap: 0.5rem;
-   628	}
-   629	
-   630	.class-features li::before {
-   631	    content: '✓';
-   632	    color: var(--color-accent);
-   633	    font-weight: 700;
-   634	}
-   635	
-   636	/* ======================
-   637	   Pricing Section
-   638	   ====================== */
-   639	.pricing-section {
-   640	    background: var(--color-dark-secondary);
-   641	}
-   642	
-   643	.pricing-grid {
-   644	    display: grid;
-   645	    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-   646	    gap: var(--spacing-md);
-   647	    margin-bottom: var(--spacing-lg);
-   648	}
-   649	
-   650	.pricing-card {
-   651	    background: var(--color-dark-tertiary);
-   652	    padding: var(--spacing-lg);
-   653	    border-radius: var(--radius-lg);
-   654	    border: 2px solid var(--color-border);
-   655	    text-align: center;
-   656	    transition: var(--transition-normal);
-   657	    position: relative;
-   658	}
-   659	
-   660	.pricing-card.featured {
-   661	    border-color: var(--color-accent);
-   662	    transform: scale(1.05);
-   663	}
-   664	
-   665	.pricing-card:hover {
-   666	    transform: translateY(-5px);
-   667	    box-shadow: var(--shadow-lg);
-   668	}
-   669	
-   670	.pricing-badge {
-   671	    position: absolute;
-   672	    top: -15px;
-   673	    left: 50%;
-   674	    transform: translateX(-50%);
-   675	    background: var(--color-accent);
-   676	    color: var(--color-black);
-   677	    padding: 0.3rem 1rem;
-   678	    border-radius: 20px;
-   679	    font-size: 0.85rem;
-   680	    font-weight: 700;
-   681	}
-   682	
-   683	.pricing-name {
-   684	    font-size: 1.5rem;
-   685	    font-weight: 700;
-   686	    margin-bottom: var(--spacing-xs);
-   687	    color: var(--color-white);
-   688	}
-   689	
-   690	.pricing-size {
-   691	    font-size: 0.95rem;
-   692	    color: var(--color-text-gray);
-   693	    margin-bottom: var(--spacing-md);
-   694	}
-   695	
-   696	.pricing-amount {
-   697	    font-family: var(--font-display);
-   698	    font-size: 2.5rem;
-   699	    font-weight: 700;
-   700	    color: var(--color-accent);
-   701	    margin-bottom: var(--spacing-sm);
-   702	}
-   703	
-   704	.pricing-note {
-   705	    font-size: 0.9rem;
-   706	    color: var(--color-text-gray);
-   707	}
-   708	
-   709	.pricing-notes {
-   710	    background: var(--color-dark-tertiary);
-   711	    padding: var(--spacing-md);
-   712	    border-radius: var(--radius-md);
-   713	    border: 1px solid var(--color-border);
-   714	    text-align: center;
-   715	}
-   716	
-   717	.pricing-notes h3 {
-   718	    color: var(--color-accent);
-   719	    margin-bottom: var(--spacing-sm);
-   720	    font-size: 1.2rem;
-   721	}
-   722	
-   723	.pricing-notes ul {
-   724	    list-style: none;
-   725	}
-   726	
-   727	.pricing-notes li {
-   728	    padding: var(--spacing-xs) 0;
-   729	    color: var(--color-text-light);
-   730	}
-   731	
-   732	/* ======================
-   733	   Reviews Section
-   734	   ====================== */
-   735	.reviews-section {
-   736	    background: var(--color-black);
-   737	}
-   738	
-   739	.reviews-grid {
-   740	    display: grid;
-   741	    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-   742	    gap: var(--spacing-md);
-   743	}
-   744	
-   745	.review-card {
-   746	    background: var(--color-dark-secondary);
-   747	    padding: var(--spacing-lg);
-   748	    border-radius: var(--radius-md);
-   749	    border: 1px solid var(--color-border);
-   750	    transition: var(--transition-normal);
-   751	}
-   752	
-   753	.review-card:hover {
-   754	    border-color: var(--color-accent);
-   755	    transform: translateY(-3px);
-   756	}
-   757	
-   758	.review-rating {
-   759	    color: var(--color-accent);
-   760	    font-size: 1.2rem;
-   761	    margin-bottom: var(--spacing-sm);
-   762	}
-   763	
-   764	.review-text {
-   765	    color: var(--color-text-light);
-   766	    line-height: 1.8;
-   767	    margin-bottom: var(--spacing-md);
-   768	}
-   769	
-   770	.review-author {
-   771	    display: flex;
-   772	    justify-content: space-between;
-   773	    align-items: center;
-   774	    padding-top: var(--spacing-sm);
-   775	    border-top: 1px solid var(--color-border);
-   776	}
-   777	
-   778	.review-name {
-   779	    font-weight: 700;
-   780	    color: var(--color-accent);
-   781	}
-   782	
-   783	.review-type {
-   784	    font-size: 0.9rem;
-   785	    color: var(--color-text-gray);
-   786	}
-   787	
-   788	/* ======================
-   789	   Contact Section
-   790	   ====================== */
-   791	.contact-section {
-   792	    background: var(--color-dark-secondary);
-   793	}
-   794	
-   795	.contact-content {
-   796	    display: grid;
-   797	    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-   798	    gap: var(--spacing-lg);
-   799	}
-   800	
-   801	.contact-info {
-   802	    background: var(--color-dark-tertiary);
-   803	    padding: var(--spacing-lg);
-   804	    border-radius: var(--radius-md);
-   805	    border: 1px solid var(--color-border);
-   806	}
-   807	
-   808	.contact-info h3 {
-   809	    color: var(--color-accent);
-   810	    margin-bottom: var(--spacing-md);
-   811	    font-size: 1.5rem;
-   812	}
-   813	
-   814	.contact-item {
-   815	    margin-bottom: var(--spacing-md);
-   816	}
-   817	
-   818	.contact-item i {
-   819	    color: var(--color-accent);
-   820	    margin-right: var(--spacing-xs);
-   821	    width: 20px;
-   822	}
-   823	
-   824	.contact-item a {
-   825	    color: var(--color-text-light);
-   826	}
-   827	
-   828	.contact-item a:hover {
-   829	    color: var(--color-accent);
-   830	}
-   831	
-   832	.contact-map {
-   833	    border-radius: var(--radius-md);
-   834	    overflow: hidden;
-   835	    height: 100%;
-   836	    min-height: 400px;
-   837	}
-   838	
-   839	.contact-map iframe {
-   840	    width: 100%;
-   841	    height: 100%;
-   842	    border: none;
-   843	}
-   844	
-   845	.social-links {
-   846	    display: flex;
-   847	    gap: var(--spacing-sm);
-   848	    margin-top: var(--spacing-md);
-   849	}
-   850	
-   851	.social-link {
-   852	    width: 50px;
-   853	    height: 50px;
-   854	    border-radius: 50%;
-   855	    background: var(--color-dark);
-   856	    border: 2px solid var(--color-border);
-   857	    display: flex;
-   858	    align-items: center;
-   859	    justify-content: center;
-   860	    font-size: 1.5rem;
-   861	    transition: var(--transition-normal);
-   862	}
-   863	
-   864	.social-link:hover {
-   865	    background: var(--color-accent);
-   866	    border-color: var(--color-accent);
-   867	    color: var(--color-black);
-   868	    transform: translateY(-3px);
-   869	}
-   870	
-   871	/* ======================
-   872	   Footer
-   873	   ====================== */
-   874	.footer {
-   875	    background: var(--color-black);
-   876	    padding: var(--spacing-lg) 0 var(--spacing-md);
-   877	    border-top: 1px solid var(--color-border);
-   878	}
-   879	
-   880	.footer-content {
-   881	    display: grid;
-   882	    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-   883	    gap: var(--spacing-lg);
-   884	    margin-bottom: var(--spacing-lg);
-   885	}
-   886	
-   887	.footer-section h3 {
-   888	    color: var(--color-accent);
-   889	    margin-bottom: var(--spacing-md);
-   890	    font-size: 1.3rem;
-   891	}
-   892	
-   893	.footer-logo {
-   894	    font-family: var(--font-display);
-   895	    font-size: 2rem;
-   896	    font-weight: 900;
-   897	    color: var(--color-accent);
-   898	    margin-bottom: var(--spacing-sm);
-   899	}
-   900	
-   901	.footer-links a {
-   902	    display: block;
-   903	    color: var(--color-text-gray);
-   904	    padding: var(--spacing-xs) 0;
-   905	    transition: var(--transition-normal);
-   906	}
-   907	
-   908	.footer-links a:hover {
-   909	    color: var(--color-accent);
-   910	    padding-left: var(--spacing-xs);
-   911	}
-   912	
-   913	.footer-bottom {
-   914	    text-align: center;
-   915	    padding-top: var(--spacing-md);
-   916	    border-top: 1px solid var(--color-border);
-   917	    color: var(--color-text-gray);
-   918	    font-size: 0.9rem;
-   919	}
-   920	
-   921	/* ======================
-   922	   Scroll to Top
-   923	   ====================== */
-   924	.scroll-top {
-   925	    position: fixed;
-   926	    bottom: 30px;
-   927	    right: 30px;
-   928	    width: 50px;
-   929	    height: 50px;
-   930	    background: var(--color-accent);
-   931	    color: var(--color-black);
-   932	    border-radius: 50%;
-   933	    display: flex;
-   934	    align-items: center;
-   935	    justify-content: center;
-   936	    font-size: 1.5rem;
-   937	    cursor: pointer;
-   938	    opacity: 0;
-   939	    visibility: hidden;
-   940	    transition: var(--transition-normal);
-   941	    z-index: 999;
-   942	}
-   943	
-   944	.scroll-top.visible {
-   945	    opacity: 1;
-   946	    visibility: visible;
-   947	}
-   948	
-   949	.scroll-top:hover {
-   950	    transform: translateY(-5px);
-   951	    box-shadow: var(--shadow-md);
-   952	}
-   953	
-   954	/* ======================
-   955	   Responsive
-   956	   ====================== */
-   957	@media (max-width: 1024px) {
-   958	    .portfolio-grid {
-   959	        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-   960	    }
-   961	}
-   962	
-   963	@media (max-width: 768px) {
-   964	    .mobile-toggle {
-   965	        display: flex;
-   966	    }
-   967	    
-   968	    .nav-menu {
-   969	        position: absolute;
-   970	        top: 100%;
-   971	        left: 0;
-   972	        width: 100%;
-   973	        background: rgba(0, 0, 0, 0.98);
-   974	        flex-direction: column;
-   975	        padding: var(--spacing-md);
-   976	        max-height: 0;
-   977	        overflow: hidden;
-   978	        transition: max-height var(--transition-normal);
-   979	    }
-   980	    
-   981	    .nav-menu.active {
-   982	        max-height: 500px;
-   983	    }
-   984	    
-   985	    .hero-buttons {
-   986	        flex-direction: column;
-   987	        align-items: center;
-   988	    }
-   989	    
-   990	    .btn {
-   991	        width: 100%;
-   992	        max-width: 300px;
-   993	        justify-content: center;
-   994	    }
-   995	    
-   996	    .portfolio-grid,
-   997	    .designs-grid,
-   998	    .reviews-grid {
-   999	        grid-template-columns: 1fr;
-  1000	    }
-  1001	    
-  1002	    .class-grid,
-  1003	    .pricing-grid {
-  1004	        grid-template-columns: 1fr;
-  1005	    }
-  1006	    
-  1007	    .pricing-card.featured {
-  1008	        transform: scale(1);
-  1009	    }
-  1010	    
-  1011	    .contact-content {
-  1012	        grid-template-columns: 1fr;
-  1013	    }
-  1014	}
-  1015	
-  1016	@media (max-width: 480px) {
-  1017	    :root {
-  1018	        --spacing-md: 1rem;
-  1019	        --spacing-lg: 2rem;
-  1020	        --spacing-xl: 3rem;
-  1021	    }
-  1022	    
-  1023	    .section-title {
-  1024	        font-size: 2rem;
-  1025	    }
-  1026	    
-  1027	    .hero-title {
-  1028	        font-size: 2.5rem;
-  1029	    }
-  1030	    
-  1031	    .stat-number {
-  1032	        font-size: 2rem;
-  1033	    }
-  1034	    
-  1035	    .btn {
-  1036	        font-size: 0.9rem;
-  1037	        padding: 0.7rem 1.2rem;
-  1038	    }
-  1039	}
-  1040	</style>
-  1041	</head>
-  1042	<body>
-  1043	    <!-- Loading Screen -->
-  1044	    <div class="loading-screen">
-  1045	        <div class="loading-content">
-  1046	            <div class="loading-logo">TATTOO MAKING</div>
-  1047	            <div class="loading-spinner"></div>
-  1048	        </div>
-  1049	    </div>
-  1050	
-  1051	    <!-- Navigation -->
-  1052	    <nav class="navbar">
-  1053	        <div class="nav-container">
-  1054	            <a href="#home" class="nav-logo">TATTOO MAKING</a>
-  1055	            <button class="mobile-toggle" id="mobileToggle">
-  1056	                <span></span>
-  1057	                <span></span>
-  1058	                <span></span>
-  1059	            </button>
-  1060	            <ul class="nav-menu" id="navMenu">
-  1061	                <li><a href="#home" class="active">HOME</a></li>
-  1062	                <li><a href="#portfolio">포트폴리오</a></li>
-  1063	                <li><a href="#designs">작업 도안</a></li>
-  1064	                <li><a href="#class">수강 안내</a></li>
-  1065	                <li><a href="#pricing">가격 안내</a></li>
-  1066	                <li><a href="#reviews">고객 후기</a></li>
-  1067	                <li><a href="#contact">CONTACT</a></li>
-  1068	            </ul>
-  1069	        </div>
-  1070	    </nav>
-  1071	
-  1072	    <!-- Hero Section -->
-  1073	    <section id="home" class="hero-section">
-  1074	        <div class="hero-content">
-  1075	            <p class="hero-subtitle">Busan Black & Grey Realism</p>
-  1076	            <h1 class="hero-title">TATTOO MAKING</h1>
-  1077	            <p class="hero-description">
-  1078	                부산 블랙&그레이 리얼리즘 전문<br>
-  1079	                1:1 맞춤 디자인으로 당신만의 특별한 이야기를 새깁니다
-  1080	            </p>
-  1081	            <div class="hero-buttons">
-  1082	                <a href="#portfolio" class="btn btn-primary">
-  1083	                    <i class="fas fa-images"></i>
-  1084	                    포트폴리오 보기
-  1085	                </a>
-  1086	                <a href="https://open.kakao.com/o/s6IlPGxb" target="_blank" class="btn btn-secondary">
-  1087	                    <i class="fas fa-comment-dots"></i>
-  1088	                    상담 문의하기
-  1089	                </a>
-  1090	            </div>
-  1091	        </div>
-  1092	    </section>
-  1093	
-  1094	    <!-- About Section -->
-  1095	    <section id="about" class="about-section">
-  1096	        <div class="container">
-  1097	            <h2 class="section-title">ABOUT</h2>
-  1098	            <div class="about-content">
-  1099	                <p class="about-description">
-  1100	                    부산에 위치한 블랙&그레이 리얼리즘 전문 타투샵 TATTOO MAKING입니다.<br>
-  1101	                    1:1 맞춤 디자인 제작, 커버업, 타투 교육까지<br>
-  1102	                    10년 이상의 경험으로 고객님의 이야기를 예술작품으로 새겨드립니다.
-  1103	                </p>
-  1104	                <div class="about-stats">
-  1105	                    <div class="stat-item">
-  1106	                        <div class="stat-number">1000+</div>
-  1107	                        <div class="stat-label">완성된 작업</div>
-  1108	                    </div>
-  1109	                    <div class="stat-item">
-  1110	                        <div class="stat-number">10+</div>
-  1111	                        <div class="stat-label">년 경력</div>
-  1112	                    </div>
-  1113	                    <div class="stat-item">
-  1114	                        <div class="stat-number">100%</div>
-  1115	                        <div class="stat-label">고객 만족도</div>
-  1116	                    </div>
-  1117	                </div>
-  1118	            </div>
-  1119	        </div>
-  1120	    </section>
-  1121	
-  1122	    <!-- Portfolio Section -->
-  1123	    <section id="portfolio" class="portfolio-section">
-  1124	        <div class="container">
-  1125	            <h2 class="section-title">PORTFOLIO</h2>
-  1126	            <div class="portfolio-filters">
-  1127	                <button class="filter-btn active" data-filter="all">전체</button>
-  1128	                <button class="filter-btn" data-filter="irezumi">이레즈미</button>
-  1129	                <button class="filter-btn" data-filter="polynesian">폴리네시안</button>
-  1130	                <button class="filter-btn" data-filter="realism">리얼리즘</button>
-  1131	                <button class="filter-btn" data-filter="large">대형작업</button>
-  1132	            </div>
-  1133	            <div class="portfolio-grid">
-  1134	                <div class="portfolio-item" data-category="irezumi">
-  1135	                    <img src="https://images.unsplash.com/photo-1565058379802-bbe93b2f703f?w=800&h=800&fit=crop" alt="이레즈미 작업">
-  1136	                    <div class="portfolio-overlay">
-  1137	                        <span class="portfolio-category">이레즈미</span>
-  1138	                        <h3 class="portfolio-title">풀슬리브 이레즈미</h3>
-  1139	                    </div>
-  1140	                </div>
-  1141	                <div class="portfolio-item" data-category="polynesian">
-  1142	                    <img src="https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?w=800&h=800&fit=crop" alt="폴리네시안 작업">
-  1143	                    <div class="portfolio-overlay">
-  1144	                        <span class="portfolio-category">폴리네시안</span>
-  1145	                        <h3 class="portfolio-title">폴리네시안 하프슬리브</h3>
-  1146	                    </div>
-  1147	                </div>
-  1148	                <div class="portfolio-item" data-category="realism">
-  1149	                    <img src="https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?w=800&h=800&fit=crop" alt="리얼리즘 작업">
-  1150	                    <div class="portfolio-overlay">
-  1151	                        <span class="portfolio-category">리얼리즘</span>
-  1152	                        <h3 class="portfolio-title">블랙&그레이 초상화</h3>
-  1153	                    </div>
-  1154	                </div>
-  1155	                <div class="portfolio-item" data-category="large">
-  1156	                    <img src="https://images.unsplash.com/photo-1567427018141-0584cfcbf1b8?w=800&h=800&fit=crop" alt="대형작업">
-  1157	                    <div class="portfolio-overlay">
-  1158	                        <span class="portfolio-category">대형작업</span>
-  1159	                        <h3 class="portfolio-title">등판 대형 작업</h3>
-  1160	                    </div>
-  1161	                </div>
-  1162	                <div class="portfolio-item" data-category="irezumi">
-  1163	                    <img src="https://images.unsplash.com/photo-1611195974226-ef22beb97142?w=800&h=800&fit=crop" alt="이레즈미 작업">
-  1164	                    <div class="portfolio-overlay">
-  1165	                        <span class="portfolio-category">이레즈미</span>
-  1166	                        <h3 class="portfolio-title">일본 전통 문양</h3>
-  1167	                    </div>
-  1168	                </div>
-  1169	                <div class="portfolio-item" data-category="realism">
-  1170	                    <img src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=800&h=800&fit=crop" alt="리얼리즘 작업">
-  1171	                    <div class="portfolio-overlay">
-  1172	                        <span class="portfolio-category">리얼리즘</span>
-  1173	                        <h3 class="portfolio-title">동물 리얼리즘</h3>
-  1174	                    </div>
-  1175	                </div>
-  1176	            </div>
-  1177	            <div class="portfolio-cta">
-  1178	                <a href="https://www.instagram.com/tattoo_making" target="_blank" class="btn btn-primary">
-  1179	                    <i class="fab fa-instagram"></i>
-  1180	                    Instagram에서 더 많은 작업 보기
-  1181	                </a>
-  1182	            </div>
-  1183	        </div>
-  1184	    </section>
-  1185	
-  1186	    <!-- Designs Section -->
-  1187	    <section id="designs" class="designs-section">
-  1188	        <div class="container">
-  1189	            <h2 class="section-title">작업 도안</h2>
-  1190	            <div class="designs-grid">
-  1191	                <div class="design-card">
-  1192	                    <img src="https://images.unsplash.com/photo-1590246814883-57c511203b96?w=600&h=600&fit=crop" alt="커스텀 디자인 1" class="design-image">
-  1193	                    <div class="design-info">
-  1194	                        <h3 class="design-title">맞춤 디자인 제작</h3>
-  1195	                        <p class="design-description">고객님의 이야기를 바탕으로 유일무이한 디자인을 제작합니다.</p>
-  1196	                    </div>
-  1197	                </div>
-  1198	                <div class="design-card">
-  1199	                    <img src="https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=600&h=600&fit=crop" alt="커스텀 디자인 2" class="design-image">
-  1200	                    <div class="design-info">
-  1201	                        <h3 class="design-title">블랙&그레이 전문</h3>
-  1202	                        <p class="design-description">섬세한 명암 처리로 입체감 있는 작품을 완성합니다.</p>
-  1203	                    </div>
-  1204	                </div>
-  1205	                <div class="design-card">
-  1206	                    <img src="https://images.unsplash.com/photo-1618588507085-c79565432917?w=600&h=600&fit=crop" alt="커스텀 디자인 3" class="design-image">
-  1207	                    <div class="design-info">
-  1208	                        <h3 class="design-title">커버업 전문</h3>
-  1209	                        <p class="design-description">기존 타투를 새로운 디자인으로 완벽하게 커버합니다.</p>
-  1210	                    </div>
-  1211	                </div>
-  1212	                <div class="design-card">
-  1213	                    <img src="https://images.unsplash.com/photo-1595433707802-6b2626ef1c91?w=600&h=600&fit=crop" alt="커스텀 디자인 4" class="design-image">
-  1214	                    <div class="design-info">
-  1215	                        <h3 class="design-title">대형 작업 특화</h3>
-  1216	                        <p class="design-description">풀슬리브, 등판 등 대형 작업도 안정적으로 진행합니다.</p>
-  1217	                    </div>
-  1218	                </div>
-  1219	            </div>
-  1220	        </div>
-  1221	    </section>
-  1222	
-  1223	    <!-- Class Section -->
-  1224	    <section id="class" class="class-section">
-  1225	        <div class="container">
-  1226	            <h2 class="section-title">타투 수강 안내</h2>
-  1227	            <div class="class-grid">
-  1228	                <div class="class-card">
-  1229	                    <div class="class-header">
-  1230	                        <h3 class="class-name">기초반</h3>
-  1231	                        <p class="class-duration">4주 / 주 2회</p>
-  1232	                    </div>
-  1233	                    <ul class="class-features">
-  1234	                        <li>타투 머신 다루기</li>
-  1235	                        <li>기초 라인 워크</li>
-  1236	                        <li>쉐이딩 기법</li>
-  1237	                        <li>위생 관리</li>
-  1238	                        <li>실습용 재료 제공</li>
-  1239	                    </ul>
-  1240	                </div>
-  1241	                <div class="class-card">
-  1242	                    <div class="class-header">
-  1243	                        <h3 class="class-name">심화반</h3>
-  1244	                        <p class="class-duration">8주 / 주 3회</p>
-  1245	                    </div>
-  1246	                    <ul class="class-features">
-  1247	                        <li>블랙&그레이 리얼리즘</li>
-  1248	                        <li>디자인 제작 실습</li>
-  1249	                        <li>커버업 기법</li>
-  1250	                        <li>실제 작업 참관</li>
-  1251	                        <li>포트폴리오 제작</li>
-  1252	                    </ul>
-  1253	                </div>
-  1254	                <div class="class-card">
-  1255	                    <div class="class-header">
-  1256	                        <h3 class="class-name">이레즈미 특화반</h3>
-  1257	                        <p class="class-duration">12주 / 주 2회</p>
-  1258	                    </div>
-  1259	                    <ul class="class-features">
-  1260	                        <li>일본 전통 문양 이해</li>
-  1261	                        <li>이레즈미 기법</li>
-  1262	                        <li>대형 작업 기획</li>
-  1263	                        <li>1:1 맞춤 지도</li>
-  1264	                        <li>수료 후 멘토링</li>
-  1265	                    </ul>
-  1266	                </div>
-  1267	            </div>
-  1268	        </div>
-  1269	    </section>
-  1270	
-  1271	    <!-- Pricing Section -->
-  1272	    <section id="pricing" class="pricing-section">
-  1273	        <div class="container">
-  1274	            <h2 class="section-title">가격 안내</h2>
-  1275	            <div class="pricing-grid">
-  1276	                <div class="pricing-card">
-  1277	                    <h3 class="pricing-name">소형</h3>
-  1278	                    <p class="pricing-size">5cm 이하</p>
-  1279	                    <div class="pricing-amount">10만원~</div>
-  1280	                    <p class="pricing-note">미니 타투</p>
-  1281	                </div>
-  1282	                <div class="pricing-card">
-  1283	                    <h3 class="pricing-name">중형</h3>
-  1284	                    <p class="pricing-size">5~15cm</p>
-  1285	                    <div class="pricing-amount">30만원~</div>
-  1286	                    <p class="pricing-note">일반 사이즈</p>
-  1287	                </div>
-  1288	                <div class="pricing-card featured">
-  1289	                    <span class="pricing-badge">인기</span>
-  1290	                    <h3 class="pricing-name">대형</h3>
-  1291	                    <p class="pricing-size">하프슬리브</p>
-  1292	                    <div class="pricing-amount">150만원~</div>
-  1293	                    <p class="pricing-note">팔 반</p>
-  1294	                </div>
-  1295	                <div class="pricing-card">
-  1296	                    <h3 class="pricing-name">특대형</h3>
-  1297	                    <p class="pricing-size">풀슬리브/등판</p>
-  1298	                    <div class="pricing-amount">300만원~</div>
-  1299	                    <p class="pricing-note">대형 작업</p>
-  1300	                </div>
-  1301	            </div>
-  1302	            <div class="pricing-notes">
-  1303	                <h3>참고사항</h3>
-  1304	                <ul>
-  1305	                    <li>✓ 커버업 작업은 기존 가격의 +20%</li>
-  1306	                    <li>✓ 컬러 작업은 기존 가격의 +30%</li>
-  1307	                    <li>✓ 카드 결제 가능 (무이자 할부 가능)</li>
-  1308	                    <li>✓ 최종 금액은 디자인 상담 후 결정</li>
-  1309	                </ul>
-  1310	            </div>
-  1311	        </div>
-  1312	    </section>
-  1313	
-  1314	    <!-- Reviews Section -->
-  1315	    <section id="reviews" class="reviews-section">
-  1316	        <div class="container">
-  1317	            <h2 class="section-title">고객 후기</h2>
-  1318	            <div class="reviews-grid">
-  1319	                <div class="review-card">
-  1320	                    <div class="review-rating">★★★★★</div>
-  1321	                    <p class="review-text">
-  1322	                        "처음 타투를 하는 거라 많이 긴장했는데, 친절하게 상담해주시고 제가 원하는 디자인으로 완벽하게 만들어주셔서 너무 만족합니다!"
-  1323	                    </p>
-  1324	                    <div class="review-author">
-  1325	                        <span class="review-name">김** 님</span>
-  1326	                        <span class="review-type">블랙워크</span>
-  1327	                    </div>
-  1328	                </div>
-  1329	                <div class="review-card">
-  1330	                    <div class="review-rating">★★★★★</div>
-  1331	                    <p class="review-text">
-  1332	                        "풀슬리브 이레즈미 작업 받았습니다. 10개월 동안 정말 정성스럽게 작업해주셔서 최고의 결과물이 나왔어요. 감사합니다!"
-  1333	                    </p>
-  1334	                    <div class="review-author">
-  1335	                        <span class="review-name">박** 님</span>
-  1336	                        <span class="review-type">풀슬리브 이레즈미</span>
-  1337	                    </div>
-  1338	                </div>
-  1339	                <div class="review-card">
-  1340	                    <div class="review-rating">★★★★★</div>
-  1341	                    <p class="review-text">
-  1342	                        "예전에 다른 곳에서 한 타투가 마음에 안 들어서 커버업 받았는데, 완전히 새로운 디자인으로 바꿔주셔서 정말 감사합니다."
-  1343	                    </p>
-  1344	                    <div class="review-author">
-  1345	                        <span class="review-name">이** 님</span>
-  1346	                        <span class="review-type">커버업</span>
-  1347	                    </div>
-  1348	                </div>
-  1349	                <div class="review-card">
-  1350	                    <div class="review-rating">★★★★★</div>
-  1351	                    <p class="review-text">
-  1352	                        "리얼리즘 타투 너무 잘 받았어요! 사진보다 실물이 훨씬 더 멋있습니다. 주변 친구들한테도 추천했어요."
-  1353	                    </p>
-  1354	                    <div class="review-author">
-  1355	                        <span class="review-name">최** 님</span>
-  1356	                        <span class="review-type">리얼리즘</span>
-  1357	                    </div>
-  1358	                </div>
-  1359	                <div class="review-card">
-  1360	                    <div class="review-rating">★★★★★</div>
-  1361	                    <p class="review-text">
-  1362	                        "타투 수강생입니다. 꼼꼼하게 가르쳐주시고, 실습도 많이 시켜주셔서 실력이 많이 늘었어요. 강력 추천합니다!"
-  1363	                    </p>
-  1364	                    <div class="review-author">
-  1365	                        <span class="review-name">정** 님</span>
-  1366	                        <span class="review-type">타투 교육</span>
-  1367	                    </div>
-  1368	                </div>
-  1369	                <div class="review-card">
-  1370	                    <div class="review-rating">★★★★★</div>
-  1371	                    <p class="review-text">
-  1372	                        "위생 관리도 철저하고, 작업 중에도 계속 확인해주셔서 안심하고 받을 수 있었어요. 결과도 대만족!"
-  1373	                    </p>
-  1374	                    <div class="review-author">
-  1375	                        <span class="review-name">강** 님</span>
-  1376	                        <span class="review-type">폴리네시안</span>
-  1377	                    </div>
-  1378	                </div>
-  1379	            </div>
-  1380	        </div>
-  1381	    </section>
-  1382	
-  1383	    <!-- Contact Section -->
-  1384	    <section id="contact" class="contact-section">
-  1385	        <div class="container">
-  1386	            <h2 class="section-title">CONTACT</h2>
-  1387	            <div class="contact-content">
-  1388	                <div class="contact-info">
-  1389	                    <h3>상담 문의</h3>
-  1390	                    <div class="contact-item">
-  1391	                        <i class="fas fa-phone"></i>
-  1392	                        <span>010-2254-0690</span>
-  1393	                        <p style="margin-left: 28px; margin-top: 5px; font-size: 0.9rem; color: var(--color-text-gray);">
-  1394	                            평일 12:00 - 21:00<br>
-  1395	                            주말 예약제 운영
-  1396	                        </p>
-  1397	                    </div>
-  1398	                    <div class="contact-item">
-  1399	                        <i class="fas fa-comment-dots"></i>
-  1400	                        <span>카카오톡 ID: making91</span>
-  1401	                        <p style="margin-left: 28px; margin-top: 5px;">
-  1402	                            <a href="https://open.kakao.com/o/s6IlPGxb" target="_blank" style="color: var(--color-accent);">
-  1403	                                오픈채팅 바로가기 →
-  1404	                            </a>
-  1405	                        </p>
-  1406	                    </div>
-  1407	                    <div class="contact-item">
-  1408	                        <i class="fab fa-instagram"></i>
-  1409	                        <a href="https://www.instagram.com/tattoo_making" target="_blank">
-  1410	                            @tattoo_making
-  1411	                        </a>
-  1412	                    </div>
-  1413	                    <div class="social-links">
-  1414	                        <a href="https://www.instagram.com/tattoo_making" target="_blank" class="social-link">
-  1415	                            <i class="fab fa-instagram"></i>
-  1416	                        </a>
-  1417	                        <a href="https://open.kakao.com/o/s6IlPGxb" target="_blank" class="social-link">
-  1418	                            <i class="fas fa-comment"></i>
-  1419	                        </a>
-  1420	                        <a href="https://linktr.ee/tattoo_making" target="_blank" class="social-link">
-  1421	                            <i class="fas fa-link"></i>
-  1422	                        </a>
-  1423	                    </div>
-  1424	                </div>
-  1425	                <div class="contact-map">
-  1426	                    <iframe 
-  1427	                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3262.8234567890123!2d128.8784972!3d35.1795543!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzXCsDEwJzQ2LjQiTiAxMjjCsDUyJzQyLjYiRQ!5e0!3m2!1sko!2skr!4v1234567890123!5m2!1sko!2skr" 
-  1428	                        allowfullscreen="" 
-  1429	                        loading="lazy">
-  1430	                    </iframe>
-  1431	                </div>
-  1432	            </div>
-  1433	        </div>
-  1434	    </section>
-  1435	
-  1436	    <!-- Footer -->
-  1437	    <footer class="footer">
-  1438	        <div class="container">
-  1439	            <div class="footer-content">
-  1440	                <div class="footer-section">
-  1441	                    <div class="footer-logo">TATTOO MAKING</div>
-  1442	                    <p style="color: var(--color-text-gray); margin-top: var(--spacing-sm);">
-  1443	                        부산 블랙&그레이 리얼리즘 전문 타투샵
-  1444	                    </p>
-  1445	                </div>
-  1446	                <div class="footer-section">
-  1447	                    <h3>Quick Links</h3>
-  1448	                    <div class="footer-links">
-  1449	                        <a href="#portfolio">포트폴리오</a>
-  1450	                        <a href="#designs">작업 도안</a>
-  1451	                        <a href="#class">수강 안내</a>
-  1452	                        <a href="#pricing">가격 안내</a>
-  1453	                    </div>
-  1454	                </div>
-  1455	                <div class="footer-section">
-  1456	                    <h3>Social</h3>
-  1457	                    <div class="footer-links">
-  1458	                        <a href="https://www.instagram.com/tattoo_making" target="_blank">Instagram</a>
-  1459	                        <a href="https://open.kakao.com/o/s6IlPGxb" target="_blank">카카오톡 오픈채팅</a>
-  1460	                        <a href="https://linktr.ee/tattoo_making" target="_blank">Linktree</a>
-  1461	                    </div>
-  1462	                </div>
-  1463	            </div>
-  1464	            <div class="footer-bottom">
-  1465	                <p>&copy; 2024 TATTOO MAKING. All rights reserved.</p>
-  1466	            </div>
-  1467	        </div>
-  1468	    </footer>
-  1469	
-  1470	    <!-- Scroll to Top Button -->
-  1471	    <div class="scroll-top" id="scrollTop">
-  1472	        <i class="fas fa-arrow-up"></i>
-  1473	    </div>
-  1474	
-  1475	<script>
-  1476	// =====================
-  1477	// Loading Screen
-  1478	// =====================
-  1479	window.addEventListener('load', () => {
-  1480	    const loadingScreen = document.querySelector('.loading-screen');
-  1481	    setTimeout(() => {
-  1482	        loadingScreen.classList.add('hidden');
-  1483	    }, 1000);
-  1484	});
-  1485	
-  1486	// =====================
-  1487	// Mobile Menu Toggle
-  1488	// =====================
-  1489	const mobileToggle = document.getElementById('mobileToggle');
-  1490	const navMenu = document.getElementById('navMenu');
-  1491	
-  1492	mobileToggle.addEventListener('click', () => {
-  1493	    navMenu.classList.toggle('active');
-  1494	});
-  1495	
-  1496	// Close mobile menu when clicking a link
-  1497	document.querySelectorAll('.nav-menu a').forEach(link => {
-  1498	    link.addEventListener('click', () => {
-  1499	        navMenu.classList.remove('active');
-  1500	    });
-  1501	});
-  1502	
-  1503	// =====================
-  1504	// Navbar Scroll Effect
-  1505	// =====================
-  1506	const navbar = document.querySelector('.navbar');
-  1507	window.addEventListener('scroll', () => {
-  1508	    if (window.scrollY > 100) {
-  1509	        navbar.classList.add('scrolled');
-  1510	    } else {
-  1511	        navbar.classList.remove('scrolled');
-  1512	    }
-  1513	});
-  1514	
-  1515	// =====================
-  1516	// Active Navigation Link
-  1517	// =====================
-  1518	const sections = document.querySelectorAll('section[id]');
-  1519	const navLinks = document.querySelectorAll('.nav-menu a');
-  1520	
-  1521	window.addEventListener('scroll', () => {
-  1522	    let current = '';
-  1523	    sections.forEach(section => {
-  1524	        const sectionTop = section.offsetTop;
-  1525	        const sectionHeight = section.clientHeight;
-  1526	        if (window.scrollY >= sectionTop - 100) {
-  1527	            current = section.getAttribute('id');
-  1528	        }
-  1529	    });
-  1530	
-  1531	    navLinks.forEach(link => {
-  1532	        link.classList.remove('active');
-  1533	        if (link.getAttribute('href') === `#${current}`) {
-  1534	            link.classList.add('active');
-  1535	        }
-  1536	    });
-  1537	});
-  1538	
-  1539	// =====================
-  1540	// Portfolio Filter
-  1541	// =====================
-  1542	const filterBtns = document.querySelectorAll('.filter-btn');
-  1543	const portfolioItems = document.querySelectorAll('.portfolio-item');
-  1544	
-  1545	filterBtns.forEach(btn => {
-  1546	    btn.addEventListener('click', () => {
-  1547	        // Remove active class from all buttons
-  1548	        filterBtns.forEach(b => b.classList.remove('active'));
-  1549	        btn.classList.add('active');
-  1550	
-  1551	        const filterValue = btn.getAttribute('data-filter');
-  1552	
-  1553	        portfolioItems.forEach(item => {
-  1554	            if (filterValue === 'all' || item.getAttribute('data-category') === filterValue) {
-  1555	                item.style.display = 'block';
-  1556	                setTimeout(() => {
-  1557	                    item.style.opacity = '1';
-  1558	                    item.style.transform = 'scale(1)';
-  1559	                }, 10);
-  1560	            } else {
-  1561	                item.style.opacity = '0';
-  1562	                item.style.transform = 'scale(0.8)';
-  1563	                setTimeout(() => {
-  1564	                    item.style.display = 'none';
-  1565	                }, 300);
-  1566	            }
-  1567	        });
-  1568	    });
-  1569	});
-  1570	
-  1571	// =====================
-  1572	// Scroll to Top Button
-  1573	// =====================
-  1574	const scrollTopBtn = document.getElementById('scrollTop');
-  1575	
-  1576	window.addEventListener('scroll', () => {
-  1577	    if (window.scrollY > 500) {
-  1578	        scrollTopBtn.classList.add('visible');
-  1579	    } else {
-  1580	        scrollTopBtn.classList.remove('visible');
-  1581	    }
-  1582	});
-  1583	
-  1584	scrollTopBtn.addEventListener('click', () => {
-  1585	    window.scrollTo({
-  1586	        top: 0,
-  1587	        behavior: 'smooth'
-  1588	    });
-  1589	});
-  1590	
-  1591	// =====================
-  1592	// Smooth Scroll for All Links
-  1593	// =====================
-  1594	document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  1595	    anchor.addEventListener('click', function (e) {
-  1596	        e.preventDefault();
-  1597	        const target = document.querySelector(this.getAttribute('href'));
-  1598	        if (target) {
-  1599	            const offsetTop = target.offsetTop - 80;
-  1600	            window.scrollTo({
-  1601	                top: offsetTop,
-  1602	                behavior: 'smooth'
-  1603	            });
-  1604	        }
-  1605	    });
-  1606	});
-  1607	
-  1608	// =====================
-  1609	// Animation on Scroll (Simple)
-  1610	// =====================
-  1611	const observerOptions = {
-  1612	    threshold: 0.1,
-  1613	    rootMargin: '0px 0px -50px 0px'
-  1614	};
-  1615	
-  1616	const observer = new IntersectionObserver((entries) => {
-  1617	    entries.forEach(entry => {
-  1618	        if (entry.isIntersecting) {
-  1619	            entry.target.style.opacity = '1';
-  1620	            entry.target.style.transform = 'translateY(0)';
-  1621	        }
-  1622	    });
-  1623	}, observerOptions);
-  1624	
-  1625	// Observe all cards and items
-  1626	document.querySelectorAll('.portfolio-item, .design-card, .class-card, .pricing-card, .review-card').forEach(el => {
-  1627	    el.style.opacity = '0';
-  1628	    el.style.transform = 'translateY(30px)';
-  1629	    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-  1630	    observer.observe(el);
-  1631	});
-  1632	
-  1633	// Log to console (for debugging)
-  1634	console.log('🖤 TATTOO MAKING 🖤');
-  1635	console.log('부산 블랙&그레이 리얼리즘 전문 타투샵');
-  1636	console.log('📞 010-2254-0690 | 📷 @tattoo_making');
-  1637	</script>
-  1638	
-  1639	</body>
-  1640	</html>
-  1641	
+     6	    <meta name="naver-site-verification" content="17cb875e0cdf1f3651901f6ebdffb30e13c547d4">
+     7	    <meta name="google-site-verification" content="6YbU8co5rNcgyb7e-NxWB5JVMVcqexrgv1KfKud1rR0">
+     8	    <meta name="description" content="부산 타투메이킹 - 블랙&그레이 리얼리즘 전문 타투샵. 이레즈미, 폴리네시안, 리얼리즘, 블랙워크 등 다양한 스타일. 1:1 맞춤 디자인, 커버업, 타투 교육 수강 가능.">
+     9	    <meta name="keywords" content="부산타투, 타투메이킹, 이레즈미, 블랙워크, 리얼리즘타투, 폴리네시안타투, 풀슬리브, 타투수강">
+    10	    <title>TATTOO MAKING - 부산 블랙&그레이 리얼리즘 타투샵</title>
+    11	    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖤</text></svg>">
+    12	    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+    13	    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    14	<style>
+    15	:root{--color-black:#000;--color-dark:#0a0a0a;--color-dark-secondary:#121212;--color-dark-tertiary:#1a1a1a;--color-accent:#c9a45c;--color-accent-dark:#a08040;--color-white:#fff;--color-text-light:#e0e0e0;--color-text-gray:#999;--color-border:rgba(201,164,92,.2);--font-primary:'Noto Sans KR',sans-serif;--font-display:'Playfair Display',serif;--spacing-xs:.5rem;--spacing-sm:1rem;--spacing-md:2rem;--spacing-lg:4rem;--spacing-xl:6rem;--transition-fast:.2s ease;--transition-normal:.3s ease;--transition-slow:.5s ease;--shadow-sm:0 2px 8px rgba(0,0,0,.3);--shadow-md:0 4px 16px rgba(0,0,0,.4);--shadow-lg:0 8px 32px rgba(0,0,0,.5);--radius-sm:4px;--radius-md:8px;--radius-lg:16px}*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}body{font-family:var(--font-primary);background:var(--color-black);color:var(--color-white);line-height:1.6;overflow-x:hidden}img{max-width:100%;height:auto;display:block}a{color:inherit;text-decoration:none;transition:var(--transition-normal)}ul{list-style:none}button{font-family:inherit;border:none;cursor:pointer;transition:var(--transition-normal)}.container{max-width:1400px;margin:0 auto;padding:0 var(--spacing-md)}section{padding:var(--spacing-xl) 0}.section-title{font-family:var(--font-display);font-size:clamp(2rem,5vw,3.5rem);font-weight:900;text-align:center;margin-bottom:var(--spacing-lg);letter-spacing:.05em;color:var(--color-white)}.section-title::after{content:'';display:block;width:80px;height:4px;background:var(--color-accent);margin:var(--spacing-sm) auto 0}.loading-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:var(--color-black);display:flex;align-items:center;justify-content:center;z-index:9999;transition:opacity .5s ease,visibility .5s ease}.loading-screen.hidden{opacity:0;visibility:hidden}.loading-content{text-align:center}.loading-logo{font-family:var(--font-display);font-size:clamp(2rem,6vw,4rem);font-weight:900;color:var(--color-accent);margin-bottom:var(--spacing-md);letter-spacing:.1... (line truncated)
+    16	</style>
+    17	</head>
+    18	<body>
+    19	<div class="loading-screen">
+    20	<div class="loading-content">
+    21	<div class="loading-logo">TATTOO MAKING</div>
+    22	<div class="loading-spinner"></div>
+    23	</div>
+    24	</div>
+    25	<nav class="navbar">
+    26	<div class="nav-container">
+    27	<a href="#home" class="nav-logo">TATTOO MAKING</a>
+    28	<button class="mobile-toggle" id="mobileToggle">
+    29	<span></span><span></span><span></span>
+    30	</button>
+    31	<ul class="nav-menu" id="navMenu">
+    32	<li><a href="#home" class="active">HOME</a></li>
+    33	<li><a href="#portfolio">포트폴리오</a></li>
+    34	<li><a href="#designs">작업 도안</a></li>
+    35	<li><a href="#class">수강 안내</a></li>
+    36	<li><a href="#pricing">가격 안내</a></li>
+    37	<li><a href="#reviews">고객 후기</a></li>
+    38	<li><a href="#contact">CONTACT</a></li>
+    39	</ul>
+    40	</div>
+    41	</nav>
+    42	<section id="home" class="hero-section">
+    43	<div class="hero-content">
+    44	<p class="hero-subtitle">Busan Black & Grey Realism</p>
+    45	<h1 class="hero-title">TATTOO MAKING</h1>
+    46	<p class="hero-description">부산 블랙&그레이 리얼리즘 전문<br>1:1 맞춤 디자인으로 당신만의 특별한 이야기를 새깁니다</p>
+    47	<div class="hero-buttons">
+    48	<a href="#portfolio" class="btn btn-primary"><i class="fas fa-images"></i> 포트폴리오 보기</a>
+    49	<a href="https://open.kakao.com/o/s6IlPGxb" target="_blank" class="btn btn-secondary"><i class="fas fa-comment-dots"></i> 상담 문의하기</a>
+    50	</div>
+    51	</div>
+    52	</section>
+    53	<section id="about" class="about-section">
+    54	<div class="container">
+    55	<h2 class="section-title">ABOUT</h2>
+    56	<div class="about-content">
+    57	<p class="about-description">부산에 위치한 블랙&그레이 리얼리즘 전문 타투샵 TATTOO MAKING입니다.<br>1:1 맞춤 디자인 제작, 커버업, 타투 교육까지<br>10년 이상의 경험으로 고객님의 이야기를 예술작품으로 새겨드립니다.</p>
+    58	<div class="about-stats">
+    59	<div class="stat-item"><div class="stat-number">1000+</div><div class="stat-label">완성된 작업</div></div>
+    60	<div class="stat-item"><div class="stat-number">10+</div><div class="stat-label">년 경력</div></div>
+    61	<div class="stat-item"><div class="stat-number">100%</div><div class="stat-label">고객 만족도</div></div>
+    62	</div>
+    63	</div>
+    64	</div>
+    65	</section>
+    66	<section id="portfolio" class="portfolio-section">
+    67	<div class="container">
+    68	<h2 class="section-title">PORTFOLIO</h2>
+    69	<div class="portfolio-filters">
+    70	<button class="filter-btn active" data-filter="all">전체</button>
+    71	<button class="filter-btn" data-filter="irezumi">이레즈미</button>
+    72	<button class="filter-btn" data-filter="polynesian">폴리네시안</button>
+    73	<button class="filter-btn" data-filter="realism">리얼리즘</button>
+    74	<button class="filter-btn" data-filter="large">대형작업</button>
+    75	</div>
+    76	<div class="portfolio-grid">
+    77	<div class="portfolio-item" data-category="irezumi">
+    78	<img src="https://images.unsplash.com/photo-1565058379802-bbe93b2f703f?w=800&h=800&fit=crop" alt="이레즈미">
+    79	<div class="portfolio-overlay"><span class="portfolio-category">이레즈미</span><h3 class="portfolio-title">풀슬리브 이레즈미</h3></div>
+    80	</div>
+    81	<div class="portfolio-item" data-category="polynesian">
+    82	<img src="https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?w=800&h=800&fit=crop" alt="폴리네시안">
+    83	<div class="portfolio-overlay"><span class="portfolio-category">폴리네시안</span><h3 class="portfolio-title">폴리네시안 하프슬리브</h3></div>
+    84	</div>
+    85	<div class="portfolio-item" data-category="realism">
+    86	<img src="https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?w=800&h=800&fit=crop" alt="리얼리즘">
+    87	<div class="portfolio-overlay"><span class="portfolio-category">리얼리즘</span><h3 class="portfolio-title">블랙&그레이 초상화</h3></div>
+    88	</div>
+    89	<div class="portfolio-item" data-category="large">
+    90	<img src="https://images.unsplash.com/photo-1567427018141-0584cfcbf1b8?w=800&h=800&fit=crop" alt="대형작업">
+    91	<div class="portfolio-overlay"><span class="portfolio-category">대형작업</span><h3 class="portfolio-title">등판 대형 작업</h3></div>
+    92	</div>
+    93	<div class="portfolio-item" data-category="irezumi">
+    94	<img src="https://images.unsplash.com/photo-1611195974226-ef22beb97142?w=800&h=800&fit=crop" alt="이레즈미">
+    95	<div class="portfolio-overlay"><span class="portfolio-category">이레즈미</span><h3 class="portfolio-title">일본 전통 문양</h3></div>
+    96	</div>
+    97	<div class="portfolio-item" data-category="realism">
+    98	<img src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=800&h=800&fit=crop" alt="리얼리즘">
+    99	<div class="portfolio-overlay"><span class="portfolio-category">리얼리즘</span><h3 class="portfolio-title">동물 리얼리즘</h3></div>
+   100	</div>
+   101	</div>
+   102	<div class="portfolio-cta">
+   103	<a href="https://www.instagram.com/tattoo_making" target="_blank" class="btn btn-primary"><i class="fab fa-instagram"></i> Instagram에서 더 많은 작업 보기</a>
+   104	</div>
+   105	</div>
+   106	</section>
+   107	<section id="designs" class="designs-section">
+   108	<div class="container">
+   109	<h2 class="section-title">작업 도안</h2>
+   110	<div class="designs-grid">
+   111	<div class="design-card">
+   112	<img src="https://images.unsplash.com/photo-1590246814883-57c511203b96?w=600&h=600&fit=crop" alt="디자인1" class="design-image">
+   113	<div class="design-info"><h3 class="design-title">맞춤 디자인 제작</h3><p class="design-description">고객님의 이야기를 바탕으로 유일무이한 디자인을 제작합니다.</p></div>
+   114	</div>
+   115	<div class="design-card">
+   116	<img src="https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=600&h=600&fit=crop" alt="디자인2" class="design-image">
+   117	<div class="design-info"><h3 class="design-title">블랙&그레이 전문</h3><p class="design-description">섬세한 명암 처리로 입체감 있는 작품을 완성합니다.</p></div>
+   118	</div>
+   119	<div class="design-card">
+   120	<img src="https://images.unsplash.com/photo-1618588507085-c79565432917?w=600&h=600&fit=crop" alt="디자인3" class="design-image">
+   121	<div class="design-info"><h3 class="design-title">커버업 전문</h3><p class="design-description">기존 타투를 새로운 디자인으로 완벽하게 커버합니다.</p></div>
+   122	</div>
+   123	<div class="design-card">
+   124	<img src="https://images.unsplash.com/photo-1595433707802-6b2626ef1c91?w=600&h=600&fit=crop" alt="디자인4" class="design-image">
+   125	<div class="design-info"><h3 class="design-title">대형 작업 특화</h3><p class="design-description">풀슬리브, 등판 등 대형 작업도 안정적으로 진행합니다.</p></div>
+   126	</div>
+   127	</div>
+   128	</div>
+   129	</section>
+   130	<section id="class" class="class-section">
+   131	<div class="container">
+   132	<h2 class="section-title">타투 수강 안내</h2>
+   133	<div class="class-grid">
+   134	<div class="class-card">
+   135	<div class="class-header"><h3 class="class-name">기초반</h3><p class="class-duration">4주 / 주 2회</p></div>
+   136	<ul class="class-features"><li>타투 머신 다루기</li><li>기초 라인 워크</li><li>쉐이딩 기법</li><li>위생 관리</li><li>실습용 재료 제공</li></ul>
+   137	</div>
+   138	<div class="class-card">
+   139	<div class="class-header"><h3 class="class-name">심화반</h3><p class="class-duration">8주 / 주 3회</p></div>
+   140	<ul class="class-features"><li>블랙&그레이 리얼리즘</li><li>디자인 제작 실습</li><li>커버업 기법</li><li>실제 작업 참관</li><li>포트폴리오 제작</li></ul>
+   141	</div>
+   142	<div class="class-card">
+   143	<div class="class-header"><h3 class="class-name">이레즈미 특화반</h3><p class="class-duration">12주 / 주 2회</p></div>
+   144	<ul class="class-features"><li>일본 전통 문양 이해</li><li>이레즈미 기법</li><li>대형 작업 기획</li><li>1:1 맞춤 지도</li><li>수료 후 멘토링</li></ul>
+   145	</div>
+   146	</div>
+   147	</div>
+   148	</section>
+   149	<section id="pricing" class="pricing-section">
+   150	<div class="container">
+   151	<h2 class="section-title">가격 안내</h2>
+   152	<div class="pricing-grid">
+   153	<div class="pricing-card"><h3 class="pricing-name">소형</h3><p class="pricing-size">5cm 이하</p><div class="pricing-amount">10만원~</div><p class="pricing-note">미니 타투</p></div>
+   154	<div class="pricing-card"><h3 class="pricing-name">중형</h3><p class="pricing-size">5~15cm</p><div class="pricing-amount">30만원~</div><p class="pricing-note">일반 사이즈</p></div>
+   155	<div class="pricing-card featured"><span class="pricing-badge">인기</span><h3 class="pricing-name">대형</h3><p class="pricing-size">하프슬리브</p><div class="pricing-amount">150만원~</div><p class="pricing-note">팔 반</p></div>
+   156	<div class="pricing-card"><h3 class="pricing-name">특대형</h3><p class="pricing-size">풀슬리브/등판</p><div class="pricing-amount">300만원~</div><p class="pricing-note">대형 작업</p></div>
+   157	</div>
+   158	<div class="pricing-notes">
+   159	<h3>참고사항</h3>
+   160	<ul><li>✓ 커버업 작업은 기존 가격의 +20%</li><li>✓ 컬러 작업은 기존 가격의 +30%</li><li>✓ 카드 결제 가능 (무이자 할부 가능)</li><li>✓ 최종 금액은 디자인 상담 후 결정</li></ul>
+   161	</div>
+   162	</div>
+   163	</section>
+   164	<section id="reviews" class="reviews-section">
+   165	<div class="container">
+   166	<h2 class="section-title">고객 후기</h2>
+   167	<div class="reviews-grid">
+   168	<div class="review-card"><div class="review-rating">★★★★★</div><p class="review-text">"처음 타투를 하는 거라 많이 긴장했는데, 친절하게 상담해주시고 제가 원하는 디자인으로 완벽하게 만들어주셔서 너무 만족합니다!"</p><div class="review-author"><span class="review-name">김** 님</span><span class="review-type">블랙워크</span></div></div>
+   169	<div class="review-card"><div class="review-rating">★★★★★</div><p class="review-text">"풀슬리브 이레즈미 작업 받았습니다. 10개월 동안 정말 정성스럽게 작업해주셔서 최고의 결과물이 나왔어요. 감사합니다!"</p><div class="review-author"><span class="review-name">박** 님</span><span class="review-type">풀슬리브 이레즈미</span></div></div>
+   170	<div class="review-card"><div class="review-rating">★★★★★</div><p class="review-text">"예전에 다른 곳에서 한 타투가 마음에 안 들어서 커버업 받았는데, 완전히 새로운 디자인으로 바꿔주셔서 정말 감사합니다."</p><div class="review-author"><span class="review-name">이** 님</span><span class="review-type">커버업</span></div></div>
+   171	<div class="review-card"><div class="review-rating">★★★★★</div><p class="review-text">"리얼리즘 타투 너무 잘 받았어요! 사진보다 실물이 훨씬 더 멋있습니다. 주변 친구들한테도 추천했어요."</p><div class="review-author"><span class="review-name">최** 님</span><span class="review-type">리얼리즘</span></div></div>
+   172	<div class="review-card"><div class="review-rating">★★★★★</div><p class="review-text">"타투 수강생입니다. 꼼꼼하게 가르쳐주시고, 실습도 많이 시켜주셔서 실력이 많이 늘었어요. 강력 추천합니다!"</p><div class="review-author"><span class="review-name">정** 님</span><span class="review-type">타투 교육</span></div></div>
+   173	<div class="review-card"><div class="review-rating">★★★★★</div><p class="review-text">"위생 관리도 철저하고, 작업 중에도 계속 확인해주셔서 안심하고 받을 수 있었어요. 결과도 대만족!"</p><div class="review-author"><span class="review-name">강** 님</span><span class="review-type">폴리네시안</span></div></div>
+   174	</div>
+   175	</div>
+   176	</section>
+   177	<section id="contact" class="contact-section">
+   178	<div class="container">
+   179	<h2 class="section-title">CONTACT</h2>
+   180	<div class="contact-content">
+   181	<div class="contact-info">
+   182	<h3>상담 문의</h3>
+   183	<div class="contact-item"><i class="fas fa-phone"></i><span>010-2254-0690</span><p style="margin-left:28px;margin-top:5px;font-size:.9rem;color:var(--color-text-gray)">평일 12:00-21:00<br>주말 예약제 운영</p></div>
+   184	<div class="contact-item"><i class="fas fa-comment-dots"></i><span>카카오톡 ID: making91</span><p style="margin-left:28px;margin-top:5px"><a href="https://open.kakao.com/o/s6IlPGxb" target="_blank" style="color:var(--color-accent)">오픈채팅 바로가기 →</a></p></div>
+   185	<div class="contact-item"><i class="fab fa-instagram"></i><a href="https://www.instagram.com/tattoo_making" target="_blank">@tattoo_making</a></div>
+   186	<div class="social-links">
+   187	<a href="https://www.instagram.com/tattoo_making" target="_blank" class="social-link"><i class="fab fa-instagram"></i></a>
+   188	<a href="https://open.kakao.com/o/s6IlPGxb" target="_blank" class="social-link"><i class="fas fa-comment"></i></a>
+   189	<a href="https://linktr.ee/tattoo_making" target="_blank" class="social-link"><i class="fas fa-link"></i></a>
+   190	</div>
+   191	</div>
+   192	<div class="contact-map">
+   193	<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3262.8234567890123!2d128.8784972!3d35.1795543!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzXCsDEwJzQ2LjQiTiAxMjjCsDUyJzQyLjYiRQ!5e0!3m2!1sko!2skr!4v1234567890123!5m2!1sko!2skr" allowfullscreen loading="lazy"></iframe>
+   194	</div>
+   195	</div>
+   196	</div>
+   197	</section>
+   198	<footer class="footer">
+   199	<div class="container">
+   200	<div class="footer-content">
+   201	<div class="footer-section"><div class="footer-logo">TATTOO MAKING</div><p style="color:var(--color-text-gray);margin-top:var(--spacing-sm)">부산 블랙&그레이 리얼리즘 전문 타투샵</p></div>
+   202	<div class="footer-section"><h3>Quick Links</h3><div class="footer-links"><a href="#portfolio">포트폴리오</a><a href="#designs">작업 도안</a><a href="#class">수강 안내</a><a href="#pricing">가격 안내</a></div></div>
+   203	<div class="footer-section"><h3>Social</h3><div class="footer-links"><a href="https://www.instagram.com/tattoo_making" target="_blank">Instagram</a><a href="https://open.kakao.com/o/s6IlPGxb" target="_blank">카카오톡 오픈채팅</a><a href="https://linktr.ee/tattoo_making" target="_blank">Linktree</a></div></div>
+   204	</div>
+   205	<div class="footer-bottom"><p>&copy; 2024 TATTOO MAKING. All rights reserved.</p></div>
+   206	</div>
+   207	</footer>
+   208	<div class="scroll-top" id="scrollTop"><i class="fas fa-arrow-up"></i></div>
+   209	<script>
+   210	(function(){const d=document;const loadingScreen=d.querySelector('.loading-screen');const navbar=d.querySelector('.navbar');const navMenu=d.getElementById('navMenu');const mobileToggle=d.getElementById('mobileToggle');const navLinks=d.querySelectorAll('.nav-menu a');const scrollTopBtn=d.getElementById('scrollTop');const filterBtns=d.querySelectorAll('.filter-btn');const portfolioItems=d.querySelectorAll('.portfolio-item');window.addEventListener('load',()=>{setTimeout(()=>loadingScreen.classList.add('hidden'),1e3)});window.addEventListener('scroll',()=>{if(window.scrollY>100)navbar.classList.add('scrolled');else navbar.classList.remove('scrolled');if(window.scrollY>500)scrollTopBtn.classList.add('visible');else scrollTopBtn.classList.remove('visible')});mobileToggle.addEventListener('click',()=>navMenu.classList.toggle('active'));navLinks.forEach(link=>link.addEventListener('click',e=>{e.preventDefault();navMenu.classList.remove('active');const target=d.querySelector(link.getAttribute('href'));if(target)window.scrollTo({top:target.offsetTop-80,behavior:'smooth'})}));filterBtns.forEach(btn=>btn.addEventListener('click',()=>{filterBtns.forEach(b=>b.classList.remove('active'));btn.classList.add('active');const filter=btn.getAttribute('data-filter');portfolioItems.forEach(item=>{if(filter==='all'||item.getAttribute('data-category')===filter){item.style.display='block';setTimeout(()=>{item.style.opacity='1';item.style.transform='scale(1)'},10)}else{item.style.opacity='0';item.style.transform='scale(0.8)';setTimeout(()=>item.style.display='none',300)}})}));scrollTopBtn.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting){entry.target.style.opacity='1';entry.target.style.transform='translateY(0)'}})},{threshold:.1,rootMargin:'0px 0px -50px 0px'});d.querySelectorAll('.portfolio-item,.design-card,.class-card,.pricing-card,.review-card').forEach(el=>{el.style... (line truncated)
+   211	</script>
+   212	</body>
+   213	</html>
+   214	
