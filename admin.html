@@ -239,37 +239,13 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 
 <!-- 포트폴리오 -->
 <div class="page" id="page-portfolio">
-  <div class="page-title">포트폴리오 이미지</div>
-  <div class="page-sub">사이트 포트폴리오 섹션 이미지를 관리합니다</div>
-  <div class="preview-bar"><span>📍 사이트: PORTFOLIO 섹션 (#portfolio)</span></div>
-  <div class="card">
-    <div class="card-title">📸 포트폴리오 이미지 업로드</div>
-    <div class="upload-zone" id="zone-portfolio"
-      onclick="document.getElementById('file-portfolio').click()"
-      ondragover="dzOver(event,'zone-portfolio')" ondragleave="dzOut('zone-portfolio')" ondrop="dzDrop(event,'portfolio')">
-      <div style="font-size:28px;margin-bottom:8px">🖼</div>
-      <p>클릭 또는 드래그로 이미지 업로드</p>
-      <p style="margin-top:4px;font-size:11px">JPG, PNG, WEBP · 복수 선택 가능</p>
-    </div>
-    <input type="file" id="file-portfolio" multiple accept="image/*" style="display:none" onchange="addImgs(this,'portfolio')">
-    <div class="img-grid" id="grid-portfolio"></div>
-    <div class="btn-group">
-      <button class="btn btn-primary" onclick="uploadImgs('portfolio')" id="btn-up-portfolio">📤 GitHub에 업로드</button>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-title">🎨 도안 이미지</div>
-    <div class="upload-zone" id="zone-design"
-      onclick="document.getElementById('file-design').click()"
-      ondragover="dzOver(event,'zone-design')" ondragleave="dzOut('zone-design')" ondrop="dzDrop(event,'design')">
-      <div style="font-size:28px;margin-bottom:8px">✏️</div>
-      <p>클릭 또는 드래그로 도안 업로드</p>
-    </div>
-    <input type="file" id="file-design" multiple accept="image/*" style="display:none" onchange="addImgs(this,'design')">
-    <div class="img-grid" id="grid-design"></div>
-    <div class="btn-group">
-      <button class="btn btn-primary" onclick="uploadImgs('design')" id="btn-up-design">📤 GitHub에 업로드</button>
-    </div>
+  <div class="page-title">포트폴리오 관리</div>
+  <div class="page-sub">사이트 포트폴리오 8개 카드를 1:1로 편집합니다</div>
+  <div class="preview-bar"><span>📍 사이트: PORTFOLIO 섹션 (#portfolio) · 8개 카드</span></div>
+  <div id="portfolio-blocks"></div>
+  <div class="btn-group" style="margin-top:4px">
+    <button class="btn btn-primary" onclick="saveAndDeploy()">🚀 저장 및 배포</button>
+    <button class="btn btn-secondary" onclick="loadFromGithub()">↺ 불러오기</button>
   </div>
 </div>
 
@@ -416,8 +392,16 @@ const D = {
     linktree: 'https://linktr.ee/tattoomaking'
   },
   footer: { sub: '부산 블랙&그레이 리얼리즘 전문 타투샵', year: '2024' },
-  portfolioImages: [],
-  designImages: []
+  portfolio: [
+    {category:'이레즈미',   title:'풀슬리브 이레즈미',    imgUrl:'https://images.unsplash.com/photo-1565058379802-bbe93b2f703f?w=800&h=800&fit=crop'},
+    {category:'폴리네시안', title:'폴리네시안 하프슬리브', imgUrl:'https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?w=800&h=800&fit=crop'},
+    {category:'리얼리즘',   title:'블랙&그레이 초상화',   imgUrl:'https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?w=800&h=800&fit=crop'},
+    {category:'대형작업',   title:'등판 대형 작업',        imgUrl:'https://images.unsplash.com/photo-1567427018141-0584cfcbf1b8?w=800&h=800&fit=crop'},
+    {category:'이레즈미',   title:'일본 전통 문양',        imgUrl:'https://images.unsplash.com/photo-1611195974226-ef22beb97142?w=800&h=800&fit=crop'},
+    {category:'리얼리즘',   title:'동물 리얼리즘',         imgUrl:'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=800&h=800&fit=crop'},
+    {category:'블랙워크',   title:'블랙워크 기하학',       imgUrl:''},
+    {category:'커버업',     title:'커버업 작업',           imgUrl:''}
+  ]
 };
 
 const GH = { user:'', repo:'', branch:'main', token:'' };
@@ -508,6 +492,12 @@ async function ghPutFile(path, content, msg) {
 // 수집 (폼 → 객체)
 // ============================================================
 function collectAll() {
+  // portfolio
+  D.portfolio.forEach(function(_,i){
+    D.portfolio[i].category = v('pf-cat-'+i);
+    D.portfolio[i].title    = v('pf-title-'+i);
+    D.portfolio[i].imgUrl   = v('pf-img-'+i);
+  });
   // hero
   D.hero.tagline  = v('hero-tagline');
   D.hero.title    = v('hero-title');
@@ -638,6 +628,7 @@ function applyData(d) {
     }
   }
   if (d.reviews) { Object.assign(D, {reviews: d.reviews}); renderReviewBlocks(); }
+  if (d.portfolio) { D.portfolio = d.portfolio; renderPortfolioBlocks(); }
   if (d.contact) {
     si('c-phone', d.contact.phone);     si('c-hours', d.contact.hours);
     si('c-kakao-id', d.contact.kakaoId); si('c-kakao-url', d.contact.kakaoUrl);
@@ -648,6 +639,88 @@ function applyData(d) {
   updateStats();
 }
 function si(id, val) { const el=document.getElementById(id); if(el&&val!==undefined) el.value=val; }
+
+// ============================================================
+// 포트폴리오 블록 렌더링
+// ============================================================
+function renderPortfolioBlocks() {
+  const c = document.getElementById('portfolio-blocks');
+  if(!c) return;
+  c.innerHTML = '';
+  D.portfolio.forEach((item, i) => {
+    const d = document.createElement('div');
+    d.className = 'card';
+    d.style.cssText = 'margin-bottom:14px';
+    const hasImg = item.imgUrl && item.imgUrl.trim();
+    d.innerHTML = `
+      <div class="card-title">
+        <span style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:3px 10px;font-size:11px;color:var(--text2)">카드 ${i+1}</span>
+        <span class="site-tag">사이트 직접 반영</span>
+      </div>
+      <div style="display:grid;grid-template-columns:140px 1fr;gap:16px;align-items:start">
+        <div>
+          <div style="aspect-ratio:1;border-radius:8px;overflow:hidden;background:var(--surface2);border:1px solid var(--border);margin-bottom:8px;position:relative">
+            ${hasImg
+              ? `<img src="${item.imgUrl}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">`
+              : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:28px;color:var(--border)">🖼</div>`
+            }
+          </div>
+          <label style="display:block;font-size:11px;color:var(--text2);margin-bottom:4px;text-transform:uppercase">이미지 업로드</label>
+          <input type="file" id="pf-file-${i}" accept="image/*" style="display:none" onchange="uploadPortfolioImg(this,${i})">
+          <button class="btn btn-secondary btn-sm" style="width:100%;font-size:11px" onclick="document.getElementById('pf-file-${i}').click()">📁 파일 선택</button>
+          <div id="pf-upload-status-${i}" style="font-size:11px;color:var(--text2);margin-top:4px;text-align:center"></div>
+        </div>
+        <div>
+          <div class="form-row">
+            <label>이미지 URL <span style="color:var(--text2);font-weight:400;text-transform:none">(업로드하거나 직접 입력)</span></label>
+            <input id="pf-img-${i}" value="${item.imgUrl||''}" placeholder="https://... 또는 이미지/파일명.jpg" oninput="previewPfImg(${i})">
+          </div>
+          <div class="grid2">
+            <div class="form-row"><label>카테고리 텍스트</label><input id="pf-cat-${i}" value="${item.category||''}" placeholder="예: 이레즈미"></div>
+            <div class="form-row"><label>작품 제목</label><input id="pf-title-${i}" value="${item.title||''}" placeholder="예: 풀슬리브 이레즈미"></div>
+          </div>
+        </div>
+      </div>`;
+    c.appendChild(d);
+  });
+}
+
+function previewPfImg(i) {
+  const url = document.getElementById('pf-img-'+i).value;
+  const card = document.querySelectorAll('#portfolio-blocks .card')[i];
+  if(!card) return;
+  const preview = card.querySelector('div[style*="aspect-ratio"]');
+  if(!preview) return;
+  preview.innerHTML = url
+    ? `<img src="${url}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">`
+    : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:28px;color:var(--border)">🖼</div>`;
+}
+
+async function uploadPortfolioImg(input, idx) {
+  if(!checkGH()) return;
+  const file = input.files[0]; if(!file) return;
+  const statusEl = document.getElementById('pf-upload-status-'+idx);
+  statusEl.textContent = '업로드 중...';
+  try {
+    const b64 = await fileToB64(file);
+    const path = '이미지/portfolio/' + Date.now() + '_' + file.name;
+    const sha  = await ghGetSha(path);
+    const body = {message:'포트폴리오 이미지: '+file.name, content:b64, branch:GH.branch};
+    if(sha) body.sha = sha;
+    const r = await fetch('https://api.github.com/repos/'+GH.user+'/'+GH.repo+'/contents/'+encodeURIComponent(path), {
+      method:'PUT', headers:{Authorization:'token '+GH.token,'Content-Type':'application/json'}, body:JSON.stringify(body)
+    });
+    if(r.ok) {
+      const imgUrl = 'https://raw.githubusercontent.com/'+GH.user+'/'+GH.repo+'/'+GH.branch+'/'+path;
+      document.getElementById('pf-img-'+idx).value = imgUrl;
+      previewPfImg(idx);
+      statusEl.textContent = '✓ 업로드 완료';
+      statusEl.style.color = 'var(--success)';
+      toast('이미지 업로드 완료!','success');
+    } else throw new Error('업로드 실패');
+  } catch(e) { statusEl.textContent = '✗ 실패'; statusEl.style.color='var(--danger)'; toast('오류: '+e.message,'error'); }
+  input.value = '';
+}
 
 // ============================================================
 // 가격 블록 렌더링
@@ -831,7 +904,8 @@ async function doPatch(fileJson, fileName, sha, el){
       html=html.replace(/\n?<!-- CMS DATA LOADER -->[\s\S]*?<\/script>/,'');
       el.textContent='기존 패치 코드 제거 후 재패치 중...'; el.style.color='var(--text2)';
     }
-    const patch=`\n<!-- CMS DATA LOADER -->\n<script id="cms-data-loader">\n(function(){\n  var REPO='https://raw.githubusercontent.com/${GH.user}/${GH.repo}/${GH.branch}/data.json';\n  fetch(REPO+'?t='+Date.now())\n    .then(function(r){return r.json()})\n    .then(function(d){\n\n      /* ── 히어로 ── */\n      if(d.hero){\n        var tl=document.querySelector('#home p');if(tl)tl.textContent=d.hero.tagline;\n        var h1=document.querySelector('#home h1');if(h1)h1.textContent=d.hero.title;\n        var ps=document.querySelectorAll('#home p');if(ps[1])ps[1].innerHTML=d.hero.desc.replace(/\\n/g,'<br>');\n        document.querySelectorAll('a[href*=\"open.kakao\"]').forEach(function(a){a.href=d.hero.kakaoUrl;});\n      }\n\n      /* ── About ── */\n      if(d.about){\n        var ap=document.querySelector('#about p');if(ap)ap.innerHTML=d.about.desc.replace(/\\n/g,'<br>');\n        var nums=document.querySelectorAll('#about [style*=\"font-size:3rem\"],[style*=\"font-size: 3rem\"]');\n        var lbls=document.querySelectorAll('#about [style*=\"color:#999\"]');\n        if(d.about.stats)d.about.stats.forEach(function(s,i){if(nums[i])nums[i].textContent=s.num;if(lbls[i])lbls[i].textContent=s.label;});\n      }\n\n      /* ── 가격 ── */\n      if(d.pricing&&d.pricing.items){\n        var pSec=document.querySelector('#pricing');if(!pSec)return;\n        var pCards=pSec.querySelectorAll('[style*=\"background:#1a1a1a\"]');\n        d.pricing.items.forEach(function(item,i){\n          var c=pCards[i];if(!c)return;\n          var h3=c.querySelector('h3');if(h3)h3.textContent=item.title;\n          var allP=c.querySelectorAll('p');\n          if(allP[0])allP[0].textContent=item.size;\n          var prEl=c.querySelector('[style*=\"2.5rem\"]');if(prEl)prEl.textContent=item.price;\n          if(allP[1])allP[1].textContent=item.desc;\n        });\n        var noteSec=pSec.querySelector('[style*=\"background:#1a1a1a\"]:last-of-type');\n        if(noteSec&&d.pricing.notes){\n          var lis=noteSec.querySelectorAll('li');\n          d.pricing.notes.forEach(function(n,i){if(lis[i])lis[i].textContent='✓ '+n;});\n        }\n      }\n\n      /* ── 후기 ── */\n      if(d.reviews){\n        var rSec=document.querySelector('#reviews');if(!rSec)return;\n        var rCards=rSec.querySelectorAll('[style*=\"background:#1a1a1a\"]');\n        d.reviews.forEach(function(rv,i){\n          var c=rCards[i];if(!c)return;\n          /* 별점 */\n          var starEl=c.querySelector('[style*=\"color:#c9a45c\"]');\n          if(starEl&&starEl.tagName!=='SPAN')starEl=null;\n          /* 후기 내용 p */\n          var p=c.querySelector('p');if(p)p.textContent='\"'+rv.content+'\"';\n          /* 이름, 작업유형 span */\n          var bot=c.querySelector('[style*=\"border-top\"]');\n          if(bot){\n            var spans=bot.querySelectorAll('span');\n            if(spans[0])spans[0].textContent=rv.name;\n            if(spans[1])spans[1].textContent=rv.type;\n          }\n        });\n      }\n\n      /* ── 연락처 ── */\n      if(d.contact){\n        var ph=document.querySelector('.fa-phone');if(ph){var s=ph.parentElement.querySelector('strong');if(s)s.textContent=d.contact.phone;}\n        var kk=document.querySelector('.fa-comment-dots');if(kk){var s2=kk.parentElement.querySelector('strong');if(s2)s2.textContent='카카오톡 ID: '+d.contact.kakaoId;}\n        document.querySelectorAll('a[href*=\"open.kakao\"]').forEach(function(a){a.href=d.contact.kakaoUrl;});\n        document.querySelectorAll('a[href*=\"instagram.com\"]').forEach(function(a){a.href=d.contact.instaUrl;if(a.textContent.trim().startsWith('@'))a.textContent=d.contact.insta;});\n        document.querySelectorAll('a[href*=\"linktr.ee\"]').forEach(function(a){a.href=d.contact.linktree;});\n        var hrs=document.querySelector('.fa-phone');if(hrs){var pp=hrs.closest('div');if(pp){var small=pp.querySelector('p[style]');if(small)small.innerHTML=d.contact.hours.replace(' / ','<br>');}}\n      }\n\n      /* ── 푸터 ── */\n      if(d.footer){\n        var fPs=document.querySelectorAll('footer p');\n        if(fPs[1])fPs[1].textContent=d.footer.sub;\n        if(fPs[2])fPs[2].textContent='\\u00a9 '+d.footer.year+' TATTOO MAKING. All rights reserved.';\n      }\n\n    }).catch(function(e){console.warn('CMS load error:',e);});\n})();\n<\/script>`;
+    const patch=`\n<!-- CMS DATA LOADER -->\n<script id="cms-data-loader">\n(function(){\n  var REPO='https://raw.githubusercontent.com/${GH.user}/${GH.repo}/${GH.branch}/data.json';\n  fetch(REPO+'?t='+Date.now())\n    .then(function(r){return r.json()})\n    .then(function(d){\n\n      /* ── 히어로 ── */\n      if(d.hero){\n        var tl=document.querySelector('#home p');if(tl)tl.textContent=d.hero.tagline;\n        var h1=document.querySelector('#home h1');if(h1)h1.textContent=d.hero.title;\n        var ps=document.querySelectorAll('#home p');if(ps[1])ps[1].innerHTML=d.hero.desc.replace(/\\n/g,'<br>');\n        document.querySelectorAll('a[href*=\"open.kakao\"]').forEach(function(a){a.href=d.hero.kakaoUrl;});\n      }\n\n      /* ── 포트폴리오 ── */
+      if(d.portfolio){\n        var pSec2=document.querySelector('#portfolio');if(pSec2){\n          var pCards2=pSec2.querySelectorAll('[style*=\"position:relative\"][style*=\"overflow:hidden\"]');\n          d.portfolio.forEach(function(item,i){\n            var c=pCards2[i];if(!c)return;\n            var img=c.querySelector('img');if(img&&item.imgUrl){img.src=item.imgUrl;}\n            var spans=c.querySelectorAll('span');if(spans[0])spans[0].textContent=item.category;\n            var h3=c.querySelector('h3');if(h3)h3.textContent=item.title;\n          });\n        }\n      }\n\n      /* ── About ── */\n      if(d.about){\n        var ap=document.querySelector('#about p');if(ap)ap.innerHTML=d.about.desc.replace(/\\n/g,'<br>');\n        var nums=document.querySelectorAll('#about [style*=\"font-size:3rem\"],[style*=\"font-size: 3rem\"]');\n        var lbls=document.querySelectorAll('#about [style*=\"color:#999\"]');\n        if(d.about.stats)d.about.stats.forEach(function(s,i){if(nums[i])nums[i].textContent=s.num;if(lbls[i])lbls[i].textContent=s.label;});\n      }\n\n      /* ── 가격 ── */\n      if(d.pricing&&d.pricing.items){\n        var pSec=document.querySelector('#pricing');if(!pSec)return;\n        var pCards=pSec.querySelectorAll('[style*=\"background:#1a1a1a\"]');\n        d.pricing.items.forEach(function(item,i){\n          var c=pCards[i];if(!c)return;\n          var h3=c.querySelector('h3');if(h3)h3.textContent=item.title;\n          var allP=c.querySelectorAll('p');\n          if(allP[0])allP[0].textContent=item.size;\n          var prEl=c.querySelector('[style*=\"2.5rem\"]');if(prEl)prEl.textContent=item.price;\n          if(allP[1])allP[1].textContent=item.desc;\n        });\n        var noteSec=pSec.querySelector('[style*=\"background:#1a1a1a\"]:last-of-type');\n        if(noteSec&&d.pricing.notes){\n          var lis=noteSec.querySelectorAll('li');\n          d.pricing.notes.forEach(function(n,i){if(lis[i])lis[i].textContent='✓ '+n;});\n        }\n      }\n\n      /* ── 후기 ── */\n      if(d.reviews){\n        var rSec=document.querySelector('#reviews');if(!rSec)return;\n        var rCards=rSec.querySelectorAll('[style*=\"background:#1a1a1a\"]');\n        d.reviews.forEach(function(rv,i){\n          var c=rCards[i];if(!c)return;\n          /* 별점 */\n          var starEl=c.querySelector('[style*=\"color:#c9a45c\"]');\n          if(starEl&&starEl.tagName!=='SPAN')starEl=null;\n          /* 후기 내용 p */\n          var p=c.querySelector('p');if(p)p.textContent='\"'+rv.content+'\"';\n          /* 이름, 작업유형 span */\n          var bot=c.querySelector('[style*=\"border-top\"]');\n          if(bot){\n            var spans=bot.querySelectorAll('span');\n            if(spans[0])spans[0].textContent=rv.name;\n            if(spans[1])spans[1].textContent=rv.type;\n          }\n        });\n      }\n\n      /* ── 연락처 ── */\n      if(d.contact){\n        var ph=document.querySelector('.fa-phone');if(ph){var s=ph.parentElement.querySelector('strong');if(s)s.textContent=d.contact.phone;}\n        var kk=document.querySelector('.fa-comment-dots');if(kk){var s2=kk.parentElement.querySelector('strong');if(s2)s2.textContent='카카오톡 ID: '+d.contact.kakaoId;}\n        document.querySelectorAll('a[href*=\"open.kakao\"]').forEach(function(a){a.href=d.contact.kakaoUrl;});\n        document.querySelectorAll('a[href*=\"instagram.com\"]').forEach(function(a){a.href=d.contact.instaUrl;if(a.textContent.trim().startsWith('@'))a.textContent=d.contact.insta;});\n        document.querySelectorAll('a[href*=\"linktr.ee\"]').forEach(function(a){a.href=d.contact.linktree;});\n        var hrs=document.querySelector('.fa-phone');if(hrs){var pp=hrs.closest('div');if(pp){var small=pp.querySelector('p[style]');if(small)small.innerHTML=d.contact.hours.replace(' / ','<br>');}}\n      }\n\n      /* ── 푸터 ── */\n      if(d.footer){\n        var fPs=document.querySelectorAll('footer p');\n        if(fPs[1])fPs[1].textContent=d.footer.sub;\n        if(fPs[2])fPs[2].textContent='\\u00a9 '+d.footer.year+' TATTOO MAKING. All rights reserved.';\n      }\n\n    }).catch(function(e){console.warn('CMS load error:',e);});\n})();\n<\/script>`;
     html=html.replace('</body>',patch+'\n</body>');
     // SHA로 업데이트
     const body={message:'CMS 패치: data.json 자동 로드 ('+fileName+')',content:btoa(unescape(encodeURIComponent(html))),branch:GH.branch,sha:sha};
@@ -854,7 +928,7 @@ async function doPatch(fileJson, fileName, sha, el){
 // 통계
 // ============================================================
 function updateStats(){
-  document.getElementById('st-portfolio').textContent=imgs.portfolio.length;
+  document.getElementById('st-portfolio').textContent=D.portfolio.filter(p=>p.imgUrl).length+'/'+D.portfolio.length;
   document.getElementById('st-reviews').textContent=D.reviews.filter(r=>r.name||r.content).length;
 }
 
@@ -874,6 +948,7 @@ function init(){
   const sd=localStorage.getItem('_cms');
   if(sd){try{applyData(JSON.parse(sd))}catch(e){}}
   // UI 렌더
+  renderPortfolioBlocks();
   renderPriceBlocks();
   renderReviewBlocks();
   updateStats();
