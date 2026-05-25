@@ -332,6 +332,7 @@ console.log('📞 010-2254-0690 | 📷 @tattoo_making');
 
 
 
+
 <!-- CMS DATA LOADER -->
 <script id="cms-data-loader">
 (function(){
@@ -346,6 +347,19 @@ console.log('📞 010-2254-0690 | 📷 @tattoo_making');
         var h1=document.querySelector('#home h1');if(h1)h1.textContent=d.hero.title;
         var ps=document.querySelectorAll('#home p');if(ps[1])ps[1].innerHTML=d.hero.desc.replace(/\n/g,'<br>');
         document.querySelectorAll('a[href*="open.kakao"]').forEach(function(a){a.href=d.hero.kakaoUrl;});
+      }
+
+      /* ── 포트폴리오 ── */
+      if(d.portfolio){
+        var pSec2=document.querySelector('#portfolio');if(pSec2){
+          var pCards2=pSec2.querySelectorAll('[style*="position:relative"][style*="overflow:hidden"]');
+          d.portfolio.forEach(function(item,i){
+            var c=pCards2[i];if(!c)return;
+            var img=c.querySelector('img');if(img&&item.imgUrl){img.src=item.imgUrl;}
+            var spans=c.querySelectorAll('span');if(spans[0])spans[0].textContent=item.category;
+            var h3=c.querySelector('h3');if(h3)h3.textContent=item.title;
+          });
+        }
       }
 
       /* ── About ── */
