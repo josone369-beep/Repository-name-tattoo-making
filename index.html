@@ -334,5 +334,101 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a){
   });
 });
 </script>
+
+<!-- CMS DATA LOADER -->
+<script id="cms-data-loader">
+(function(){
+  var REPO='https://raw.githubusercontent.com/josone369-beep/Repository-name-tattoo-making/main/data.json';
+  fetch(REPO+'?t='+Date.now())
+    .then(function(r){return r.json()})
+    .then(function(d){
+
+      /* ── 히어로 ── */
+      if(d.hero){
+        var tl=document.querySelector('#home p');if(tl)tl.textContent=d.hero.tagline;
+        var h1=document.querySelector('#home h1');if(h1)h1.textContent=d.hero.title;
+        var ps=document.querySelectorAll('#home p');if(ps[1])ps[1].innerHTML=d.hero.desc.replace(/\n/g,'<br>');
+        document.querySelectorAll('a[href*="open.kakao"]').forEach(function(a){a.href=d.hero.kakaoUrl;});
+      }
+
+      /* ── 포트폴리오: 카드 전체 재생성 ── */
+      if(d.portfolio&&d.portfolio.length){
+        var pfSec=document.querySelector('#portfolio');
+        if(pfSec){
+          var pfGrid=pfSec.querySelector('[style*="grid"]');
+          if(pfGrid){
+            pfGrid.innerHTML='';
+            d.portfolio.forEach(function(item){
+              var card=document.createElement('div');
+              card.setAttribute('style','position:relative;overflow:hidden;border-radius:8px;aspect-ratio:1;background:#121212');
+              var imgPart=item.imgUrl
+                ? '<img src="'+item.imgUrl+'" alt="'+item.category+'" style="width:100%;height:100%;object-fit:cover" loading="lazy">'
+                : '<div style="width:100%;height:100%;background:#1a1a1a;display:flex;align-items:center;justify-content:center;color:#333;font-size:2rem">+</div>';
+              card.innerHTML=imgPart
+                +'<div style="position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(to top,rgba(0,0,0,0.9),transparent)">'
+                +'<span style="color:#c9a45c;font-size:0.9rem;text-transform:uppercase;letter-spacing:0.1em">'+item.category+'</span>'
+                +'<h3 style="color:#fff;font-size:1.3rem;margin-top:5px">'+item.title+'</h3>'
+                +'</div>';
+              pfGrid.appendChild(card);
+            });
+          }
+        }
+      }
+
+      /* ── About ── */
+      if(d.about){
+        var ap=document.querySelector('#about p');if(ap)ap.innerHTML=d.about.desc.replace(/\n/g,'<br>');
+        var nums=document.querySelectorAll('#about [style*="font-size:3rem"],[style*="font-size: 3rem"]');
+        var lbls=document.querySelectorAll('#about [style*="color:#999"]');
+        if(d.about.stats)d.about.stats.forEach(function(s,i){if(nums[i])nums[i].textContent=s.num;if(lbls[i])lbls[i].textContent=s.label;});
+      }
+
+      /* ── 가격 ── */
+      if(d.pricing&&d.pricing.items){
+        var pSec=document.querySelector('#pricing');if(!pSec)return;
+        var pCards=pSec.querySelectorAll('[style*="background:#1a1a1a"]');
+        d.pricing.items.forEach(function(item,i){
+          var c=pCards[i];if(!c)return;
+          var h3=c.querySelector('h3');if(h3)h3.textContent=item.title;
+          var allP=c.querySelectorAll('p');
+          if(allP[0])allP[0].textContent=item.size;
+          var prEl=c.querySelector('[style*="2.5rem"]');if(prEl)prEl.textContent=item.price;
+          if(allP[1])allP[1].textContent=item.desc;
+        });
+        var noteSec=pSec.querySelector('[style*="background:#1a1a1a"]:last-of-type');
+        if(noteSec&&d.pricing.notes){var lis=noteSec.querySelectorAll('li');d.pricing.notes.forEach(function(n,i){if(lis[i])lis[i].textContent='\u2713 '+n;});}
+      }
+
+      /* ── 후기 ── */
+      if(d.reviews){
+        var rSec=document.querySelector('#reviews');if(!rSec)return;
+        var rCards=rSec.querySelectorAll('[style*="background:#1a1a1a"]');
+        d.reviews.forEach(function(rv,i){
+          var c=rCards[i];if(!c)return;
+          var p=c.querySelector('p');if(p)p.textContent='"'+rv.content+'"';
+          var bot=c.querySelector('[style*="border-top"]');
+          if(bot){var spans=bot.querySelectorAll('span');if(spans[0])spans[0].textContent=rv.name;if(spans[1])spans[1].textContent=rv.type;}
+        });
+      }
+
+      /* ── 연락처 ── */
+      if(d.contact){
+        var ph=document.querySelector('.fa-phone');if(ph){var s=ph.parentElement.querySelector('strong');if(s)s.textContent=d.contact.phone;}
+        var kk=document.querySelector('.fa-comment-dots');if(kk){var s2=kk.parentElement.querySelector('strong');if(s2)s2.textContent='카카오톡 ID: '+d.contact.kakaoId;}
+        document.querySelectorAll('a[href*="open.kakao"]').forEach(function(a){a.href=d.contact.kakaoUrl;});
+        document.querySelectorAll('a[href*="instagram.com"]').forEach(function(a){a.href=d.contact.instaUrl;if(a.textContent.trim().startsWith('@'))a.textContent=d.contact.insta;});
+        document.querySelectorAll('a[href*="linktr.ee"]').forEach(function(a){a.href=d.contact.linktree;});
+      }
+
+      /* ── 푸터 ── */
+      if(d.footer){
+        var fPs=document.querySelectorAll('footer p');
+        if(fPs[1])fPs[1].textContent=d.footer.sub;
+        if(fPs[2])fPs[2].textContent='\u00a9 '+d.footer.year+' TATTOO MAKING. All rights reserved.';
+      }
+
+    }).catch(function(e){console.warn('CMS load error:',e);});
+})();
+</script>
 </body>
 </html>
