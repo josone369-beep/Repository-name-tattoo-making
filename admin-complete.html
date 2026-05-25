@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TATTOO MAKING CMS - 완전판</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 { font-size: 2.8em; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
+        .header p { opacity: 0.9; font-size: 1.2em; }
+
+        .sync-banner {
+            background: linear-gradient(90deg, #fff3cd 0%, #ffeaa7 100%);
+            padding: 20px 40px;
+            text-align: center;
+            border-bottom: 3px solid #ffc107;
+        }
+
+        .sync-banner.success {
+            background: linear-gradient(90deg, #d4edda 0%, #c3e6cb 100%);
+            border-bottom-color: #28a745;
+        }
+
+        .sync-banner h3 { color: #856404; font-size: 1.3em; margin-bottom: 10px; }
+        .sync-banner.success h3 { color: #155724; }
+
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 3px solid #dee2e6;
+            overflow-x: auto;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 18px 30px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 15px;
+            color: #495057;
+            transition: all 0.3s;
+            white-space: nowrap;
+            border-bottom: 4px solid transparent;
+            font-weight: 500;
+        }
+
+        .tab:hover { background: rgba(102, 126, 234, 0.1); }
+        
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            font-weight: 700;
+            background: white;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 40px;
+            animation: fadeIn 0.3s;
+        }
+
+        .tab-content.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group { margin-bottom: 25px; }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #495057;
+            font-size: 15px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .image-upload-area {
+            border: 3px dashed #dee2e6;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            background: #f8f9fa;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .image-upload-area:hover { border-color: #667eea; background: rgba(102, 126, 234, 0.05); }
+        .image-upload-area.drag-over { border-color: #28a745; background: rgba(40, 167, 69, 0.1); }
+        .image-upload-area input[type="file"] { display: none; }
+
+        .image-preview {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .image-preview-item {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .image-preview-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .image-preview-item .remove-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+        }
+
+        .review-item {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border: 2px solid #e9ecef;
+        }
+
+        .review-item h4 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+        }
+
+        .btn {
+            padding: 16px 35px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+            color: white;
+        }
+
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .status {
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            display: none;
+            animation: slideIn 0.3s;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .status.success { background: #d4edda; color: #155724; border: 2px solid #c3e6cb; }
+        .status.error { background: #f8d7da; color: #721c24; border: 2px solid #f5c6cb; }
+
+        .deploy-btn-container {
+            position: sticky;
+            bottom: 0;
+            background: white;
+            padding: 25px 40px;
+            border-top: 3px solid #e9ecef;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 15px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 968px) {
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loading-overlay.active { display: flex; }
+
+        .loading-content {
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .loading-spinner {
+            width: 70px;
+            height: 70px;
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 25px;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .section-divider { border-top: 2px solid #e9ecef; margin: 30px 0; }
+        
+        .help-text {
+            font-size: 13px;
+            color: #6c757d;
+            margin-top: 8px;
+        }
+
+        .config-info {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #ffc107;
+            margin-bottom: 25px;
+        }
+
+        .config-info h4 { color: #856404; margin-bottom: 10px; }
+        .config-info p { color: #856404; font-size: 14px; line-height: 1.6; }
+    </style>
+</head>
+<body>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <h3>처리 중...</h3>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>🎨 TATTOO MAKING CMS</h1>
+            <p>완전 자동 동기화 & 드래그앤드롭 이미지 업로드</p>
+        </div>
+
+        <div class="sync-banner" id="syncBanner">
+            <h3>⚠️ GitHub 설정 후 "📥 사이트 데이터 불러오기" 클릭</h3>
+            <p>현재 사이트의 모든 내용을 자동으로 가져옵니다</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab(event, 'images')">🖼️ 이미지</button>
+            <button class="tab" onclick="switchTab(event, 'contact')">📞 연락처</button>
+            <button class="tab" onclick="switchTab(event, 'text')">📝 텍스트</button>
+            <button class="tab" onclick="switchTab(event, 'price')">💰 가격</button>
+            <button class="tab" onclick="switchTab(event, 'review')">⭐ 후기</button>
+            <button class="tab" onclick="switchTab(event, 'menu')">🍽️ 메뉴</button>
+            <button class="tab" onclick="switchTab(event, 'map')">🗺️ 지도</button>
+            <button class="tab" onclick="switchTab(event, 'config')">⚙️ 설정</button>
+        </div>
+
+        <div id="status" class="status"></div>
+
+        <!-- 이미지 탭 -->
+        <div id="images" class="tab-content active">
+            <h2 style="margin-bottom: 30px; color: #667eea;">🖼️ 이미지 관리</h2>
+            
+            <div class="form-group">
+                <label>로고 이미지</label>
+                <div class="image-upload-area" onclick="document.getElementById('logoUpload').click()">
+                    <input type="file" id="logoUpload" accept="image/*">
+                    <p style="font-size: 48px; margin-bottom: 10px;">📤</p>
+                    <p style="font-size: 16px;">이미지를 드래그하거나 클릭하여 업로드</p>
+                </div>
+                <div class="help-text">또는 이미지 URL 입력:</div>
+                <input type="text" id="logoUrl" placeholder="https://..." style="margin-top: 10px; width: 100%; padding: 12px;">
+            </div>
+
+            <div class="section-divider"></div>
+
+            <div class="form-group">
+                <label>갤러리 이미지 (포트폴리오)</label>
+                <div class="image-upload-area" onclick="document.getElementById('galleryUpload').click()">
+                    <input type="file" id="galleryUpload" accept="image/*" multiple>
+                    <p style="font-size: 48px; margin-bottom: 10px;">🖼️</p>
+                    <p style="font-size: 16px;">여러 이미지를 한 번에 선택 가능</p>
+                </div>
+                <div id="galleryPreview" class="image-preview"></div>
+            </div>
+        </div>
+
+        <!-- 연락처 탭 -->
+        <div id="contact" class="tab-content">
+            <h2 style="margin-bottom: 30px; color: #667eea;">📞 연락처 정보</h2>
+            
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>📱 전화번호</label>
+                    <input type="text" id="phone" placeholder="010-XXXX-XXXX">
+                </div>
+                <div class="form-group">
+                    <label>💬 카카오톡 ID</label>
+                    <input type="text" id="kakaoId" placeholder="카카오톡 ID">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>🔗 카카오톡 오픈채팅 URL</label>
+                <input type="text" id="kakaoUrl" placeholder="https://open.kakao.com/...">
+            </div>
+
+            <div class="form-group">
+                <label>📷 인스타그램 URL</label>
+                <input type="text" id="instagram" placeholder="https://instagram.com/...">
+            </div>
+
+            <div class="form-group">
+                <label>🌐 링크트리 URL</label>
+                <input type="text" id="linktree" placeholder="https://linktr.ee/...">
+            </div>
+        </div>
+
+        <!-- 텍스트 탭 -->
+        <div id="text" class="tab-content">
+            <h2 style="margin-bottom: 30px; color: #667eea;">📝 사이트 텍스트</h2>
+
+            <div class="form-group">
+                <label>메인 타이틀</label>
+                <input type="text" id="mainTitle" placeholder="TATTOO MAKING">
+            </div>
+
+            <div class="form-group">
+                <label>부제목</label>
+                <input type="text" id="subtitle" placeholder="부산 블랙앤그레이 리얼리즘 전문">
+            </div>
+
+            <div class="form-group">
+                <label>소개글</label>
+                <textarea id="description" rows="6"></textarea>
+            </div>
+        </div>
+
+        <!-- 가격 탭 -->
+        <div id="price" class="tab-content">
+            <h2 style="margin-bottom: 30px; color: #667eea;">💰 가격 정보</h2>
+
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>소형 타투</label>
+                    <input type="text" id="priceSmall" placeholder="100,000원">
+                </div>
+                <div class="form-group">
+                    <label>중형 타투</label>
+                    <input type="text" id="priceMedium" placeholder="300,000원">
+                </div>
+                <div class="form-group">
+                    <label>대형 타투</label>
+                    <input type="text" id="priceLarge" placeholder="500,000원">
+                </div>
+                <div class="form-group">
+                    <label>풀슬리브</label>
+                    <input type="text" id="priceSleeve" placeholder="1,000,000원">
+                </div>
+            </div>
+        </div>
+
+        <!-- 후기 탭 -->
+        <div id="review" class="tab-content">
+            <h2 style="margin-bottom: 30px; color: #667eea;">⭐ 고객 후기</h2>
+
+            <div id="reviewsContainer"></div>
+        </div>
+
+        <!-- 메뉴 탭 -->
+        <div id="menu" class="tab-content">
+            <h2 style="margin-bottom: 30px; color: #667eea;">🍽️ 서비스 메뉴</h2>
+
+            <div class="review-item">
+                <h4>서비스 1</h4>
+                <div class="form-group">
+                    <label>이름</label>
+                    <input type="text" id="service1Name" placeholder="블랙앤그레이">
+                </div>
+                <div class="form-group">
+                    <label>설명</label>
+                    <textarea id="service1Desc" rows="3"></textarea>
+                </div>
+            </div>
+
+            <div class="review-item">
+                <h4>서비스 2</h4>
+                <div class="form-group">
+                    <label>이름</label>
+                    <input type="text" id="service2Name" placeholder="리얼리즘">
+                </div>
+                <div class="form-group">
+                    <label>설명</label>
+                    <textarea id="service2Desc" rows="3"></textarea>
+                </div>
+            </div>
+
+            <div class="review-item">
+                <h4>서비스 3</h4>
+                <div class="form-group">
+                    <label>이름</label>
+                    <input type="text" id="service3Name" placeholder="커버업">
+                </div>
+                <div class="form-group">
+                    <label>설명</label>
+                    <textarea id="service3Desc" rows="3"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- 지도 탭 -->
+        <div id="map" class="tab-content">
+            <h2 style="margin-bottom: 30px; color: #667eea;">🗺️ 위치 정보</h2>
+
+            <div class="form-group">
+                <label>📍 주소</label>
+                <input type="text" id="address" placeholder="부산광역시...">
+            </div>
+
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>위도</label>
+                    <input type="text" id="lat" placeholder="35.1579">
+                </div>
+                <div class="form-group">
+                    <label>경도</label>
+                    <input type="text" id="lng" placeholder="129.0594">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>영업시간</label>
+                <textarea id="businessHours" rows="4" placeholder="월-금: 10:00-20:00"></textarea>
+            </div>
+        </div>
+
+        <!-- 설정 탭 -->
+        <div id="config" class="tab-content">
+            <h2 style="margin-bottom: 30px; color: #667eea;">⚙️ GitHub 설정</h2>
+
+            <div class="config-info">
+                <h4>🔐 Personal Access Token 생성</h4>
+                <p>GitHub → Settings → Developer settings → Personal access tokens → Generate new token (classic) → repo 전체 체크</p>
+            </div>
+
+            <div class="form-group">
+                <label>GitHub Username</label>
+                <input type="text" id="githubUsername" value="josone369-beep">
+            </div>
+
+            <div class="form-group">
+                <label>Repository Name</label>
+                <input type="text" id="githubRepo" value="Repository-name-tattoo-making">
+            </div>
+
+            <div class="form-group">
+                <label>Personal Access Token</label>
+                <input type="password" id="githubToken" placeholder="ghp_...">
+            </div>
+
+            <button class="btn btn-success" onclick="saveConfig(event)">💾 설정 저장</button>
+            <div id="configStatus" class="status"></div>
+        </div>
+
+        <div class="deploy-btn-container">
+            <button class="btn btn-info" onclick="loadFromSite(event)">📥 사이트 데이터 불러오기</button>
+            <button class="btn btn-primary" onclick="deployAll(event)" style="flex: 1;">🚀 저장 및 배포</button>
+        </div>
+    </div>
+
+    <script>
+        let siteData = { sha: '', originalHTML: '' };
+
+        function switchTab(event, tabName) {
+            event.preventDefault();
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        function showStatus(message, type = 'info') {
+            const statusEl = document.getElementById('status');
+            statusEl.textContent = message;
+            statusEl.className = `status ${type}`;
+            statusEl.style.display = 'block';
+            setTimeout(() => statusEl.style.display = 'none', 5000);
+        }
+
+        function saveConfig(event) {
+            event.preventDefault();
+            const config = {
+                username: document.getElementById('githubUsername').value.trim(),
+                repo: document.getElementById('githubRepo').value.trim(),
+                token: document.getElementById('githubToken').value.trim()
+            };
+
+            if (!config.username || !config.repo || !config.token) {
+                document.getElementById('configStatus').textContent = '❌ 모든 항목을 입력해주세요';
+                document.getElementById('configStatus').className = 'status error';
+                document.getElementById('configStatus').style.display = 'block';
+                return;
+            }
+
+            localStorage.setItem('githubConfig', JSON.stringify(config));
+            document.getElementById('configStatus').textContent = '✅ 설정 저장 완료!';
+            document.getElementById('configStatus').className = 'status success';
+            document.getElementById('configStatus').style.display = 'block';
+
+            document.getElementById('syncBanner').className = 'sync-banner success';
+            document.getElementById('syncBanner').innerHTML = '<h3>✅ 설정 완료!</h3><p>"📥 사이트 데이터 불러오기" 클릭하여 현재 내용 가져오기</p>';
+        }
+
+        function loadConfig() {
+            const config = JSON.parse(localStorage.getItem('githubConfig') || '{}');
+            if (config.username) document.getElementById('githubUsername').value = config.username;
+            if (config.repo) document.getElementById('githubRepo').value = config.repo;
+            if (config.token) document.getElementById('githubToken').value = config.token;
+        }
+
+        window.addEventListener('load', loadConfig);
+
+        async function loadFromSite(event) {
+            event.preventDefault();
+            
+            const config = JSON.parse(localStorage.getItem('githubConfig') || '{}');
+            if (!config.token) {
+                showStatus('❌ GitHub 설정을 먼저 저장해주세요', 'error');
+                return;
+            }
+
+            document.getElementById('loadingOverlay').classList.add('active');
+
+            try {
+                const response = await fetch(
+                    `https://api.github.com/repos/${config.username}/${config.repo}/contents/index.html`,
+                    {
+                        headers: {
+                            'Authorization': `token ${config.token}`,
+                            'Accept': 'application/vnd.github.v3+json'
+                        }
+                    }
+                );
+
+                if (!response.ok) throw new Error(`API 에러: ${response.status}`);
+
+                const data = await response.json();
+                const content = decodeURIComponent(escape(atob(data.content)));
+                
+                siteData.originalHTML = content;
+                siteData.sha = data.sha;
+
+                // 데이터 추출
+                const phoneMatch = content.match(/010-\d{4}-\d{4}/);
+                if (phoneMatch) document.getElementById('phone').value = phoneMatch[0];
+
+                const kakaoIdMatch = content.match(/making\d+/);
+                if (kakaoIdMatch) document.getElementById('kakaoId').value = kakaoIdMatch[0];
+
+                const titleMatch = content.match(/<span class="hero-main">(.*?)<\/span>/s);
+                if (titleMatch) document.getElementById('mainTitle').value = titleMatch[1].trim();
+
+                const priceMatches = content.match(/<span class="price-amount">(.*?)<\/span>/g);
+                if (priceMatches && priceMatches.length >= 4) {
+                    document.getElementById('priceSmall').value = priceMatches[0].replace(/<[^>]+>/g, '').trim();
+                    document.getElementById('priceMedium').value = priceMatches[1].replace(/<[^>]+>/g, '').trim();
+                    document.getElementById('priceLarge').value = priceMatches[2].replace(/<[^>]+>/g, '').trim();
+                    document.getElementById('priceSleeve').value = priceMatches[3].replace(/<[^>]+>/g, '').trim();
+                }
+
+                // 후기 추출 (모든 패턴 시도)
+                const reviewPatterns = [
+                    /<div class="review-card">([\s\S]*?)<\/div>\s*<\/div>\s*<\/div>/g,
+                    /<div class="review-item">([\s\S]*?)<\/div>\s*<\/div>/g
+                ];
+
+                let reviews = [];
+                for (let pattern of reviewPatterns) {
+                    const matches = [...content.matchAll(pattern)];
+                    if (matches.length > 0) {
+                        matches.forEach(match => {
+                            const reviewContent = match[1];
+                            let nameMatch = reviewContent.match(/<div class="author-initial">(.*?)<\/div>/) ||
+                                          reviewContent.match(/<div class="author-name">(.*?)<\/div>/);
+                            let typeMatch = reviewContent.match(/<div class="review-type">(.*?)<\/div>/);
+                            let textMatch = reviewContent.match(/<p class="review-text">(.*?)<\/p>/s);
+                            
+                            reviews.push({
+                                name: nameMatch ? nameMatch[1].replace(/\*+/g, '').trim() : '',
+                                type: typeMatch ? typeMatch[1].trim() : '',
+                                text: textMatch ? textMatch[1].trim() : ''
+                            });
+                        });
+                        break;
+                    }
+                }
+
+                // 후기 편집기 생성
+                let reviewsHTML = '';
+                reviews.forEach((review, index) => {
+                    reviewsHTML += `
+                        <div class="review-item">
+                            <h4>⭐ 후기 ${index + 1}</h4>
+                            <div class="grid-3">
+                                <div class="form-group">
+                                    <label>고객명</label>
+                                    <input type="text" id="review${index}Name" value="${review.name}">
+                                </div>
+                                <div class="form-group">
+                                    <label>작업 유형</label>
+                                    <input type="text" id="review${index}Type" value="${review.type}">
+                                </div>
+                                <div class="form-group">
+                                    <label>평점</label>
+                                    <input type="text" id="review${index}Rating" value="5.0">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>후기 내용</label>
+                                <textarea id="review${index}Text" rows="3">${review.text}</textarea>
+                            </div>
+                        </div>
+                    `;
+                });
+                document.getElementById('reviewsContainer').innerHTML = reviewsHTML;
+
+                document.getElementById('syncBanner').className = 'sync-banner success';
+                document.getElementById('syncBanner').innerHTML = '<h3>✅ 데이터 불러오기 완료!</h3><p>수정 후 "🚀 저장 및 배포" 클릭</p>';
+                
+                showStatus('✅ 사이트 데이터 불러오기 완료!', 'success');
+
+            } catch (error) {
+                console.error('실패:', error);
+                showStatus(`❌ 실패: ${error.message}`, 'error');
+            } finally {
+                document.getElementById('loadingOverlay').classList.remove('active');
+            }
+        }
+
+        async function deployAll(event) {
+            event.preventDefault();
+            
+            const config = JSON.parse(localStorage.getItem('githubConfig') || '{}');
+            if (!config.token || !siteData.sha) {
+                showStatus('❌ "사이트 데이터 불러오기"를 먼저 실행해주세요', 'error');
+                return;
+            }
+
+            document.getElementById('loadingOverlay').classList.add('active');
+
+            try {
+                let html = siteData.originalHTML;
+
+                // 연락처
+                const phone = document.getElementById('phone').value;
+                if (phone) html = html.replace(/010-\d{4}-\d{4}/g, phone);
+
+                // 타이틀
+                const title = document.getElementById('mainTitle').value;
+                if (title) html = html.replace(/<span class="hero-main">.*?<\/span>/s, `<span class="hero-main">${title}</span>`);
+
+                // 가격
+                const prices = [
+                    document.getElementById('priceSmall').value,
+                    document.getElementById('priceMedium').value,
+                    document.getElementById('priceLarge').value,
+                    document.getElementById('priceSleeve').value
+                ];
+                const priceMatches = html.match(/<span class="price-amount">.*?<\/span>/g);
+                if (priceMatches) {
+                    prices.forEach((price, index) => {
+                        if (price && priceMatches[index]) {
+                            html = html.replace(priceMatches[index], `<span class="price-amount">${price}</span>`);
+                        }
+                    });
+                }
+
+                // 후기
+                const reviewCards = html.match(/<div class="review-card">[\s\S]*?<\/div>\s*<\/div>\s*<\/div>/g);
+                if (reviewCards) {
+                    reviewCards.forEach((card, index) => {
+                        const name = document.getElementById(`review${index}Name`)?.value;
+                        const type = document.getElementById(`review${index}Type`)?.value;
+                        const text = document.getElementById(`review${index}Text`)?.value;
+                        
+                        if (name || type || text) {
+                            let newCard = card;
+                            if (name) {
+                                newCard = newCard.replace(/<div class="author-initial">.*?<\/div>/, `<div class="author-initial">${name}</div>`);
+                                newCard = newCard.replace(/<div class="author-name">.*?<\/div>/, `<div class="author-name">${name}**</div>`);
+                            }
+                            if (type) newCard = newCard.replace(/<div class="review-type">.*?<\/div>/, `<div class="review-type">${type}</div>`);
+                            if (text) newCard = newCard.replace(/<p class="review-text">.*?<\/p>/s, `<p class="review-text">${text}</p>`);
+                            html = html.replace(card, newCard);
+                        }
+                    });
+                }
+
+                // GitHub 커밋
+                const encodedContent = btoa(unescape(encodeURIComponent(html)));
+
+                const response = await fetch(
+                    `https://api.github.com/repos/${config.username}/${config.repo}/contents/index.html`,
+                    {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': `token ${config.token}`,
+                            'Accept': 'application/vnd.github.v3+json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            message: '[CMS] 콘텐츠 업데이트',
+                            content: encodedContent,
+                            sha: siteData.sha
+                        })
+                    }
+                );
+
+                if (!response.ok) throw new Error(`커밋 실패: ${response.status}`);
+
+                showStatus('✅ 배포 완료! 1-2분 후 사이트 확인', 'success');
+                
+                document.getElementById('syncBanner').className = 'sync-banner success';
+                document.getElementById('syncBanner').innerHTML = `<h3>✅ 배포 완료!</h3><p>🌐 <a href="https://${config.username}.github.io/${config.repo}/" target="_blank" style="color: #667eea;">사이트 확인하기</a> (1-2분 후)</p>`;
+
+            } catch (error) {
+                console.error('실패:', error);
+                showStatus(`❌ 실패: ${error.message}`, 'error');
+            } finally {
+                document.getElementById('loadingOverlay').classList.remove('active');
+            }
+        }
+    </script>
+</body>
+</html>
