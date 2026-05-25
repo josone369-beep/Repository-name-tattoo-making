@@ -764,74 +764,89 @@ function fileToB64(f){return new Promise((res,rej)=>{const r=new FileReader();r.
 async function patchIndexHtml() {
   if(!checkGH())return;
   const el=document.getElementById('patch-result');
-  el.textContent='인덱스.html 가져오는 중...';
+  el.textContent='파일 탐색 중...'; el.style.color='var(--text2)';
+ 
+  // 가능한 파일명 순서대로 탐색
+  const candidates=['인덱스.html','index.html','Index.html','INDEX.html'];
+  let found=null, foundName='', foundSha='';
+ 
+  for(const name of candidates){
+    try{
+      const r=await ghFetch('/contents/'+encodeURIComponent(name));
+      if(r.ok){ const j=await r.json(); found=j; foundName=name; foundSha=j.sha; break; }
+    }catch(e){}
+  }
+ 
+  if(!found){
+    // 저장소 루트 파일 목록 전체 조회
+    try{
+      const r=await ghFetch('/contents/');
+      if(r.ok){
+        const files=await r.json();
+        el.textContent='저장소 파일 목록: '+files.map(f=>f.name).join(', ');
+        el.style.color='var(--text2)';
+        // html 파일 찾기
+        const htmlFile=files.find(f=>f.name.toLowerCase().endsWith('.html')&&
+          (f.name.toLowerCase().includes('index')||f.name.includes('인덱스')||f.name.includes('home')));
+        if(htmlFile){
+          const r2=await ghFetch('/contents/'+encodeURIComponent(htmlFile.name));
+          if(r2.ok){ found=await r2.json(); foundName=htmlFile.name; foundSha=found.sha; }
+        }
+      }
+    }catch(e){}
+  }
+ 
+  if(!found){
+    el.textContent='✗ 메인 HTML 파일을 찾지 못했습니다. 아래에서 파일명을 직접 입력하세요.';
+    el.style.color='var(--danger)';
+    // 직접 입력 UI 추가
+    const inp=document.createElement('div');
+    inp.style.cssText='margin-top:10px;display:flex;gap:8px;';
+    inp.innerHTML=`<input id="manual-filename" placeholder="파일명 예: index.html" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-size:13px;outline:none">
+    <button onclick="patchWithName(document.getElementById('manual-filename').value)" class="btn btn-primary btn-sm">패치</button>`;
+    el.after(inp);
+    return;
+  }
+ 
+  await doPatch(found, foundName, foundSha, el);
+}
+ 
+async function patchWithName(name){
+  if(!name){toast('파일명을 입력하세요','error');return}
+  const el=document.getElementById('patch-result');
+  el.textContent=name+' 가져오는 중...'; el.style.color='var(--text2)';
   try{
-    const r=await ghFetch('/contents/인덱스.html');
-    if(!r.ok)throw new Error('인덱스.html 파일을 찾을 수 없습니다');
+    const r=await ghFetch('/contents/'+encodeURIComponent(name));
+    if(!r.ok)throw new Error(name+' 파일을 찾을 수 없습니다 (HTTP '+r.status+')');
     const j=await r.json();
-    let html=decodeURIComponent(escape(atob(j.content.replace(/\n/g,''))));
-    if(html.includes('data.json')){el.textContent='✓ 이미 패치되어 있습니다';return}
-    const patch=`
-<script>
-(function(){
-  const REPO='https://raw.githubusercontent.com/${GH.user}/${GH.repo}/${GH.branch}/data.json';
-  fetch(REPO+'?t='+Date.now())
-    .then(r=>r.json())
-    .then(d=>{
-      // 히어로
-      if(d.hero){
-        const tl=document.querySelector('#home p');
-        const h1=document.querySelector('#home h1');
-        const desc=document.querySelector('#home p:nth-of-type(2)');
-        if(tl)tl.textContent=d.hero.tagline;
-        if(h1)h1.textContent=d.hero.title;
-      }
-      // 연락처
-      if(d.contact){
-        document.querySelectorAll('a[href*="open.kakao"]').forEach(a=>a.href=d.contact.kakaoUrl);
-        document.querySelectorAll('a[href*="instagram"]').forEach(a=>{
-          if(a.href.includes('instagram'))a.href=d.contact.instaUrl;
-        });
-        document.querySelectorAll('a[href*="linktr"]').forEach(a=>a.href=d.contact.linktree);
-        const phone=document.querySelector('.fa-phone')?.nextSibling;
-        if(phone&&d.contact.phone)phone.parentElement.querySelector('strong').textContent=d.contact.phone;
-      }
-      // 가격
-      if(d.pricing&&d.pricing.items){
-        const cards=document.querySelectorAll('#pricing .grid-template-columns > div, #pricing [style*="grid"] > div');
-        d.pricing.items.forEach((item,i)=>{
-          if(cards[i]){
-            const h3=cards[i].querySelector('h3');
-            const ps=cards[i].querySelectorAll('p');
-            const price=cards[i].querySelector('[style*="2.5rem"]');
-            if(h3)h3.textContent=item.title;
-            if(ps[0])ps[0].textContent=item.size;
-            if(price)price.textContent=item.price;
-            if(ps[1])ps[1].textContent=item.desc;
-          }
-        });
-      }
-      // 후기
-      if(d.reviews){
-        const cards=document.querySelectorAll('#reviews [style*="background:#1a1a1a"]');
-        d.reviews.forEach((rv,i)=>{
-          if(cards[i]){
-            const p=cards[i].querySelector('p');
-            const spans=cards[i].querySelectorAll('span');
-            if(p)p.textContent='"'+rv.content+'"';
-            if(spans[0])spans[0].textContent=rv.name;
-            if(spans[1])spans[1].textContent=rv.type;
-          }
-        });
-      }
-    }).catch(e=>console.warn('CMS data load failed:',e));
-})();
-<\/script>`;
+    await doPatch(j, name, j.sha, el);
+  }catch(e){ el.textContent='✗ '+e.message; el.style.color='var(--danger)'; }
+}
+ 
+async function doPatch(fileJson, fileName, sha, el){
+  try{
+    let html=decodeURIComponent(escape(atob(fileJson.content.replace(/\n/g,''))));
+    if(html.includes('cms-data-loader')){
+      el.textContent='✓ 이미 패치되어 있습니다 ('+fileName+')';
+      el.style.color='var(--success)'; return;
+    }
+    const patch=`\n<!-- CMS DATA LOADER -->\n<script id="cms-data-loader">\n(function(){\n  var REPO='https://raw.githubusercontent.com/${GH.user}/${GH.repo}/${GH.branch}/data.json';\n  fetch(REPO+'?t='+Date.now())\n    .then(function(r){return r.json()})\n    .then(function(d){\n      // 히어로 섹션\n      if(d.hero){\n        var els=document.querySelectorAll('#home p');\n        if(els[0])els[0].textContent=d.hero.tagline;\n        var h1=document.querySelector('#home h1');\n        if(h1)h1.textContent=d.hero.title;\n        var desc=document.querySelector('#home p:nth-child(2)');\n        if(desc)desc.innerHTML=d.hero.desc.replace(/\\n/g,'<br>');\n        document.querySelectorAll('a[href*=\"open.kakao\"]').forEach(function(a){a.href=d.hero.kakaoUrl;});\n      }\n      // About 섹션\n      if(d.about){\n        var aboutDesc=document.querySelector('#about p');\n        if(aboutDesc)aboutDesc.innerHTML=d.about.desc.replace(/\\n/g,'<br>');\n        var statNums=document.querySelectorAll('#about [style*=\"3rem\"]');\n        var statLabels=document.querySelectorAll('#about [style*=\"#999\"]');\n        if(d.about.stats)d.about.stats.forEach(function(s,i){\n          if(statNums[i])statNums[i].textContent=s.num;\n          if(statLabels[i])statLabels[i].textContent=s.label;\n        });\n      }\n      // 가격 섹션\n      if(d.pricing&&d.pricing.items){\n        var pCards=document.querySelectorAll('#pricing>div>div>div');\n        d.pricing.items.forEach(function(item,i){\n          if(!pCards[i])return;\n          var h3=pCards[i].querySelector('h3');\n          var ps=pCards[i].querySelectorAll('p');\n          var priceEl=pCards[i].querySelector('[style*=\"2.5rem\"]');\n          if(h3)h3.textContent=item.title;\n          if(ps[0])ps[0].textContent=item.size;\n          if(priceEl)priceEl.textContent=item.price;\n          if(ps[1])ps[1].textContent=item.desc;\n        });\n        var noteItems=document.querySelectorAll('#pricing li, #pricing [style*=\"background:#1a1a1a\"] li');\n        d.pricing.notes.forEach(function(note,i){if(noteItems[i])noteItems[i].textContent='✓ '+note;});\n      }\n      // 후기 섹션\n      if(d.reviews){\n        var rCards=document.querySelectorAll('#reviews>div>div>div');\n        d.reviews.forEach(function(rv,i){\n          if(!rCards[i])return;\n          var p=rCards[i].querySelector('p');\n          var spans=rCards[i].querySelectorAll('span');\n          if(p)p.textContent='\"'+rv.content+'\"';\n          if(spans[0])spans[0].textContent=rv.name;\n          if(spans[1])spans[1].textContent=rv.type;\n        });\n      }\n      // 연락처 섹션\n      if(d.contact){\n        var phoneEl=document.querySelector('.fa-phone');\n        if(phoneEl&&phoneEl.parentElement){var strong=phoneEl.parentElement.querySelector('strong');if(strong)strong.textContent=d.contact.phone;}\n        var kakaoIdEl=document.querySelector('.fa-comment-dots');\n        if(kakaoIdEl&&kakaoIdEl.parentElement){var strong2=kakaoIdEl.parentElement.querySelector('strong');if(strong2)strong2.textContent='카카오톡 ID: '+d.contact.kakaoId;}\n        document.querySelectorAll('a[href*=\"open.kakao\"]').forEach(function(a){a.href=d.contact.kakaoUrl;});\n        document.querySelectorAll('a[href*=\"instagram\"]').forEach(function(a){a.href=d.contact.instaUrl;if(a.textContent.includes('@'))a.textContent=d.contact.insta;});\n        document.querySelectorAll('a[href*=\"linktr\"]').forEach(function(a){a.href=d.contact.linktree;});\n        var hoursEl=document.querySelector('.fa-phone');\n        if(hoursEl){var p=hoursEl.closest('div')&&hoursEl.closest('div').querySelector('p[style]');if(p)p.innerHTML=d.contact.hours.replace('/','\/<br>');}\n      }\n      // 푸터\n      if(d.footer){\n        var footerSub=document.querySelector('footer p:nth-child(2)');\n        if(footerSub)footerSub.textContent=d.footer.sub;\n        var copy=document.querySelector('footer p:last-child');\n        if(copy)copy.textContent='\\u00a9 '+d.footer.year+' TATTOO MAKING. All rights reserved.';\n      }\n    }).catch(function(e){console.warn('CMS load error:',e);});\n})();\n<\/script>`;
     html=html.replace('</body>',patch+'\n</body>');
-    const pr=await ghPutFile('인덱스.html',html,'CMS 패치: data.json 자동 로드 추가');
-    if(pr.ok){el.textContent='✓ 인덱스.html 패치 완료! 배포 후 사이트가 자동으로 data.json을 읽습니다.';el.style.color='var(--success)'}
-    else throw new Error('업로드 실패');
-  }catch(e){el.textContent='✗ '+e.message;el.style.color='var(--danger)'}
+    // SHA로 업데이트
+    const body={message:'CMS 패치: data.json 자동 로드 ('+fileName+')',content:btoa(unescape(encodeURIComponent(html))),branch:GH.branch,sha:sha};
+    const pr=await fetch('https://api.github.com/repos/'+GH.user+'/'+GH.repo+'/contents/'+encodeURIComponent(fileName),{
+      method:'PUT',
+      headers:{Authorization:'token '+GH.token,'Content-Type':'application/json',Accept:'application/vnd.github.v3+json'},
+      body:JSON.stringify(body)
+    });
+    if(pr.ok){
+      el.textContent='✓ '+fileName+' 패치 완료! 이제 배포하면 사이트에 바로 반영됩니다.';
+      el.style.color='var(--success)';
+      toast('패치 완료! 이제 전체 배포를 눌러주세요','success');
+    } else {
+      const err=await pr.json(); throw new Error(err.message||'업로드 실패');
+    }
+  }catch(e){ el.textContent='✗ '+e.message; el.style.color='var(--danger)'; }
 }
  
 // ============================================================
