@@ -3,1002 +3,336 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TATTOO MAKING - 관리자 CMS v5</title>
-<style>
-:root {
-  --bg:#0a0a0a; --surface:#111; --surface2:#1a1a1a;
-  --border:#2a2a2a; --accent:#c9a45c; --accent2:#e8c98e;
-  --text:#f0f0f0; --text2:#888; --danger:#e05555; --success:#55b055;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh}
-.sidebar{position:fixed;left:0;top:0;bottom:0;width:230px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100}
-.logo{padding:22px 20px;border-bottom:1px solid var(--border)}
-.logo h1{font-size:14px;font-weight:700;color:var(--accent);letter-spacing:2px;text-transform:uppercase}
-.logo p{font-size:11px;color:var(--text2);margin-top:4px}
-.nav{flex:1;padding:10px 0;overflow-y:auto}
-.nav-item{display:flex;align-items:center;gap:10px;padding:11px 20px;cursor:pointer;font-size:13px;color:var(--text2);transition:all .15s;border-left:3px solid transparent}
-.nav-item:hover{background:var(--surface2);color:var(--text)}
-.nav-item.active{background:var(--surface2);color:var(--accent);border-left-color:var(--accent)}
-.nav-badge{margin-left:auto;background:var(--accent);color:#111;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px}
-.sidebar-footer{padding:14px 20px;border-top:1px solid var(--border)}
-.conn-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--text2);margin-right:6px;vertical-align:middle}
-.conn-dot.on{background:var(--success)}
-.conn-text{font-size:11px;color:var(--text2)}
-.main{margin-left:230px;padding:30px;flex:1;min-height:100vh}
-.page{display:none}.page.active{display:block}
-.page-title{font-size:20px;font-weight:600;margin-bottom:4px}
-.page-sub{font-size:13px;color:var(--text2);margin-bottom:24px}
-/* 미리보기 배너 */
-.preview-bar{background:rgba(201,164,92,0.08);border:1px solid rgba(201,164,92,0.25);border-radius:10px;padding:12px 16px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;font-size:13px}
-.preview-bar span{color:var(--accent)}
-.preview-bar a{color:var(--accent);text-decoration:none;font-weight:600}
-/* 카드 */
-.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:22px;margin-bottom:18px}
-.card-title{font-size:12px;font-weight:700;color:var(--accent);margin-bottom:16px;text-transform:uppercase;letter-spacing:1px;display:flex;align-items:center;gap:8px}
-.site-tag{background:rgba(201,164,92,0.12);color:var(--accent);font-size:10px;padding:2px 8px;border-radius:4px;font-weight:600}
-/* 폼 */
-.form-row{margin-bottom:14px}
-.form-row label{display:block;font-size:11px;color:var(--text2);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
-.form-row input,.form-row textarea,.form-row select{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:9px 13px;color:var(--text);font-size:13px;outline:none;transition:border-color .15s;font-family:inherit}
-.form-row input:focus,.form-row textarea:focus{border-color:var(--accent)}
-.form-row textarea{resize:vertical;min-height:75px}
-.form-hint{font-size:11px;color:var(--text2);margin-top:4px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-/* 버튼 */
-.btn{padding:9px 18px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .15s;display:inline-flex;align-items:center;gap:6px}
-.btn-primary{background:var(--accent);color:#111}
-.btn-primary:hover{background:var(--accent2)}
-.btn-secondary{background:transparent;color:var(--text);border:1px solid var(--border)}
-.btn-secondary:hover{border-color:var(--accent);color:var(--accent)}
-.btn-sm{padding:6px 12px;font-size:12px}
-.btn:disabled{opacity:.4;cursor:not-allowed}
-.btn-group{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
-/* 토스트 */
-#toast{position:fixed;bottom:22px;right:22px;padding:12px 18px;border-radius:10px;font-size:13px;font-weight:500;opacity:0;transform:translateY(8px);transition:all .2s;z-index:9999;max-width:300px}
-#toast.show{opacity:1;transform:translateY(0)}
-#toast.success{background:var(--success);color:#fff}
-#toast.error{background:var(--danger);color:#fff}
-#toast.info{background:var(--accent);color:#111}
-/* 로딩 */
-.spin{display:inline-block;width:13px;height:13px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-/* 이미지 */
-.upload-zone{border:2px dashed var(--border);border-radius:10px;padding:28px;text-align:center;cursor:pointer;transition:all .15s;margin-bottom:14px}
-.upload-zone:hover,.upload-zone.drag-over{border-color:var(--accent);background:rgba(201,164,92,0.04)}
-.upload-zone p{color:var(--text2);font-size:12px}
-.img-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;margin-top:12px}
-.img-item{position:relative;aspect-ratio:1;border-radius:8px;overflow:hidden;border:1px solid var(--border)}
-.img-item img{width:100%;height:100%;object-fit:cover}
-.img-item .del{position:absolute;top:3px;right:3px;background:rgba(0,0,0,.75);border:none;border-radius:50%;width:22px;height:22px;cursor:pointer;color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .15s}
-.img-item:hover .del{opacity:1}
-.img-item .done{position:absolute;bottom:3px;right:3px;background:var(--success);border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:10px}
-/* 후기 */
-.review-block{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:10px}
-.review-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.review-num{font-size:11px;color:var(--accent);text-transform:uppercase;letter-spacing:1px;font-weight:700}
-.star-row{display:flex;gap:4px;margin-bottom:12px}
-.star{font-size:20px;cursor:pointer;color:var(--border);transition:color .1s}
-.star.on{color:var(--accent)}
-/* 가격 */
-.price-block{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:10px}
-.price-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.price-icon{font-size:20px}
-/* 로그 */
-.log-box{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px;font-family:'Courier New',monospace;font-size:11px;max-height:180px;overflow-y:auto;margin-top:12px;display:none}
-.log-ok{color:var(--success)}.log-err{color:var(--danger)}.log-info{color:var(--accent)}
-/* 대시보드 통계 */
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-bottom:22px}
-.stat{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px;text-align:center}
-.stat-n{font-size:26px;font-weight:700;color:var(--accent)}
-.stat-l{font-size:11px;color:var(--text2);margin-top:3px}
-/* 연결 안내 배너 */
-.banner{padding:11px 15px;border-radius:8px;font-size:12px;margin-bottom:18px;display:flex;align-items:center;gap:8px}
-.banner.warn{background:rgba(201,164,92,0.08);border:1px solid rgba(201,164,92,0.25);color:var(--accent)}
-.banner.ok{background:rgba(85,176,85,0.08);border:1px solid rgba(85,176,85,0.25);color:var(--success)}
-/* 섹션 매핑 표시 */
-.mapping{border-left:3px solid var(--accent);padding-left:12px;margin-bottom:16px}
-.mapping-label{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px}
-.mapping-value{font-size:12px;color:var(--text);margin-top:2px}
-</style>
+<meta name="naver-site-verification" content="17cb875e0cdf1f3651901f6ebdffb30e13c547d4">
+<meta name="google-site-verification" content="6YbU8co5rNcgyb7e-NxWB5JVMVcqexrgv1KfKud1rR0">
+<title>TATTOO MAKING - 부산 블랙&그레이 리얼리즘 타투샵</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖤</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
 </head>
-<body>
+<body style="margin:0;padding:0;font-family:'Noto Sans KR',sans-serif;background:#000;color:#fff;overflow-x:hidden">
 
-<nav class="sidebar">
-  <div class="logo">
-    <h1>✦ Tattoo CMS</h1>
-    <p>관리자 패널 v5.0</p>
-  </div>
-  <div class="nav">
-    <div class="nav-item active" onclick="goPage('dashboard')"><span>◈</span> 대시보드</div>
-    <div class="nav-item" onclick="goPage('github')"><span>⚙</span> GitHub 설정</div>
-    <div class="nav-item" onclick="goPage('hero')"><span>◎</span> 히어로 섹션</div>
-    <div class="nav-item" onclick="goPage('about')"><span>◇</span> ABOUT</div>
-    <div class="nav-item" onclick="goPage('portfolio')"><span>◫</span> 포트폴리오</div>
-    <div class="nav-item" onclick="goPage('pricing')"><span>◈</span> 가격 안내</div>
-    <div class="nav-item" onclick="goPage('reviews')"><span>◉</span> 고객 후기 <span class="nav-badge">6</span></div>
-    <div class="nav-item" onclick="goPage('contact')"><span>◎</span> CONTACT</div>
-    <div class="nav-item" onclick="goPage('deploy')"><span>▶</span> 배포</div>
-  </div>
-  <div class="sidebar-footer">
-    <span class="conn-dot" id="conn-dot"></span>
-    <span class="conn-text" id="conn-text">GitHub 미연결</span>
-  </div>
+<!-- 네비게이션 -->
+<nav style="position:fixed;top:0;left:0;width:100%;background:rgba(0,0,0,0.95);backdrop-filter:blur(10px);z-index:1000;padding:15px 0;border-bottom:1px solid rgba(201,164,92,0.2)">
+<div style="max-width:1400px;margin:0 auto;padding:0 30px;display:flex;justify-content:space-between;align-items:center">
+<a href="#home" style="font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;color:#c9a45c;text-decoration:none">TATTOO MAKING</a>
+<div style="display:flex;gap:30px">
+<a href="#home" style="color:#e0e0e0;text-decoration:none;font-weight:500">HOME</a>
+<a href="#about" style="color:#e0e0e0;text-decoration:none;font-weight:500">소개</a>
+<a href="#portfolio" style="color:#e0e0e0;text-decoration:none;font-weight:500">포트폴리오</a>
+<a href="#class" style="color:#e0e0e0;text-decoration:none;font-weight:500">수강 안내</a>
+<a href="#pricing" style="color:#e0e0e0;text-decoration:none;font-weight:500">가격 안내</a>
+<a href="#reviews" style="color:#e0e0e0;text-decoration:none;font-weight:500">고객 후기</a>
+<a href="#contact" style="color:#e0e0e0;text-decoration:none;font-weight:500">CONTACT</a>
+</div>
+</div>
 </nav>
 
-<main class="main">
-
-<!-- 대시보드 -->
-<div class="page active" id="page-dashboard">
-  <div class="page-title">대시보드</div>
-  <div class="page-sub">사이트 현황 한눈에 보기</div>
-  <div class="banner warn" id="dash-banner">⚠ GitHub 설정을 먼저 완료하세요</div>
-  <div class="stats">
-    <div class="stat"><div class="stat-n" id="st-portfolio">0</div><div class="stat-l">포트폴리오</div></div>
-    <div class="stat"><div class="stat-n" id="st-reviews">0</div><div class="stat-l">고객 후기</div></div>
-    <div class="stat"><div class="stat-n" id="st-price">4</div><div class="stat-l">가격 항목</div></div>
-    <div class="stat"><div class="stat-n" id="st-deploy">-</div><div class="stat-l">마지막 배포</div></div>
-  </div>
-  <div class="card">
-    <div class="card-title">⚡ 빠른 전체 배포</div>
-    <p style="font-size:13px;color:var(--text2);margin-bottom:14px">모든 섹션 변경사항을 사이트에 한번에 반영합니다</p>
-    <div class="btn-group">
-      <button class="btn btn-primary" onclick="deployAll()" id="btn-dash-deploy">▶ 지금 배포</button>
-      <button class="btn btn-secondary" onclick="loadFromGithub()">↺ GitHub에서 불러오기</button>
-    </div>
-    <div class="log-box" id="dash-log"></div>
-  </div>
-  <div class="card">
-    <div class="card-title">🔗 사이트 바로가기</div>
-    <p style="font-size:13px;color:var(--text2);margin-bottom:12px" id="site-url-text">GitHub 설정 후 링크가 표시됩니다</p>
-    <button class="btn btn-secondary btn-sm" onclick="openSite()">사이트 열기 →</button>
-  </div>
-</div>
-
-<!-- GitHub 설정 -->
-<div class="page" id="page-github">
-  <div class="page-title">GitHub 설정</div>
-  <div class="page-sub">저장소 정보와 토큰을 설정하세요 (브라우저에만 저장됩니다)</div>
-  <div class="card">
-    <div class="card-title">저장소 정보</div>
-    <div class="form-row"><label>GitHub 사용자명</label><input id="gh-user" placeholder="josone369-beep"></div>
-    <div class="form-row"><label>저장소 이름</label><input id="gh-repo" placeholder="Repository-name-tattoo-making"></div>
-    <div class="form-row"><label>브랜치</label><input id="gh-branch" value="main"></div>
-    <div class="form-row"><label>Personal Access Token (repo 권한)</label><input type="password" id="gh-token" placeholder="ghp_xxxxxxxxxxxx"></div>
-    <div class="btn-group">
-      <button class="btn btn-primary" onclick="saveGithub()">💾 저장</button>
-      <button class="btn btn-secondary" onclick="testGithub()">🔗 연결 테스트</button>
-    </div>
-    <div id="gh-result" style="margin-top:10px;font-size:13px"></div>
-  </div>
-  <div class="card">
-    <div class="card-title">📋 토큰 발급 방법</div>
-    <ol style="font-size:13px;color:var(--text2);line-height:2.2;padding-left:18px">
-      <li>GitHub → Settings → Developer settings</li>
-      <li>Personal access tokens → Tokens (classic)</li>
-      <li>Generate new token → <strong style="color:var(--text)">repo</strong> 권한 체크</li>
-      <li>생성된 토큰 복사 후 위에 입력</li>
-    </ol>
-  </div>
-</div>
-
 <!-- 히어로 섹션 -->
-<div class="page" id="page-hero">
-  <div class="page-title">히어로 섹션</div>
-  <div class="page-sub">메인 페이지 첫 화면 내용을 수정합니다</div>
-  <div class="preview-bar"><span>📍 사이트: 첫 화면 (스크롤 최상단)</span></div>
-  <div class="card">
-    <div class="card-title">상단 태그라인 <span class="site-tag">사이트 직접 반영</span></div>
-    <div class="mapping"><div class="mapping-label">현재 사이트 표시값</div><div class="mapping-value">Busan Black & Grey Realism</div></div>
-    <div class="form-row"><label>태그라인 텍스트</label><input id="hero-tagline" value="Busan Black &amp; Grey Realism"></div>
-  </div>
-  <div class="card">
-    <div class="card-title">메인 제목</div>
-    <div class="form-row"><label>제목 (대형 텍스트)</label><input id="hero-title" value="TATTOO MAKING"></div>
-  </div>
-  <div class="card">
-    <div class="card-title">부제목 설명</div>
-    <div class="form-row"><label>설명 문구</label><textarea id="hero-desc">부산 블랙&amp;그레이 리얼리즘 전문
-1:1 맞춤 디자인으로 당신만의 특별한 이야기를 새깁니다</textarea></div>
-  </div>
-  <div class="card">
-    <div class="card-title">카카오 오픈채팅 링크</div>
-    <div class="form-row"><label>카카오 오픈채팅 URL</label><input id="hero-kakao" value="https://open.kakao.com/o/sVVHM32g"></div>
-  </div>
-  <div class="btn-group">
-    <button class="btn btn-primary" onclick="saveAndDeploy()">🚀 저장 및 배포</button>
-  </div>
+<section id="home" style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#000 0%,#121212 100%);padding-top:80px">
+<div style="text-align:center;padding:20px">
+<p id="hero-tagline" style="font-size:1rem;color:#c9a45c;letter-spacing:0.3em;margin-bottom:15px;text-transform:uppercase">Busan Black &amp; Grey Realism</p>
+<h1 id="hero-title" style="font-family:'Playfair Display',serif;font-size:5rem;font-weight:900;margin:30px 0;color:#fff;text-transform:uppercase;line-height:1.2">TATTOO MAKING</h1>
+<p id="hero-desc" style="font-size:1.3rem;color:#e0e0e0;max-width:600px;margin:0 auto 50px;line-height:1.8">부산 블랙&amp;그레이 리얼리즘 전문<br>1:1 맞춤 디자인으로 당신만의 특별한 이야기를 새깁니다</p>
+<div style="display:flex;gap:15px;justify-content:center;flex-wrap:wrap">
+<a href="#portfolio" style="padding:15px 30px;background:#c9a45c;color:#000;text-decoration:none;font-weight:600;border-radius:4px;display:inline-flex;align-items:center;gap:8px"><i class="fas fa-images"></i> 포트폴리오 보기</a>
+<a id="hero-kakao-btn" href="https://open.kakao.com/o/sVVHM32g" target="_blank" style="padding:15px 30px;background:transparent;color:#c9a45c;border:2px solid #c9a45c;text-decoration:none;font-weight:600;border-radius:4px;display:inline-flex;align-items:center;gap:8px"><i class="fas fa-comment-dots"></i> 상담 문의하기</a>
 </div>
+</div>
+</section>
 
 <!-- ABOUT -->
-<div class="page" id="page-about">
-  <div class="page-title">ABOUT 섹션</div>
-  <div class="page-sub">소개 섹션 내용을 수정합니다</div>
-  <div class="preview-bar"><span>📍 사이트: ABOUT 섹션 (#about)</span></div>
-  <div class="card">
-    <div class="card-title">소개 본문 <span class="site-tag">사이트 직접 반영</span></div>
-    <div class="form-row"><label>소개 문구</label><textarea id="about-desc" style="min-height:100px">부산에 위치한 블랙&amp;그레이 리얼리즘 전문 타투샵 TATTOO MAKING입니다.
-1:1 맞춤 디자인 제작, 커버업, 타투 교육까지
-10년 이상의 경험으로 고객님의 이야기를 예술작품으로 새겨드립니다.</textarea></div>
-  </div>
-  <div class="card">
-    <div class="card-title">통계 수치 3개</div>
-    <div class="grid2">
-      <div class="form-row"><label>완성된 작업 수</label><input id="about-stat1" value="1000+"></div>
-      <div class="form-row"><label>라벨</label><input id="about-stat1-label" value="완성된 작업"></div>
-      <div class="form-row"><label>경력</label><input id="about-stat2" value="10+"></div>
-      <div class="form-row"><label>라벨</label><input id="about-stat2-label" value="년 경력"></div>
-      <div class="form-row"><label>만족도</label><input id="about-stat3" value="100%"></div>
-      <div class="form-row"><label>라벨</label><input id="about-stat3-label" value="고객 만족도"></div>
-    </div>
-  </div>
-  <div class="btn-group">
-    <button class="btn btn-primary" onclick="saveAndDeploy()">🚀 저장 및 배포</button>
-  </div>
+<section id="about" style="padding:100px 20px;background:#121212">
+<div style="max-width:1400px;margin:0 auto">
+<h2 style="font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;text-align:center;margin-bottom:20px;color:#fff">ABOUT</h2>
+<div style="width:80px;height:4px;background:#c9a45c;margin:0 auto 60px"></div>
+<div style="max-width:800px;margin:0 auto;text-align:center">
+<p id="about-desc" style="font-size:1.2rem;color:#e0e0e0;line-height:1.8;margin-bottom:60px">부산에 위치한 블랙&amp;그레이 리얼리즘 전문 타투샵 TATTOO MAKING입니다.<br>1:1 맞춤 디자인 제작, 커버업, 타투 교육까지<br>10년 이상의 경험으로 고객님의 이야기를 예술작품으로 새겨드립니다.</p>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:30px">
+<div style="padding:30px;background:#1a1a1a;border-radius:8px;border:1px solid rgba(201,164,92,0.2)">
+<div id="about-stat1" style="font-family:'Playfair Display',serif;font-size:3rem;font-weight:700;color:#c9a45c;margin-bottom:10px">1000+</div>
+<div id="about-stat1-label" style="color:#999">완성된 작업</div>
 </div>
-
-<!-- 포트폴리오 -->
-<div class="page" id="page-portfolio">
-  <div class="page-title">포트폴리오 관리</div>
-  <div class="page-sub">사이트 포트폴리오 8개 카드를 1:1로 편집합니다</div>
-  <div class="preview-bar"><span>📍 사이트: PORTFOLIO 섹션 (#portfolio) · 8개 카드</span></div>
-  <div id="portfolio-blocks"></div>
-  <div class="btn-group" style="margin-top:4px">
-    <button class="btn btn-primary" onclick="saveAndDeploy()">🚀 저장 및 배포</button>
-    <button class="btn btn-secondary" onclick="loadFromGithub()">↺ 불러오기</button>
-  </div>
+<div style="padding:30px;background:#1a1a1a;border-radius:8px;border:1px solid rgba(201,164,92,0.2)">
+<div id="about-stat2" style="font-family:'Playfair Display',serif;font-size:3rem;font-weight:700;color:#c9a45c;margin-bottom:10px">10+</div>
+<div id="about-stat2-label" style="color:#999">년 경력</div>
 </div>
-
-<!-- 가격 안내 -->
-<div class="page" id="page-pricing">
-  <div class="page-title">가격 안내</div>
-  <div class="page-sub">사이트 가격 섹션과 1:1 매칭됩니다</div>
-  <div class="preview-bar"><span>📍 사이트: 가격 안내 섹션 (#pricing)</span></div>
-
-  <!-- 가격 4개 -->
-  <div id="price-blocks"></div>
-
-  <div class="card">
-    <div class="card-title">참고사항 <span class="site-tag">사이트 직접 반영</span></div>
-    <div class="form-row"><label>참고사항 1</label><input id="price-note1" value="커버업 작업은 기존 가격의 +20%"></div>
-    <div class="form-row"><label>참고사항 2</label><input id="price-note2" value="컬러 작업은 기존 가격의 +30%"></div>
-    <div class="form-row"><label>참고사항 3</label><input id="price-note3" value="카드 결제 가능 (무이자 할부 가능)"></div>
-    <div class="form-row"><label>참고사항 4</label><input id="price-note4" value="최종 금액은 디자인 상담 후 결정"></div>
-  </div>
-  <div class="btn-group">
-    <button class="btn btn-primary" onclick="saveAndDeploy()">🚀 저장 및 배포</button>
-    <button class="btn btn-secondary" onclick="loadFromGithub()">↺ 불러오기</button>
-  </div>
+<div style="padding:30px;background:#1a1a1a;border-radius:8px;border:1px solid rgba(201,164,92,0.2)">
+<div id="about-stat3" style="font-family:'Playfair Display',serif;font-size:3rem;font-weight:700;color:#c9a45c;margin-bottom:10px">100%</div>
+<div id="about-stat3-label" style="color:#999">고객 만족도</div>
 </div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio" style="padding:100px 20px;background:#000">
+<div style="max-width:1400px;margin:0 auto">
+<h2 style="font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;text-align:center;margin-bottom:20px;color:#fff">PORTFOLIO</h2>
+<div style="width:80px;height:4px;background:#c9a45c;margin:0 auto 60px"></div>
+<div id="portfolio-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;margin-bottom:60px">
+<!-- CMS에서 자동 생성 -->
+</div>
+<div style="text-align:center">
+<a id="insta-link" href="https://www.instagram.com/tattoo_making" target="_blank" style="padding:15px 30px;background:#c9a45c;color:#000;text-decoration:none;font-weight:600;border-radius:4px;display:inline-flex;align-items:center;gap:8px"><i class="fab fa-instagram"></i> Instagram에서 더 많은 작업 보기</a>
+</div>
+</div>
+</section>
+
+<!-- 수강 안내 -->
+<section id="class" style="padding:100px 20px;background:#121212">
+<div style="max-width:1400px;margin:0 auto">
+<h2 style="font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;text-align:center;margin-bottom:20px;color:#fff">타투 수강 안내</h2>
+<div style="width:80px;height:4px;background:#c9a45c;margin:0 auto 60px"></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:30px">
+<div style="background:#1a1a1a;padding:40px;border-radius:16px;border:2px solid rgba(201,164,92,0.2)">
+<h3 style="font-size:1.8rem;font-weight:700;color:#c9a45c;margin-bottom:10px;text-align:center">기초반</h3>
+<p style="color:#999;text-align:center;margin-bottom:30px">4주 / 주 2회</p>
+<ul style="list-style:none;padding:0;margin:0">
+<li style="padding:10px 0;color:#e0e0e0">✓ 타투 머신 다루기</li>
+<li style="padding:10px 0;color:#e0e0e0">✓ 기초 라인 워크</li>
+<li style="padding:10px 0;color:#e0e0e0">✓ 쉐이딩 기법</li>
+<li style="padding:10px 0;color:#e0e0e0">✓ 위생 관리</li>
+<li style="padding:10px 0;color:#e0e0e0">✓ 실습용 재료 제공</li>
+</ul>
+</div>
+<div style="background:#1a1a1a;padding:40px;border-radius:16px;border:2px solid rgba(201,164,92,0.2)">
+<h3 style="font-size:1.8rem;font-weight:700;color:#c9a45c;margin-bottom:10px;text-align:center">심화반</h3>
+<p style="color:#999;text-align:center;margin-bottom:30px">8주 / 주 3회</p>
+<ul style="list-style:none;padding:0;margin:0">
+<li style="padding:10px 0;color:#e0e0e0">✓ 블랙&amp;그레이 리얼리즘</li>
+<li style="padding:10px 0;color:#e0e0e0">✓ 디자인 제작 실습</li>
+<li style="padding:10px 0;color:#e0e0e0">✓ 커버업 기법</li>
+<li style="padding:10px 0;color:#e0e0e0">✓ 실제 작업 참관</li>
+<li style="padding:10px 0;color:#e0e0e0">✓ 포트폴리오 제작</li>
+</ul>
+</div>
+<div style="background:#1a1a1a;padding:40px;border-radius:16px;border:2px solid rgba(201,164,92,0.2)">
+<h3 style="font-size:1.8rem;font-weight:700;color:#c9a45c;margin-bottom:10px;text-align:center">이레즈미 특화반</h3>
+<p style="color:#999;text-align:center;margin-bottom:30px">12주 / 주 2회</p>
+<ul style="list-style:none;padding:0;margin:0">
+<li style="padding:10px 0;color:#e0e0e0">✓ 일본 전통 문양 이해</li>
+<li style="padding:10px 0;color:#e0e0e0">✓ 이레즈미 기법</li>
+<li style="padding:10px 0;color:#e0e0e0">✓ 대형 작업 기획</li>
+<li style="padding:10px 0;color:#e0e0e0">✓ 1:1 맞춤 지도</li>
+<li style="padding:10px 0;color:#e0e0e0">✓ 수료 후 멘토링</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" style="padding:100px 20px;background:#000">
+<div style="max-width:1400px;margin:0 auto">
+<h2 style="font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;text-align:center;margin-bottom:20px;color:#fff">가격 안내</h2>
+<div style="width:80px;height:4px;background:#c9a45c;margin:0 auto 60px"></div>
+<div id="pricing-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:30px;margin-bottom:40px">
+<!-- CMS에서 자동 생성 -->
+</div>
+<div id="pricing-notes" style="background:#1a1a1a;padding:30px;border-radius:8px;border:1px solid rgba(201,164,92,0.2);text-align:center">
+<h3 style="color:#c9a45c;margin-bottom:20px;font-size:1.2rem">참고사항</h3>
+<ul id="pricing-notes-list" style="list-style:none;padding:0;margin:0">
+<li style="padding:8px 0;color:#e0e0e0">✓ 커버업 작업은 기존 가격의 +20%</li>
+<li style="padding:8px 0;color:#e0e0e0">✓ 컬러 작업은 기존 가격의 +30%</li>
+<li style="padding:8px 0;color:#e0e0e0">✓ 카드 결제 가능 (무이자 할부 가능)</li>
+<li style="padding:8px 0;color:#e0e0e0">✓ 최종 금액은 디자인 상담 후 결정</li>
+</ul>
+</div>
+</div>
+</section>
 
 <!-- 고객 후기 -->
-<div class="page" id="page-reviews">
-  <div class="page-title">고객 후기</div>
-  <div class="page-sub">사이트 고객 후기 섹션 8개를 수정합니다</div>
-  <div class="preview-bar"><span>📍 사이트: 고객 후기 섹션 (#reviews) · 6개 카드</span></div>
-  <div id="review-blocks"></div>
-  <div class="btn-group">
-    <button class="btn btn-primary" onclick="saveAndDeploy()">🚀 저장 및 배포</button>
-    <button class="btn btn-secondary" onclick="loadFromGithub()">↺ 불러오기</button>
-  </div>
+<section id="reviews" style="padding:100px 20px;background:#121212">
+<div style="max-width:1400px;margin:0 auto">
+<h2 style="font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;text-align:center;margin-bottom:20px;color:#fff">고객 후기</h2>
+<div style="width:80px;height:4px;background:#c9a45c;margin:0 auto 60px"></div>
+<div id="reviews-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px">
+<!-- CMS에서 자동 생성 -->
 </div>
+</div>
+</section>
 
 <!-- CONTACT -->
-<div class="page" id="page-contact">
-  <div class="page-title">CONTACT 섹션</div>
-  <div class="page-sub">연락처 정보를 수정합니다</div>
-  <div class="preview-bar"><span>📍 사이트: CONTACT 섹션 (#contact)</span></div>
-  <div class="card">
-    <div class="card-title">연락처 정보 <span class="site-tag">사이트 직접 반영</span></div>
-    <div class="mapping"><div class="mapping-label">현재 사이트 전화번호</div><div class="mapping-value">010-2254-0690</div></div>
-    <div class="form-row"><label>전화번호</label><input id="c-phone" value="010-2254-0690"></div>
-    <div class="form-row"><label>운영 시간</label><input id="c-hours" value="평일 12:00-21:00 / 주말 예약제 운영"></div>
-    <div class="form-row"><label>카카오톡 ID</label><input id="c-kakao-id" value="making91"></div>
-    <div class="form-row"><label>카카오 오픈채팅 URL</label><input id="c-kakao-url" value="https://open.kakao.com/o/sVVHM32g"></div>
-    <div class="form-row"><label>인스타그램 ID (@포함)</label><input id="c-insta" value="@tattoo_making"></div>
-    <div class="form-row"><label>인스타그램 URL</label><input id="c-insta-url" value="https://www.instagram.com/tattoo_making"></div>
-    <div class="form-row"><label>Linktree URL</label><input id="c-linktree" value="https://linktr.ee/tattoomaking"></div>
-  </div>
-  <div class="card">
-    <div class="card-title">푸터 정보</div>
-    <div class="form-row"><label>푸터 부제목</label><input id="footer-sub" value="부산 블랙&amp;그레이 리얼리즘 전문 타투샵"></div>
-    <div class="form-row"><label>저작권 연도</label><input id="footer-year" value="2024"></div>
-  </div>
-  <div class="btn-group">
-    <button class="btn btn-primary" onclick="saveAndDeploy()">🚀 저장 및 배포</button>
-    <button class="btn btn-secondary" onclick="loadFromGithub()">↺ 불러오기</button>
-  </div>
+<section id="contact" style="padding:100px 20px;background:#000">
+<div style="max-width:1400px;margin:0 auto">
+<h2 style="font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;text-align:center;margin-bottom:20px;color:#fff">CONTACT</h2>
+<div style="width:80px;height:4px;background:#c9a45c;margin:0 auto 60px"></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:60px">
+<div style="background:#1a1a1a;padding:40px;border-radius:8px;border:1px solid rgba(201,164,92,0.2)">
+<h3 style="color:#c9a45c;margin-bottom:30px;font-size:1.5rem">상담 문의</h3>
+<div style="margin-bottom:30px">
+<p style="margin-bottom:10px"><i class="fas fa-phone" style="color:#c9a45c;margin-right:10px"></i><strong id="contact-phone">010-2254-0690</strong></p>
+<p id="contact-hours" style="margin-left:28px;font-size:0.9rem;color:#999">평일 12:00-21:00<br>주말 예약제 운영</p>
 </div>
-
-<!-- 배포 -->
-<div class="page" id="page-deploy">
-  <div class="page-title">배포 관리</div>
-  <div class="page-sub">변경사항을 GitHub Pages에 반영합니다</div>
-  <div class="card">
-    <div class="card-title">배포 실행</div>
-    <p style="font-size:13px;color:var(--text2);margin-bottom:14px">
-      data.json 파일이 저장소에 업로드되고, 사이트가 자동으로 최신 내용을 불러옵니다.
-    </p>
-    <div class="btn-group">
-      <button class="btn btn-primary" onclick="deployAll()" id="btn-deploy">▶ 전체 배포</button>
-      <button class="btn btn-secondary" onclick="clearLog()">🗑 로그 지우기</button>
-    </div>
-    <div class="log-box" id="deploy-log" style="display:block">
-      <div class="log-info">// 배포 로그</div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-title">인덱스.html 업데이트</div>
-    <p style="font-size:13px;color:var(--text2);margin-bottom:14px">
-      인덱스.html에 data.json 자동 로드 코드가 없다면 아래 버튼으로 업데이트하세요.
-    </p>
-    <button class="btn btn-secondary" onclick="patchIndexHtml()">🔧 인덱스.html 패치</button>
-    <div id="patch-result" style="margin-top:10px;font-size:12px;color:var(--text2)"></div>
-  </div>
+<div style="margin-bottom:30px">
+<p style="margin-bottom:10px"><i class="fas fa-comment-dots" style="color:#c9a45c;margin-right:10px"></i><strong id="contact-kakao-id">카카오톡 ID: making91</strong></p>
+<p style="margin-left:28px"><a id="contact-kakao-url" href="https://open.kakao.com/o/sVVHM32g" target="_blank" style="color:#c9a45c;text-decoration:none">오픈채팅 바로가기 →</a></p>
 </div>
+<div style="margin-bottom:30px">
+<p><i class="fab fa-instagram" style="color:#c9a45c;margin-right:10px"></i>
+<a id="contact-insta-url" href="https://www.instagram.com/tattoo_making" target="_blank" style="color:#e0e0e0;text-decoration:none" id="contact-insta">@tattoo_making</a></p>
+</div>
+<div style="display:flex;gap:15px;margin-top:30px">
+<a id="social-insta" href="https://www.instagram.com/tattoo_making" target="_blank" style="width:50px;height:50px;border-radius:50%;background:#0a0a0a;border:2px solid rgba(201,164,92,0.2);display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:#c9a45c;text-decoration:none"><i class="fab fa-instagram"></i></a>
+<a id="social-kakao" href="https://open.kakao.com/o/sVVHM32g" target="_blank" style="width:50px;height:50px;border-radius:50%;background:#0a0a0a;border:2px solid rgba(201,164,92,0.2);display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:#c9a45c;text-decoration:none"><i class="fas fa-comment"></i></a>
+<a id="social-linktree" href="https://linktr.ee/tattoomaking" target="_blank" style="width:50px;height:50px;border-radius:50%;background:#0a0a0a;border:2px solid rgba(201,164,92,0.2);display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:#c9a45c;text-decoration:none"><i class="fas fa-link"></i></a>
+</div>
+</div>
+<div style="border-radius:8px;overflow:hidden;min-height:400px">
+<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3262.4087437854814!2d129.0403!3d35.1028!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3568eb5f3e4c78e5%3A0x3e2c5e6a5d6b8c9d!2sBusan%2C%20South%20Korea!5e0!3m2!1sen!2sus!4v1234567890123!5m2!1sen!2sus" style="width:100%;height:100%;border:none" allowfullscreen loading="lazy"></iframe>
+</div>
+</div>
+</div>
+</section>
 
-</main>
-
-<div id="toast"></div>
-
-<script>
-// ============================================================
-// 기본 데이터 (사이트와 1:1 매칭)
-// ============================================================
-const D = {
-  hero: {
-    tagline: 'Busan Black & Grey Realism',
-    title: 'TATTOO MAKING',
-    desc: '부산 블랙&그레이 리얼리즘 전문\n1:1 맞춤 디자인으로 당신만의 특별한 이야기를 새깁니다',
-    kakaoUrl: 'https://open.kakao.com/o/sVVHM32g'
-  },
-  about: {
-    desc: '부산에 위치한 블랙&그레이 리얼리즘 전문 타투샵 TATTOO MAKING입니다.\n1:1 맞춤 디자인 제작, 커버업, 타투 교육까지\n10년 이상의 경험으로 고객님의 이야기를 예술작품으로 새겨드립니다.',
-    stats: [
-      {num:'1000+', label:'완성된 작업'},
-      {num:'10+',   label:'년 경력'},
-      {num:'100%',  label:'고객 만족도'}
-    ]
-  },
-  pricing: {
-    items: [
-      {title:'소형', size:'5cm 이하',     price:'10만원~', desc:'미니 타투'},
-      {title:'중형', size:'5~15cm',       price:'30만원~', desc:'일반 사이즈'},
-      {title:'대형', size:'하프슬리브',   price:'150만원~',desc:'팔 반', popular:true},
-      {title:'특대형',size:'풀슬리브/등판',price:'300만원~',desc:'대형 작업'}
-    ],
-    notes: [
-      '커버업 작업은 기존 가격의 +20%',
-      '컬러 작업은 기존 가격의 +30%',
-      '카드 결제 가능 (무이자 할부 가능)',
-      '최종 금액은 디자인 상담 후 결정'
-    ]
-  },
-  reviews: [
-    {name:'김** 님', type:'블랙워크',         stars:5, content:'처음 타투를 하는 거라 많이 긴장했는데, 친절하게 상담해주시고 제가 원하는 디자인으로 완벽하게 만들어주셔서 너무 만족합니다!'},
-    {name:'박** 님', type:'풀슬리브 이레즈미', stars:5, content:'풀슬리브 이레즈미 작업 받았습니다. 10개월 동안 정말 정성스럽게 작업해주셔서 최고의 결과물이 나왔어요. 감사합니다!'},
-    {name:'이** 님', type:'커버업',            stars:5, content:'예전에 다른 곳에서 한 타투가 마음에 안 들어서 커버업 받았는데, 완전히 새로운 디자인으로 바꿔주셔서 정말 감사합니다.'},
-    {name:'최** 님', type:'리얼리즘',          stars:5, content:'리얼리즘 타투 너무 잘 받았어요! 사진보다 실물이 훨씬 더 멋있습니다. 주변 친구들한테도 추천했어요.'},
-    {name:'정** 님', type:'타투 교육',         stars:5, content:'타투 수강생입니다. 꼼꼼하게 가르쳐주시고, 실습도 많이 시켜주셔서 실력이 많이 늘었어요. 강력 추천합니다!'},
-    {name:'강** 님', type:'폴리네시안',        stars:5, content:'위생 관리도 철저하고, 작업 중에도 계속 확인해주셔서 안심하고 받을 수 있었어요. 결과도 대만족!'},
-    {name:'',        type:'',                  stars:5, content:''},
-    {name:'',        type:'',                  stars:5, content:''}
-  ],
-  contact: {
-    phone: '010-2254-0690',
-    hours: '평일 12:00-21:00 / 주말 예약제 운영',
-    kakaoId: 'making91',
-    kakaoUrl: 'https://open.kakao.com/o/sVVHM32g',
-    insta: '@tattoo_making',
-    instaUrl: 'https://www.instagram.com/tattoo_making',
-    linktree: 'https://linktr.ee/tattoomaking'
-  },
-  footer: { sub: '부산 블랙&그레이 리얼리즘 전문 타투샵', year: '2024' },
-  portfolio: [
-    {category:'이레즈미',   title:'풀슬리브 이레즈미',    imgUrl:'https://images.unsplash.com/photo-1565058379802-bbe93b2f703f?w=800&h=800&fit=crop'},
-    {category:'폴리네시안', title:'폴리네시안 하프슬리브', imgUrl:'https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?w=800&h=800&fit=crop'},
-    {category:'리얼리즘',   title:'블랙&그레이 초상화',   imgUrl:'https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?w=800&h=800&fit=crop'},
-    {category:'대형작업',   title:'등판 대형 작업',        imgUrl:'https://images.unsplash.com/photo-1567427018141-0584cfcbf1b8?w=800&h=800&fit=crop'},
-    {category:'이레즈미',   title:'일본 전통 문양',        imgUrl:'https://images.unsplash.com/photo-1611195974226-ef22beb97142?w=800&h=800&fit=crop'},
-    {category:'리얼리즘',   title:'동물 리얼리즘',         imgUrl:'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=800&h=800&fit=crop'},
-    {category:'블랙워크',   title:'블랙워크 기하학',       imgUrl:''},
-    {category:'커버업',     title:'커버업 작업',           imgUrl:''}
-  ]
-};
-
-const GH = { user:'', repo:'', branch:'main', token:'' };
-
-// ============================================================
-// 페이지 전환
-// ============================================================
-function goPage(id) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('page-' + id).classList.add('active');
-  const map = {dashboard:'대시보드',github:'GitHub',hero:'히어로',about:'ABOUT',portfolio:'포트폴리오',pricing:'가격',reviews:'후기',contact:'CONTACT',deploy:'배포'};
-  document.querySelectorAll('.nav-item').forEach(n => {
-    if (n.textContent.includes(map[id]||'')) n.classList.add('active');
-  });
-}
-
-// ============================================================
-// 토스트
-// ============================================================
-let _tt;
-function toast(msg, type='info') {
-  const el = document.getElementById('toast');
-  el.textContent = msg; el.className = 'show ' + type;
-  clearTimeout(_tt); _tt = setTimeout(() => el.className='', 3200);
-}
-
-// ============================================================
-// GitHub
-// ============================================================
-function saveGithub() {
-  GH.user   = document.getElementById('gh-user').value.trim();
-  GH.repo   = document.getElementById('gh-repo').value.trim();
-  GH.branch = document.getElementById('gh-branch').value.trim() || 'main';
-  GH.token  = document.getElementById('gh-token').value.trim();
-  if (!GH.user || !GH.repo || !GH.token) { toast('모두 입력하세요','error'); return; }
-  localStorage.setItem('_gh', JSON.stringify(GH));
-  updateConn(true);
-  toast('설정 저장됨','success');
-}
-async function testGithub() {
-  saveGithub();
-  const el = document.getElementById('gh-result');
-  el.textContent = '⏳ 테스트 중...'; el.style.color = 'var(--text2)';
-  try {
-    const r = await ghFetch('','GET');
-    if (r.ok) {
-      const j = await r.json();
-      el.textContent = '✓ 연결 성공: ' + j.full_name; el.style.color='var(--success)';
-    } else throw new Error('HTTP ' + r.status);
-  } catch(e) { el.textContent='✗ 실패: '+e.message; el.style.color='var(--danger)'; }
-}
-function updateConn(on) {
-  document.getElementById('conn-dot').className = 'conn-dot' + (on?' on':'');
-  document.getElementById('conn-text').textContent = on ? GH.user+'/'+GH.repo : 'GitHub 미연결';
-  const b = document.getElementById('dash-banner');
-  if (on) {
-    b.textContent = '✓ '+GH.user+'/'+GH.repo+' 연결됨';
-    b.className = 'banner ok';
-    const url = 'https://'+GH.user+'.github.io/'+GH.repo+'/';
-    document.getElementById('site-url-text').textContent = url;
-  }
-}
-function checkGH() {
-  if (!GH.token) { toast('GitHub 설정을 먼저 완료하세요','error'); goPage('github'); return false; }
-  return true;
-}
-function ghFetch(path, method='GET', body=null) {
-  const opts = {
-    method,
-    headers:{ Authorization:'token '+GH.token, Accept:'application/vnd.github.v3+json', 'Content-Type':'application/json' }
-  };
-  if (body) opts.body = JSON.stringify(body);
-  return fetch(`https://api.github.com/repos/${GH.user}/${GH.repo}${path}`, opts);
-}
-async function ghGetSha(path) {
-  try { const r = await ghFetch('/contents/'+path); if(r.ok){const j=await r.json();return j.sha;} } catch(e){}
-  return null;
-}
-async function ghPutFile(path, content, msg) {
-  const sha = await ghGetSha(path);
-  const body = { message:msg, content: btoa(unescape(encodeURIComponent(content))), branch: GH.branch };
-  if (sha) body.sha = sha;
-  return ghFetch('/contents/'+path, 'PUT', body);
-}
-
-// ============================================================
-// 수집 (폼 → 객체)
-// ============================================================
-function collectAll() {
-  // portfolio
-  D.portfolio.forEach(function(_,i){
-    D.portfolio[i].category = v('pf-cat-'+i);
-    D.portfolio[i].title    = v('pf-title-'+i);
-    D.portfolio[i].imgUrl   = v('pf-img-'+i);
-  });
-  // hero
-  D.hero.tagline  = v('hero-tagline');
-  D.hero.title    = v('hero-title');
-  D.hero.desc     = v('hero-desc');
-  D.hero.kakaoUrl = v('hero-kakao');
-  // about
-  D.about.desc = v('about-desc');
-  D.about.stats[0].num   = v('about-stat1'); D.about.stats[0].label = v('about-stat1-label');
-  D.about.stats[1].num   = v('about-stat2'); D.about.stats[1].label = v('about-stat2-label');
-  D.about.stats[2].num   = v('about-stat3'); D.about.stats[2].label = v('about-stat3-label');
-  // pricing
-  D.pricing.items.forEach((item, i) => {
-    item.title = v('pt-title-'+i); item.size  = v('pt-size-'+i);
-    item.price = v('pt-price-'+i); item.desc  = v('pt-desc-'+i);
-    item.popular = document.getElementById('pt-pop-'+i).checked;
-  });
-  D.pricing.notes[0] = v('price-note1');
-  D.pricing.notes[1] = v('price-note2');
-  D.pricing.notes[2] = v('price-note3');
-  D.pricing.notes[3] = v('price-note4');
-  // reviews
-  D.reviews.forEach((r, i) => {
-    r.name    = v('rv-name-'+i);
-    r.type    = v('rv-type-'+i);
-    r.content = v('rv-content-'+i);
-    r.stars   = parseInt(document.querySelector('#rv-stars-'+i+' .star.on:last-of-type')?.dataset.n||'5');
-  });
-  // contact
-  D.contact.phone    = v('c-phone');
-  D.contact.hours    = v('c-hours');
-  D.contact.kakaoId  = v('c-kakao-id');
-  D.contact.kakaoUrl = v('c-kakao-url');
-  D.contact.insta    = v('c-insta');
-  D.contact.instaUrl = v('c-insta-url');
-  D.contact.linktree = v('c-linktree');
-  D.footer.sub  = v('footer-sub');
-  D.footer.year = v('footer-year');
-}
-function v(id) { const el=document.getElementById(id); return el ? el.value : ''; }
-
-// ============================================================
-// 저장 및 배포
-// ============================================================
-async function saveAndDeploy() { await deployAll(); }
-
-async function deployAll() {
-  if (!checkGH()) return;
-  collectAll();
-  const logEl = document.getElementById('deploy-log') || document.getElementById('dash-log');
-  logEl.style.display = 'block';
-  const btn1 = document.getElementById('btn-deploy');
-  const btn2 = document.getElementById('btn-dash-deploy');
-  [btn1,btn2].forEach(b=>{ if(b){b.disabled=true; b.innerHTML='<span class="spin"></span> 배포 중...';} });
-
-  function log(msg, cls='') {
-    const d = document.createElement('div');
-    d.className = 'log-'+cls;
-    d.textContent = '['+new Date().toLocaleTimeString()+'] '+msg;
-    logEl.appendChild(d); logEl.scrollTop = logEl.scrollHeight;
-  }
-
-  log('배포 시작...','info');
-  try {
-    const json = JSON.stringify({ ...D, updatedAt: new Date().toISOString() }, null, 2);
-    log('data.json 업로드 중...');
-    const r = await ghPutFile('data.json', json, 'CMS 업데이트: '+new Date().toLocaleString('ko-KR'));
-    if (r.ok) {
-      log('✓ data.json 저장 완료','ok');
-      log('✓ 배포 완료! 사이트 반영까지 1~2분 소요','ok');
-      document.getElementById('st-deploy').textContent = '방금';
-      localStorage.setItem('_cms', JSON.stringify(D));
-      toast('배포 완료! 🎉','success');
-    } else {
-      const e = await r.json(); throw new Error(e.message||'HTTP '+r.status);
-    }
-  } catch(e) {
-    log('✗ 오류: '+e.message,'err');
-    toast('배포 실패: '+e.message,'error');
-  }
-  [btn1,btn2].forEach(b=>{ if(b){b.disabled=false; b.innerHTML=b===btn1?'▶ 전체 배포':'▶ 지금 배포';} });
-}
-
-function clearLog() {
-  document.getElementById('deploy-log').innerHTML='<div class="log-info">// 배포 로그</div>';
-}
-function openSite() {
-  if(GH.user&&GH.repo) window.open('https://'+GH.user+'.github.io/'+GH.repo+'/','_blank');
-  else toast('GitHub 설정을 먼저 완료하세요','error');
-}
-
-// ============================================================
-// GitHub에서 데이터 불러오기
-// ============================================================
-async function loadFromGithub() {
-  if (!checkGH()) return;
-  try {
-    const r = await ghFetch('/contents/data.json');
-    if (r.ok) {
-      const j = await r.json();
-      const parsed = JSON.parse(decodeURIComponent(escape(atob(j.content.replace(/\n/g,'')))));
-      applyData(parsed);
-      toast('불러오기 완료!','success');
-    } else { toast('data.json 없음. 먼저 배포하세요','info'); }
-  } catch(e) { toast('오류: '+e.message,'error'); }
-}
-
-function applyData(d) {
-  if (d.hero) {
-    si('hero-tagline', d.hero.tagline); si('hero-title', d.hero.title);
-    si('hero-desc', d.hero.desc);       si('hero-kakao', d.hero.kakaoUrl);
-  }
-  if (d.about) {
-    si('about-desc', d.about.desc);
-    if (d.about.stats) {
-      si('about-stat1', d.about.stats[0]?.num);       si('about-stat1-label', d.about.stats[0]?.label);
-      si('about-stat2', d.about.stats[1]?.num);       si('about-stat2-label', d.about.stats[1]?.label);
-      si('about-stat3', d.about.stats[2]?.num);       si('about-stat3-label', d.about.stats[2]?.label);
-    }
-  }
-  if (d.pricing) {
-    if (d.pricing.items) {
-      Object.assign(D.pricing, d.pricing);
-      renderPriceBlocks();
-    }
-    if (d.pricing.notes) {
-      si('price-note1', d.pricing.notes[0]); si('price-note2', d.pricing.notes[1]);
-      si('price-note3', d.pricing.notes[2]); si('price-note4', d.pricing.notes[3]);
-    }
-  }
-  if (d.reviews) { Object.assign(D, {reviews: d.reviews}); renderReviewBlocks(); }
-  if (d.portfolio) { D.portfolio = d.portfolio; renderPortfolioBlocks(); }
-  if (d.contact) {
-    si('c-phone', d.contact.phone);     si('c-hours', d.contact.hours);
-    si('c-kakao-id', d.contact.kakaoId); si('c-kakao-url', d.contact.kakaoUrl);
-    si('c-insta', d.contact.insta);     si('c-insta-url', d.contact.instaUrl);
-    si('c-linktree', d.contact.linktree);
-  }
-  if (d.footer) { si('footer-sub', d.footer.sub); si('footer-year', d.footer.year); }
-  updateStats();
-}
-function si(id, val) { const el=document.getElementById(id); if(el&&val!==undefined) el.value=val; }
-
-// ============================================================
-// 포트폴리오 블록 렌더링
-// ============================================================
-function renderPortfolioBlocks() {
-  const c = document.getElementById('portfolio-blocks');
-  if(!c) return;
-  c.innerHTML = '';
-  D.portfolio.forEach((item, i) => {
-    const d = document.createElement('div');
-    d.className = 'card';
-    d.style.cssText = 'margin-bottom:14px';
-    const hasImg = item.imgUrl && item.imgUrl.trim();
-    d.innerHTML = `
-      <div class="card-title">
-        <span style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:3px 10px;font-size:11px;color:var(--text2)">카드 ${i+1}</span>
-        <span class="site-tag">사이트 직접 반영</span>
-      </div>
-      <div style="display:grid;grid-template-columns:140px 1fr;gap:16px;align-items:start">
-        <div>
-          <div style="aspect-ratio:1;border-radius:8px;overflow:hidden;background:var(--surface2);border:1px solid var(--border);margin-bottom:8px;position:relative">
-            ${hasImg
-              ? `<img src="${item.imgUrl}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">`
-              : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:28px;color:var(--border)">🖼</div>`
-            }
-          </div>
-          <label style="display:block;font-size:11px;color:var(--text2);margin-bottom:4px;text-transform:uppercase">이미지 업로드</label>
-          <input type="file" id="pf-file-${i}" accept="image/*" style="display:none" onchange="uploadPortfolioImg(this,${i})">
-          <button class="btn btn-secondary btn-sm" style="width:100%;font-size:11px" onclick="document.getElementById('pf-file-${i}').click()">📁 파일 선택</button>
-          <div id="pf-upload-status-${i}" style="font-size:11px;color:var(--text2);margin-top:4px;text-align:center"></div>
-        </div>
-        <div>
-          <div class="form-row">
-            <label>이미지 URL <span style="color:var(--text2);font-weight:400;text-transform:none">(업로드하거나 직접 입력)</span></label>
-            <input id="pf-img-${i}" value="${item.imgUrl||''}" placeholder="https://... 또는 이미지/파일명.jpg" oninput="previewPfImg(${i})">
-          </div>
-          <div class="grid2">
-            <div class="form-row"><label>카테고리 텍스트</label><input id="pf-cat-${i}" value="${item.category||''}" placeholder="예: 이레즈미"></div>
-            <div class="form-row"><label>작품 제목</label><input id="pf-title-${i}" value="${item.title||''}" placeholder="예: 풀슬리브 이레즈미"></div>
-          </div>
-        </div>
-      </div>`;
-    c.appendChild(d);
-  });
-}
-
-function previewPfImg(i) {
-  const url = document.getElementById('pf-img-'+i).value;
-  const card = document.querySelectorAll('#portfolio-blocks .card')[i];
-  if(!card) return;
-  const preview = card.querySelector('div[style*="aspect-ratio"]');
-  if(!preview) return;
-  preview.innerHTML = url
-    ? `<img src="${url}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">`
-    : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:28px;color:var(--border)">🖼</div>`;
-}
-
-async function uploadPortfolioImg(input, idx) {
-  if(!checkGH()) return;
-  const file = input.files[0]; if(!file) return;
-  const statusEl = document.getElementById('pf-upload-status-'+idx);
-  statusEl.textContent = '업로드 중...';
-  try {
-    const b64 = await fileToB64(file);
-    const path = '이미지/portfolio/' + Date.now() + '_' + file.name;
-    const sha  = await ghGetSha(path);
-    const body = {message:'포트폴리오 이미지: '+file.name, content:b64, branch:GH.branch};
-    if(sha) body.sha = sha;
-    const r = await fetch('https://api.github.com/repos/'+GH.user+'/'+GH.repo+'/contents/'+encodeURIComponent(path), {
-      method:'PUT', headers:{Authorization:'token '+GH.token,'Content-Type':'application/json'}, body:JSON.stringify(body)
-    });
-    if(r.ok) {
-      const imgUrl = 'https://raw.githubusercontent.com/'+GH.user+'/'+GH.repo+'/'+GH.branch+'/'+path;
-      document.getElementById('pf-img-'+idx).value = imgUrl;
-      previewPfImg(idx);
-      statusEl.textContent = '✓ 업로드 완료';
-      statusEl.style.color = 'var(--success)';
-      toast('이미지 업로드 완료!','success');
-    } else throw new Error('업로드 실패');
-  } catch(e) { statusEl.textContent = '✗ 실패'; statusEl.style.color='var(--danger)'; toast('오류: '+e.message,'error'); }
-  input.value = '';
-}
-
-// ============================================================
-// 가격 블록 렌더링
-// ============================================================
-function renderPriceBlocks() {
-  const c = document.getElementById('price-blocks');
-  c.innerHTML = '';
-  D.pricing.items.forEach((item, i) => {
-    const d = document.createElement('div');
-    d.className = 'price-block';
-    d.innerHTML = `
-      <div class="price-head">
-        <span class="price-icon">${['🔹','🔸','⭐','👑'][i]}</span>
-        <span style="font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px">가격 ${i+1}</span>
-        <label style="margin-left:auto;display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text2);cursor:pointer">
-          <input type="checkbox" id="pt-pop-${i}" ${item.popular?'checked':''} style="accent-color:var(--accent)"> 인기 배지
-        </label>
-      </div>
-      <div class="grid2">
-        <div class="form-row"><label>제목</label><input id="pt-title-${i}" value="${item.title}"></div>
-        <div class="form-row"><label>사이즈 설명</label><input id="pt-size-${i}" value="${item.size}"></div>
-        <div class="form-row"><label>가격</label><input id="pt-price-${i}" value="${item.price}" placeholder="30만원~"></div>
-        <div class="form-row"><label>부연설명</label><input id="pt-desc-${i}" value="${item.desc}"></div>
-      </div>`;
-    c.appendChild(d);
-  });
-}
-
-// ============================================================
-// 후기 블록 렌더링
-// ============================================================
-function renderReviewBlocks() {
-  const c = document.getElementById('review-blocks');
-  c.innerHTML = '';
-  D.reviews.forEach((r, i) => {
-    const d = document.createElement('div');
-    d.className = 'review-block';
-    const stars = Array.from({length:5},(_,s)=>
-      `<span class="star ${s<r.stars?'on':''}" data-n="${s+1}" onclick="setStar(${i},${s+1})">★</span>`
-    ).join('');
-    d.innerHTML = `
-      <div class="review-head">
-        <span class="review-num">후기 ${i+1}</span>
-      </div>
-      <div class="star-row" id="rv-stars-${i}">${stars}</div>
-      <div class="grid2">
-        <div class="form-row"><label>고객 이름</label><input id="rv-name-${i}" value="${r.name}" placeholder="홍** 님"></div>
-        <div class="form-row"><label>작업 유형</label><input id="rv-type-${i}" value="${r.type}" placeholder="블랙워크"></div>
-      </div>
-      <div class="form-row"><label>후기 내용</label><textarea id="rv-content-${i}">${r.content}</textarea></div>`;
-    c.appendChild(d);
-  });
-}
-
-function setStar(reviewIdx, n) {
-  D.reviews[reviewIdx].stars = n;
-  const row = document.getElementById('rv-stars-'+reviewIdx);
-  row.querySelectorAll('.star').forEach((s,i) => s.classList.toggle('on', i<n));
-}
-
-// ============================================================
-// 이미지 관련
-// ============================================================
-const imgs = { portfolio:[], design:[] };
-function dzOver(e,id){e.preventDefault();document.getElementById(id).classList.add('drag-over')}
-function dzOut(id){document.getElementById(id).classList.remove('drag-over')}
-function dzDrop(e,type){e.preventDefault();dzOut('zone-'+type);addImgsToState(Array.from(e.dataTransfer.files).filter(f=>f.type.startsWith('image/')),type)}
-function addImgs(input,type){addImgsToState(Array.from(input.files),type);input.value=''}
-function addImgsToState(files,type){
-  files.forEach(f=>{if(!imgs[type].find(x=>x.name===f.name))imgs[type].push({file:f,name:f.name,done:false})});
-  renderImgGrid(type); updateStats();
-}
-function removeImg(type,name){imgs[type]=imgs[type].filter(x=>x.name!==name);renderImgGrid(type);updateStats()}
-function renderImgGrid(type){
-  const g=document.getElementById('grid-'+type); g.innerHTML='';
-  imgs[type].forEach(item=>{
-    const d=document.createElement('div'); d.className='img-item';
-    const url=URL.createObjectURL(item.file);
-    d.innerHTML=`<img src="${url}" alt="${item.name}">${item.done?'<div class="done">✓</div>':''}<button class="del" onclick="removeImg('${type}','${item.name}')">✕</button>`;
-    g.appendChild(d);
-  });
-}
-async function uploadImgs(type){
-  if(!checkGH())return;
-  const pending=imgs[type].filter(x=>!x.done);
-  if(!pending.length){toast('업로드할 이미지가 없습니다','info');return}
-  const btn=document.getElementById('btn-up-'+type);
-  btn.disabled=true; btn.innerHTML='<span class="spin"></span> 업로드 중...';
-  let ok=0;
-  for(const item of pending){
-    try{
-      const b64=await fileToB64(item.file);
-      const path='이미지/'+type+'/'+Date.now()+'_'+item.name;
-      const sha=await ghGetSha(path);
-      const body={message:'이미지 업로드: '+item.name,content:b64,branch:GH.branch};
-      if(sha)body.sha=sha;
-      const r=await fetch(`https://api.github.com/repos/${GH.user}/${GH.repo}/contents/${encodeURIComponent(path)}`,{
-        method:'PUT',
-        headers:{Authorization:'token '+GH.token,'Content-Type':'application/json'},
-        body:JSON.stringify(body)
-      });
-      if(r.ok){item.done=true;ok++;}
-    }catch(e){console.error(e)}
-  }
-  renderImgGrid(type);
-  btn.disabled=false; btn.innerHTML='📤 GitHub에 업로드';
-  toast(ok+'개 업로드 완료!','success');
-}
-function fileToB64(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=rej;r.readAsDataURL(f)})}
-
-// ============================================================
-// 인덱스.html 패치 (data.json 로드 코드 삽입)
-// ============================================================
-async function patchIndexHtml() {
-  if(!checkGH())return;
-  const el=document.getElementById('patch-result');
-  el.textContent='파일 탐색 중...'; el.style.color='var(--text2)';
-
-  // 가능한 파일명 순서대로 탐색
-  const candidates=['인덱스.html','index.html','Index.html','INDEX.html'];
-  let found=null, foundName='', foundSha='';
-
-  for(const name of candidates){
-    try{
-      const r=await ghFetch('/contents/'+encodeURIComponent(name));
-      if(r.ok){ const j=await r.json(); found=j; foundName=name; foundSha=j.sha; break; }
-    }catch(e){}
-  }
-
-  if(!found){
-    // 저장소 루트 파일 목록 전체 조회
-    try{
-      const r=await ghFetch('/contents/');
-      if(r.ok){
-        const files=await r.json();
-        el.textContent='저장소 파일 목록: '+files.map(f=>f.name).join(', ');
-        el.style.color='var(--text2)';
-        // html 파일 찾기
-        const htmlFile=files.find(f=>f.name.toLowerCase().endsWith('.html')&&
-          (f.name.toLowerCase().includes('index')||f.name.includes('인덱스')||f.name.includes('home')));
-        if(htmlFile){
-          const r2=await ghFetch('/contents/'+encodeURIComponent(htmlFile.name));
-          if(r2.ok){ found=await r2.json(); foundName=htmlFile.name; foundSha=found.sha; }
-        }
-      }
-    }catch(e){}
-  }
-
-  if(!found){
-    el.textContent='✗ 메인 HTML 파일을 찾지 못했습니다. 아래에서 파일명을 직접 입력하세요.';
-    el.style.color='var(--danger)';
-    // 직접 입력 UI 추가
-    const inp=document.createElement('div');
-    inp.style.cssText='margin-top:10px;display:flex;gap:8px;';
-    inp.innerHTML=`<input id="manual-filename" placeholder="파일명 예: index.html" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-size:13px;outline:none">
-    <button onclick="patchWithName(document.getElementById('manual-filename').value)" class="btn btn-primary btn-sm">패치</button>`;
-    el.after(inp);
-    return;
-  }
-
-  await doPatch(found, foundName, foundSha, el);
-}
-
-async function patchWithName(name){
-  if(!name){toast('파일명을 입력하세요','error');return}
-  const el=document.getElementById('patch-result');
-  el.textContent=name+' 가져오는 중...'; el.style.color='var(--text2)';
-  try{
-    const r=await ghFetch('/contents/'+encodeURIComponent(name));
-    if(!r.ok)throw new Error(name+' 파일을 찾을 수 없습니다 (HTTP '+r.status+')');
-    const j=await r.json();
-    await doPatch(j, name, j.sha, el);
-  }catch(e){ el.textContent='✗ '+e.message; el.style.color='var(--danger)'; }
-}
-
-async function doPatch(fileJson, fileName, sha, el){
-  try{
-    let html=decodeURIComponent(escape(atob(fileJson.content.replace(/\n/g,''))));
-    // 기존 패치 코드 있으면 제거 후 재삽입 (업데이트)
-    if(html.includes('cms-data-loader')){
-      html=html.replace(/\n?
+<!-- FOOTER -->
+<footer style="background:#000;padding:60px 20px 30px;border-top:1px solid rgba(201,164,92,0.2)">
+<div style="max-width:1400px;margin:0 auto;text-align:center;color:#999;font-size:0.9rem">
+<p style="margin-bottom:10px;font-family:'Playfair Display',serif;font-size:1.5rem;color:#c9a45c;font-weight:900">TATTOO MAKING</p>
+<p id="footer-sub">부산 블랙&amp;그레이 리얼리즘 전문 타투샵</p>
+<p id="footer-copy" style="margin-top:20px">&copy; 2024 TATTOO MAKING. All rights reserved.</p>
+</div>
+</footer>
 
 <!-- CMS DATA LOADER -->
-<script id="cms-data-loader">
+<script>
 (function(){
-  var REPO='https://raw.githubusercontent.com/josone369-beep/Repository-name-tattoo-making/main/data.json';
-  fetch(REPO+'?t='+Date.now())
-    .then(function(r){return r.json()})
-    .then(function(d){
+  var OWNER  = 'josone369-beep';
+  var REPO   = 'Repository-name-tattoo-making';
+  var BRANCH = 'main';
+  var URL    = 'https://raw.githubusercontent.com/'+OWNER+'/'+REPO+'/'+BRANCH+'/data.json?t='+Date.now();
 
-      /* ── 히어로 ── */
-      if(d.hero){
-        var tl=document.querySelector('#home p');if(tl)tl.textContent=d.hero.tagline;
-        var h1=document.querySelector('#home h1');if(h1)h1.textContent=d.hero.title;
-        var ps=document.querySelectorAll('#home p');if(ps[1])ps[1].innerHTML=d.hero.desc.replace(/\n/g,'<br>');
-        document.querySelectorAll('a[href*="open.kakao"]').forEach(function(a){a.href=d.hero.kakaoUrl;});
+  fetch(URL).then(function(r){ return r.json(); }).then(function(d){
+
+    /* ── 히어로 ── */
+    if(d.hero){
+      var tl=document.getElementById('hero-tagline'); if(tl)tl.textContent=d.hero.tagline;
+      var h1=document.getElementById('hero-title');   if(h1)h1.textContent=d.hero.title;
+      var dc=document.getElementById('hero-desc');    if(dc)dc.innerHTML=d.hero.desc.replace(/\n/g,'<br>');
+      var kb=document.getElementById('hero-kakao-btn'); if(kb)kb.href=d.hero.kakaoUrl;
+    }
+
+    /* ── About ── */
+    if(d.about){
+      var ab=document.getElementById('about-desc'); if(ab)ab.innerHTML=d.about.desc.replace(/\n/g,'<br>');
+      if(d.about.stats){
+        var s1=document.getElementById('about-stat1');       if(s1)s1.textContent=d.about.stats[0].num;
+        var s1l=document.getElementById('about-stat1-label');if(s1l)s1l.textContent=d.about.stats[0].label;
+        var s2=document.getElementById('about-stat2');       if(s2)s2.textContent=d.about.stats[1].num;
+        var s2l=document.getElementById('about-stat2-label');if(s2l)s2l.textContent=d.about.stats[1].label;
+        var s3=document.getElementById('about-stat3');       if(s3)s3.textContent=d.about.stats[2].num;
+        var s3l=document.getElementById('about-stat3-label');if(s3l)s3l.textContent=d.about.stats[2].label;
       }
+    }
 
-      /* ── 포트폴리오: 카드 전체 재생성 ── */
-      if(d.portfolio&&d.portfolio.length){
-        var pfSec=document.querySelector('#portfolio');
-        if(pfSec){
-          var pfGrid=pfSec.querySelector('[style*="grid"]');
-          if(pfGrid){
-            pfGrid.innerHTML='';
-            d.portfolio.forEach(function(item){
-              var card=document.createElement('div');
-              card.setAttribute('style','position:relative;overflow:hidden;border-radius:8px;aspect-ratio:1;background:#121212');
-              var imgPart=item.imgUrl
-                ? '<img src="'+item.imgUrl+'" alt="'+item.category+'" style="width:100%;height:100%;object-fit:cover" loading="lazy">'
-                : '<div style="width:100%;height:100%;background:#1a1a1a;display:flex;align-items:center;justify-content:center;color:#333;font-size:2rem">+</div>';
-              card.innerHTML=imgPart
-                +'<div style="position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(to top,rgba(0,0,0,0.9),transparent)">'
-                +'<span style="color:#c9a45c;font-size:0.9rem;text-transform:uppercase;letter-spacing:0.1em">'+item.category+'</span>'
-                +'<h3 style="color:#fff;font-size:1.3rem;margin-top:5px">'+item.title+'</h3>'
-                +'</div>';
-              pfGrid.appendChild(card);
-            });
-          }
+    /* ── 포트폴리오 ── */
+    if(d.portfolio&&d.portfolio.length){
+      var grid=document.getElementById('portfolio-grid');
+      if(grid){
+        grid.innerHTML='';
+        d.portfolio.forEach(function(item){
+          if(!item.category&&!item.title&&!item.imgUrl) return;
+          var card=document.createElement('div');
+          card.style.cssText='position:relative;overflow:hidden;border-radius:8px;aspect-ratio:1;background:#121212';
+          var imgPart=item.imgUrl
+            ? '<img src="'+item.imgUrl+'" alt="'+item.category+'" style="width:100%;height:100%;object-fit:cover" loading="lazy">'
+            : '<div style="width:100%;height:100%;background:#1a1a1a;display:flex;align-items:center;justify-content:center;color:#333;font-size:3rem">🖤</div>';
+          card.innerHTML=imgPart
+            +'<div style="position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(to top,rgba(0,0,0,0.9),transparent)">'
+            +'<span style="color:#c9a45c;font-size:0.9rem;text-transform:uppercase;letter-spacing:0.1em">'+item.category+'</span>'
+            +'<h3 style="color:#fff;font-size:1.3rem;margin-top:5px">'+item.title+'</h3>'
+            +'</div>';
+          grid.appendChild(card);
+        });
+      }
+    }
+
+    /* ── 가격 ── */
+    if(d.pricing&&d.pricing.items){
+      var pgrid=document.getElementById('pricing-grid');
+      if(pgrid){
+        pgrid.innerHTML='';
+        d.pricing.items.forEach(function(item,i){
+          var card=document.createElement('div');
+          var isPopular=item.popular;
+          card.style.cssText='background:#1a1a1a;padding:40px;border-radius:16px;border:2px solid '+(isPopular?'#c9a45c':'rgba(201,164,92,0.2)')+';text-align:center;position:relative';
+          var badge=isPopular?'<span style="position:absolute;top:-15px;left:50%;transform:translateX(-50%);background:#c9a45c;color:#000;padding:5px 20px;border-radius:20px;font-size:0.85rem;font-weight:700">인기</span>':'';
+          card.innerHTML=badge
+            +'<h3 style="font-size:1.5rem;font-weight:700;margin-bottom:10px;color:#fff">'+item.title+'</h3>'
+            +'<p style="color:#999;margin-bottom:30px">'+item.size+'</p>'
+            +'<div style="font-family:\'Playfair Display\',serif;font-size:2.5rem;font-weight:700;color:#c9a45c;margin-bottom:10px">'+item.price+'</div>'
+            +'<p style="color:#999">'+item.desc+'</p>';
+          pgrid.appendChild(card);
+        });
+      }
+      if(d.pricing.notes){
+        var nl=document.getElementById('pricing-notes-list');
+        if(nl){
+          nl.innerHTML='';
+          d.pricing.notes.forEach(function(n){
+            var li=document.createElement('li');
+            li.style.cssText='padding:8px 0;color:#e0e0e0';
+            li.textContent='✓ '+n;
+            nl.appendChild(li);
+          });
         }
       }
+    }
 
-      /* ── About ── */
-      if(d.about){
-        var ap=document.querySelector('#about p');if(ap)ap.innerHTML=d.about.desc.replace(/\n/g,'<br>');
-        var nums=document.querySelectorAll('#about [style*="font-size:3rem"],[style*="font-size: 3rem"]');
-        var lbls=document.querySelectorAll('#about [style*="color:#999"]');
-        if(d.about.stats)d.about.stats.forEach(function(s,i){if(nums[i])nums[i].textContent=s.num;if(lbls[i])lbls[i].textContent=s.label;});
-      }
-
-      /* ── 가격 ── */
-      if(d.pricing&&d.pricing.items){
-        var pSec=document.querySelector('#pricing');if(!pSec)return;
-        var pCards=pSec.querySelectorAll('[style*="background:#1a1a1a"]');
-        d.pricing.items.forEach(function(item,i){
-          var c=pCards[i];if(!c)return;
-          var h3=c.querySelector('h3');if(h3)h3.textContent=item.title;
-          var allP=c.querySelectorAll('p');
-          if(allP[0])allP[0].textContent=item.size;
-          var prEl=c.querySelector('[style*="2.5rem"]');if(prEl)prEl.textContent=item.price;
-          if(allP[1])allP[1].textContent=item.desc;
-        });
-        var noteSec=pSec.querySelector('[style*="background:#1a1a1a"]:last-of-type');
-        if(noteSec&&d.pricing.notes){var lis=noteSec.querySelectorAll('li');d.pricing.notes.forEach(function(n,i){if(lis[i])lis[i].textContent='\u2713 '+n;});}
-      }
-
-      /* ── 후기 ── */
-      if(d.reviews){
-        var rSec=document.querySelector('#reviews');if(!rSec)return;
-        var rCards=rSec.querySelectorAll('[style*="background:#1a1a1a"]');
-        d.reviews.forEach(function(rv,i){
-          var c=rCards[i];if(!c)return;
-          var p=c.querySelector('p');if(p)p.textContent='"'+rv.content+'"';
-          var bot=c.querySelector('[style*="border-top"]');
-          if(bot){var spans=bot.querySelectorAll('span');if(spans[0])spans[0].textContent=rv.name;if(spans[1])spans[1].textContent=rv.type;}
+    /* ── 후기 ── */
+    if(d.reviews&&d.reviews.length){
+      var rgrid=document.getElementById('reviews-grid');
+      if(rgrid){
+        rgrid.innerHTML='';
+        d.reviews.forEach(function(rv){
+          if(!rv.name&&!rv.content) return;
+          var stars='★'.repeat(rv.stars||5);
+          var card=document.createElement('div');
+          card.style.cssText='background:#1a1a1a;padding:30px;border-radius:8px;border:1px solid rgba(201,164,92,0.2)';
+          card.innerHTML='<div style="color:#c9a45c;font-size:1.2rem;margin-bottom:15px">'+stars+'</div>'
+            +'<p style="color:#e0e0e0;line-height:1.8;margin-bottom:20px">"'+rv.content+'"</p>'
+            +'<div style="display:flex;justify-content:space-between;padding-top:15px;border-top:1px solid rgba(201,164,92,0.2)">'
+            +'<span style="font-weight:700;color:#c9a45c">'+rv.name+'</span>'
+            +'<span style="color:#999">'+rv.type+'</span>'
+            +'</div>';
+          rgrid.appendChild(card);
         });
       }
+    }
 
-      /* ── 연락처 ── */
-      if(d.contact){
-        var ph=document.querySelector('.fa-phone');if(ph){var s=ph.parentElement.querySelector('strong');if(s)s.textContent=d.contact.phone;}
-        var kk=document.querySelector('.fa-comment-dots');if(kk){var s2=kk.parentElement.querySelector('strong');if(s2)s2.textContent='카카오톡 ID: '+d.contact.kakaoId;}
-        document.querySelectorAll('a[href*="open.kakao"]').forEach(function(a){a.href=d.contact.kakaoUrl;});
-        document.querySelectorAll('a[href*="instagram.com"]').forEach(function(a){a.href=d.contact.instaUrl;if(a.textContent.trim().startsWith('@'))a.textContent=d.contact.insta;});
-        document.querySelectorAll('a[href*="linktr.ee"]').forEach(function(a){a.href=d.contact.linktree;});
-      }
+    /* ── 연락처 ── */
+    if(d.contact){
+      var cp=document.getElementById('contact-phone');      if(cp)cp.textContent=d.contact.phone;
+      var ch=document.getElementById('contact-hours');      if(ch)ch.innerHTML=d.contact.hours.replace(' / ','<br>');
+      var ck=document.getElementById('contact-kakao-id');   if(ck)ck.textContent='카카오톡 ID: '+d.contact.kakaoId;
+      var cu=document.getElementById('contact-kakao-url');  if(cu)cu.href=d.contact.kakaoUrl;
+      var ci=document.getElementById('contact-insta-url');  if(ci){ci.href=d.contact.instaUrl; ci.textContent=d.contact.insta;}
+      var si=document.getElementById('social-insta');       if(si)si.href=d.contact.instaUrl;
+      var sk=document.getElementById('social-kakao');       if(sk)sk.href=d.contact.kakaoUrl;
+      var sl=document.getElementById('social-linktree');    if(sl)sl.href=d.contact.linktree;
+      var il=document.getElementById('insta-link');         if(il)il.href=d.contact.instaUrl;
+      var hk=document.getElementById('hero-kakao-btn');     if(hk)hk.href=d.contact.kakaoUrl;
+    }
 
-      /* ── 푸터 ── */
-      if(d.footer){
-        var fPs=document.querySelectorAll('footer p');
-        if(fPs[1])fPs[1].textContent=d.footer.sub;
-        if(fPs[2])fPs[2].textContent='\u00a9 '+d.footer.year+' TATTOO MAKING. All rights reserved.';
-      }
+    /* ── 푸터 ── */
+    if(d.footer){
+      var fs=document.getElementById('footer-sub');   if(fs)fs.textContent=d.footer.sub;
+      var fc=document.getElementById('footer-copy');  if(fc)fc.textContent='© '+d.footer.year+' TATTOO MAKING. All rights reserved.';
+    }
 
-    }).catch(function(e){console.warn('CMS load error:',e);});
+  }).catch(function(e){ console.warn('CMS 데이터 로드 실패:', e); });
 })();
+
+/* 스무스 스크롤 */
+document.querySelectorAll('a[href^="#"]').forEach(function(a){
+  a.addEventListener('click',function(e){
+    e.preventDefault();
+    var t=document.querySelector(this.getAttribute('href'));
+    if(t) window.scrollTo({top:t.offsetTop-70,behavior:'smooth'});
+  });
+});
 </script>
 </body>
 </html>
