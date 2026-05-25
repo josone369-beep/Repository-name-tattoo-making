@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>디버그 - HTML 내용 확인</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: #000;
+            color: #fff;
+            padding: 2rem;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 { color: #c9a45c; margin-bottom: 2rem; }
+        .form-group { margin-bottom: 1.5rem; }
+        label { display: block; margin-bottom: 0.5rem; color: #c9a45c; }
+        input {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(42, 42, 42, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border-radius: 5px;
+        }
+        .btn {
+            padding: 1rem 2rem;
+            background: #c9a45c;
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-right: 1rem;
+        }
+        .btn:hover { background: #a88541; }
+        .result {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        .highlight { background: yellow; color: black; padding: 2px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 HTML 내용 디버그</h1>
+        
+        <div class="form-group">
+            <label>GitHub 사용자명</label>
+            <input type="text" id="username" value="josone369-beep">
+        </div>
+        
+        <div class="form-group">
+            <label>저장소 이름</label>
+            <input type="text" id="repo" value="Repository-name-tattoo-making">
+        </div>
+        
+        <div class="form-group">
+            <label>Personal Access Token</label>
+            <input type="password" id="token" placeholder="ghp_xxxxxxxxxxxxx">
+        </div>
+        
+        <button class="btn" onclick="checkHTML()">🔍 HTML 내용 확인</button>
+        <button class="btn" onclick="searchReviews()">🔍 후기 섹션 찾기</button>
+        
+        <div id="result" class="result"></div>
+    </div>
+    
+    <script>
+        let htmlContent = '';
+        
+        async function checkHTML() {
+            const username = document.getElementById('username').value.trim();
+            const repo = document.getElementById('repo').value.trim();
+            const token = document.getElementById('token').value.trim();
+            
+            if (!token) {
+                alert('토큰을 입력해주세요!');
+                return;
+            }
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.textContent = '📥 데이터 가져오는 중...\n\n';
+            
+            try {
+                const response = await fetch(
+                    `https://api.github.com/repos/${username}/${repo}/contents/index.html`,
+                    {
+                        headers: {
+                            'Authorization': `token ${token}`,
+                            'Accept': 'application/vnd.github.v3+json'
+                        }
+                    }
+                );
+                
+                if (!response.ok) throw new Error(`GitHub API 오류: ${response.status}`);
+                
+                const data = await response.json();
+                htmlContent = decodeURIComponent(escape(atob(data.content)));
+                
+                resultDiv.textContent = `✅ HTML 다운로드 완료!\n\n`;
+                resultDiv.textContent += `📊 파일 크기: ${htmlContent.length.toLocaleString()} 문자\n`;
+                resultDiv.textContent += `📊 줄 수: ${htmlContent.split('\n').length.toLocaleString()} 줄\n\n`;
+                
+                // review-card 검색
+                const reviewCardCount = (htmlContent.match(/review-card/g) || []).length;
+                resultDiv.textContent += `🔍 "review-card" 발견: ${reviewCardCount}개\n`;
+                
+                // review-text 검색
+                const reviewTextCount = (htmlContent.match(/review-text/g) || []).length;
+                resultDiv.textContent += `🔍 "review-text" 발견: ${reviewTextCount}개\n`;
+                
+                // author-name 검색
+                const authorNameCount = (htmlContent.match(/author-name/g) || []).length;
+                resultDiv.textContent += `🔍 "author-name" 발견: ${authorNameCount}개\n\n`;
+                
+                // Reviews Section 찾기
+                const reviewsSectionIndex = htmlContent.indexOf('id="reviews"');
+                if (reviewsSectionIndex !== -1) {
+                    resultDiv.textContent += `✅ Reviews Section 발견! (위치: ${reviewsSectionIndex})\n\n`;
+                    
+                    // Reviews Section 일부 표시
+                    const sampleStart = reviewsSectionIndex;
+                    const sampleEnd = sampleStart + 2000;
+                    const sample = htmlContent.substring(sampleStart, sampleEnd);
+                    
+                    resultDiv.textContent += '=== Reviews Section 샘플 (첫 2000자) ===\n\n';
+                    resultDiv.textContent += sample;
+                } else {
+                    resultDiv.textContent += '❌ Reviews Section을 찾을 수 없습니다!\n';
+                }
+                
+            } catch (error) {
+                resultDiv.textContent += `\n❌ 오류: ${error.message}\n`;
+                alert(`오류: ${error.message}`);
+            }
+        }
+        
+        async function searchReviews() {
+            if (!htmlContent) {
+                alert('먼저 "HTML 내용 확인" 버튼을 클릭하세요!');
+                return;
+            }
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.textContent = '=== 후기 검색 중 ===\n\n';
+            
+            // 김** 님 찾기
+            const kimIndex = htmlContent.indexOf('김** 님');
+            if (kimIndex !== -1) {
+                resultDiv.textContent += `✅ "김** 님" 발견! (위치: ${kimIndex})\n\n`;
+                
+                // 앞뒤 1000자씩 표시
+                const start = Math.max(0, kimIndex - 1000);
+                const end = Math.min(htmlContent.length, kimIndex + 1000);
+                const context = htmlContent.substring(start, end);
+                
+                resultDiv.textContent += '=== 김** 님 주변 HTML (앞뒤 1000자) ===\n\n';
+                resultDiv.textContent += context;
+            } else {
+                resultDiv.textContent += '❌ "김** 님"을 찾을 수 없습니다!\n';
+            }
+            
+            // 등판 이레즈미 찾기
+            const irezumiIndex = htmlContent.indexOf('등판 이레즈미');
+            if (irezumiIndex !== -1) {
+                resultDiv.textContent += `\n\n✅ "등판 이레즈미" 발견! (위치: ${irezumiIndex})\n`;
+            }
+            
+            // 등판 전체 이레즈미 작업했는데 찾기
+            const fullTextIndex = htmlContent.indexOf('등판 전체 이레즈미 작업했는데');
+            if (fullTextIndex !== -1) {
+                resultDiv.textContent += `\n✅ 후기 전문 발견! (위치: ${fullTextIndex})\n`;
+                
+                // 앞뒤 500자씩 표시
+                const start = Math.max(0, fullTextIndex - 500);
+                const end = Math.min(htmlContent.length, fullTextIndex + 500);
+                const context = htmlContent.substring(start, end);
+                
+                resultDiv.textContent += '\n=== 후기 전문 주변 HTML ===\n\n';
+                resultDiv.textContent += context;
+            }
+        }
+    </script>
+</body>
+</html>
