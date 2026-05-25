@@ -331,6 +331,7 @@ console.log('📞 010-2254-0690 | 📷 @tattoo_making');
 </script>
 
 
+
 <!-- CMS DATA LOADER -->
 <script id="cms-data-loader">
 (function(){
@@ -338,74 +339,80 @@ console.log('📞 010-2254-0690 | 📷 @tattoo_making');
   fetch(REPO+'?t='+Date.now())
     .then(function(r){return r.json()})
     .then(function(d){
-      // 히어로 섹션
+
+      /* ── 히어로 ── */
       if(d.hero){
-        var els=document.querySelectorAll('#home p');
-        if(els[0])els[0].textContent=d.hero.tagline;
-        var h1=document.querySelector('#home h1');
-        if(h1)h1.textContent=d.hero.title;
-        var desc=document.querySelector('#home p:nth-child(2)');
-        if(desc)desc.innerHTML=d.hero.desc.replace(/\n/g,'<br>');
+        var tl=document.querySelector('#home p');if(tl)tl.textContent=d.hero.tagline;
+        var h1=document.querySelector('#home h1');if(h1)h1.textContent=d.hero.title;
+        var ps=document.querySelectorAll('#home p');if(ps[1])ps[1].innerHTML=d.hero.desc.replace(/\n/g,'<br>');
         document.querySelectorAll('a[href*="open.kakao"]').forEach(function(a){a.href=d.hero.kakaoUrl;});
       }
-      // About 섹션
+
+      /* ── About ── */
       if(d.about){
-        var aboutDesc=document.querySelector('#about p');
-        if(aboutDesc)aboutDesc.innerHTML=d.about.desc.replace(/\n/g,'<br>');
-        var statNums=document.querySelectorAll('#about [style*="3rem"]');
-        var statLabels=document.querySelectorAll('#about [style*="#999"]');
-        if(d.about.stats)d.about.stats.forEach(function(s,i){
-          if(statNums[i])statNums[i].textContent=s.num;
-          if(statLabels[i])statLabels[i].textContent=s.label;
-        });
+        var ap=document.querySelector('#about p');if(ap)ap.innerHTML=d.about.desc.replace(/\n/g,'<br>');
+        var nums=document.querySelectorAll('#about [style*="font-size:3rem"],[style*="font-size: 3rem"]');
+        var lbls=document.querySelectorAll('#about [style*="color:#999"]');
+        if(d.about.stats)d.about.stats.forEach(function(s,i){if(nums[i])nums[i].textContent=s.num;if(lbls[i])lbls[i].textContent=s.label;});
       }
-      // 가격 섹션
+
+      /* ── 가격 ── */
       if(d.pricing&&d.pricing.items){
-        var pCards=document.querySelectorAll('#pricing>div>div>div');
+        var pSec=document.querySelector('#pricing');if(!pSec)return;
+        var pCards=pSec.querySelectorAll('[style*="background:#1a1a1a"]');
         d.pricing.items.forEach(function(item,i){
-          if(!pCards[i])return;
-          var h3=pCards[i].querySelector('h3');
-          var ps=pCards[i].querySelectorAll('p');
-          var priceEl=pCards[i].querySelector('[style*="2.5rem"]');
-          if(h3)h3.textContent=item.title;
-          if(ps[0])ps[0].textContent=item.size;
-          if(priceEl)priceEl.textContent=item.price;
-          if(ps[1])ps[1].textContent=item.desc;
+          var c=pCards[i];if(!c)return;
+          var h3=c.querySelector('h3');if(h3)h3.textContent=item.title;
+          var allP=c.querySelectorAll('p');
+          if(allP[0])allP[0].textContent=item.size;
+          var prEl=c.querySelector('[style*="2.5rem"]');if(prEl)prEl.textContent=item.price;
+          if(allP[1])allP[1].textContent=item.desc;
         });
-        var noteItems=document.querySelectorAll('#pricing li, #pricing [style*="background:#1a1a1a"] li');
-        d.pricing.notes.forEach(function(note,i){if(noteItems[i])noteItems[i].textContent='✓ '+note;});
+        var noteSec=pSec.querySelector('[style*="background:#1a1a1a"]:last-of-type');
+        if(noteSec&&d.pricing.notes){
+          var lis=noteSec.querySelectorAll('li');
+          d.pricing.notes.forEach(function(n,i){if(lis[i])lis[i].textContent='✓ '+n;});
+        }
       }
-      // 후기 섹션
+
+      /* ── 후기 ── */
       if(d.reviews){
-        var rCards=document.querySelectorAll('#reviews>div>div>div');
+        var rSec=document.querySelector('#reviews');if(!rSec)return;
+        var rCards=rSec.querySelectorAll('[style*="background:#1a1a1a"]');
         d.reviews.forEach(function(rv,i){
-          if(!rCards[i])return;
-          var p=rCards[i].querySelector('p');
-          var spans=rCards[i].querySelectorAll('span');
-          if(p)p.textContent='"'+rv.content+'"';
-          if(spans[0])spans[0].textContent=rv.name;
-          if(spans[1])spans[1].textContent=rv.type;
+          var c=rCards[i];if(!c)return;
+          /* 별점 */
+          var starEl=c.querySelector('[style*="color:#c9a45c"]');
+          if(starEl&&starEl.tagName!=='SPAN')starEl=null;
+          /* 후기 내용 p */
+          var p=c.querySelector('p');if(p)p.textContent='"'+rv.content+'"';
+          /* 이름, 작업유형 span */
+          var bot=c.querySelector('[style*="border-top"]');
+          if(bot){
+            var spans=bot.querySelectorAll('span');
+            if(spans[0])spans[0].textContent=rv.name;
+            if(spans[1])spans[1].textContent=rv.type;
+          }
         });
       }
-      // 연락처 섹션
+
+      /* ── 연락처 ── */
       if(d.contact){
-        var phoneEl=document.querySelector('.fa-phone');
-        if(phoneEl&&phoneEl.parentElement){var strong=phoneEl.parentElement.querySelector('strong');if(strong)strong.textContent=d.contact.phone;}
-        var kakaoIdEl=document.querySelector('.fa-comment-dots');
-        if(kakaoIdEl&&kakaoIdEl.parentElement){var strong2=kakaoIdEl.parentElement.querySelector('strong');if(strong2)strong2.textContent='카카오톡 ID: '+d.contact.kakaoId;}
+        var ph=document.querySelector('.fa-phone');if(ph){var s=ph.parentElement.querySelector('strong');if(s)s.textContent=d.contact.phone;}
+        var kk=document.querySelector('.fa-comment-dots');if(kk){var s2=kk.parentElement.querySelector('strong');if(s2)s2.textContent='카카오톡 ID: '+d.contact.kakaoId;}
         document.querySelectorAll('a[href*="open.kakao"]').forEach(function(a){a.href=d.contact.kakaoUrl;});
-        document.querySelectorAll('a[href*="instagram"]').forEach(function(a){a.href=d.contact.instaUrl;if(a.textContent.includes('@'))a.textContent=d.contact.insta;});
-        document.querySelectorAll('a[href*="linktr"]').forEach(function(a){a.href=d.contact.linktree;});
-        var hoursEl=document.querySelector('.fa-phone');
-        if(hoursEl){var p=hoursEl.closest('div')&&hoursEl.closest('div').querySelector('p[style]');if(p)p.innerHTML=d.contact.hours.replace('/','/<br>');}
+        document.querySelectorAll('a[href*="instagram.com"]').forEach(function(a){a.href=d.contact.instaUrl;if(a.textContent.trim().startsWith('@'))a.textContent=d.contact.insta;});
+        document.querySelectorAll('a[href*="linktr.ee"]').forEach(function(a){a.href=d.contact.linktree;});
+        var hrs=document.querySelector('.fa-phone');if(hrs){var pp=hrs.closest('div');if(pp){var small=pp.querySelector('p[style]');if(small)small.innerHTML=d.contact.hours.replace(' / ','<br>');}}
       }
-      // 푸터
+
+      /* ── 푸터 ── */
       if(d.footer){
-        var footerSub=document.querySelector('footer p:nth-child(2)');
-        if(footerSub)footerSub.textContent=d.footer.sub;
-        var copy=document.querySelector('footer p:last-child');
-        if(copy)copy.textContent='\u00a9 '+d.footer.year+' TATTOO MAKING. All rights reserved.';
+        var fPs=document.querySelectorAll('footer p');
+        if(fPs[1])fPs[1].textContent=d.footer.sub;
+        if(fPs[2])fPs[2].textContent='\u00a9 '+d.footer.year+' TATTOO MAKING. All rights reserved.';
       }
+
     }).catch(function(e){console.warn('CMS load error:',e);});
 })();
 </script>
