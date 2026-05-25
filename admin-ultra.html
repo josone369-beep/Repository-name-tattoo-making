@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TATTOO MAKING CMS - 완벽 자동 동기화</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 { font-size: 2.8em; margin-bottom: 10px; }
+        .header p { opacity: 0.9; font-size: 1.2em; }
+
+        .alert {
+            padding: 25px;
+            margin: 30px 40px;
+            border-radius: 12px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            border: 3px solid #ffc107;
+            color: #856404;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            border: 3px solid #28a745;
+            color: #155724;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            border: 3px solid #17a2b8;
+            color: #0c5460;
+        }
+
+        .step-container {
+            padding: 40px;
+        }
+
+        .step {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 2px solid #e9ecef;
+        }
+
+        .step h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #495057;
+            font-size: 15px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+            font-family: monospace;
+        }
+
+        .btn {
+            padding: 16px 35px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
+        }
+
+        .btn-success:hover:not(:disabled) {
+            transform: translateY(-3px);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loading-overlay.active { display: flex; }
+
+        .loading-content {
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 500px;
+        }
+
+        .loading-spinner {
+            width: 70px;
+            height: 70px;
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 25px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .status {
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            display: none;
+            animation: slideIn 0.3s;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+
+        .debug-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-family: monospace;
+            font-size: 13px;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 2px solid #dee2e6;
+        }
+
+        .debug-section h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-family: sans-serif;
+        }
+
+        .review-editor {
+            background: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 2px solid #e9ecef;
+        }
+
+        .review-editor h4 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2 { grid-template-columns: 1fr; }
+        }
+
+        .code-preview {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            line-height: 1.6;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <h3 id="loadingText">처리 중...</h3>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>🎨 TATTOO MAKING CMS</h1>
+            <p>자동 패턴 감지 & 완벽 동기화 시스템</p>
+        </div>
+
+        <div id="mainAlert" class="alert alert-warning">
+            <h3 style="margin-bottom: 10px;">⚠️ 시작하기</h3>
+            <p><strong>STEP 1:</strong> GitHub 설정 입력</p>
+            <p><strong>STEP 2:</strong> "🔍 사이트 분석 및 데이터 불러오기" 클릭</p>
+            <p><strong>STEP 3:</strong> 자동으로 편집기 생성됨</p>
+        </div>
+
+        <div class="step-container">
+            <!-- STEP 1: GitHub 설정 -->
+            <div class="step">
+                <h2>🔐 STEP 1: GitHub 설정</h2>
+                
+                <div class="form-group">
+                    <label>GitHub Username</label>
+                    <input type="text" id="githubUsername" value="josone369-beep">
+                </div>
+
+                <div class="form-group">
+                    <label>Repository Name</label>
+                    <input type="text" id="githubRepo" value="Repository-name-tattoo-making">
+                </div>
+
+                <div class="form-group">
+                    <label>Personal Access Token</label>
+                    <input type="password" id="githubToken" placeholder="ghp_...">
+                    <small style="color: #6c757d; display: block; margin-top: 8px;">
+                        GitHub → Settings → Developer settings → Personal access tokens → Generate new token (classic) → repo 전체 체크
+                    </small>
+                </div>
+
+                <button class="btn btn-success" onclick="saveConfig()">💾 설정 저장</button>
+                
+                <div id="configStatus" class="status"></div>
+            </div>
+
+            <!-- STEP 2: 자동 분석 -->
+            <div class="step">
+                <h2>🔍 STEP 2: 사이트 자동 분석</h2>
+                <p style="margin-bottom: 20px; color: #6c757d;">
+                    실제 index.html을 분석하여 모든 패턴을 자동으로 감지하고 편집기를 생성합니다.
+                </p>
+
+                <button class="btn btn-primary" onclick="analyzeSite()" id="analyzeBtn">
+                    🔍 사이트 분석 및 데이터 불러오기
+                </button>
+
+                <div id="analyzeStatus" class="status"></div>
+
+                <div id="debugInfo" class="debug-section" style="display: none;">
+                    <h4>📊 분석 결과</h4>
+                    <div id="debugContent"></div>
+                </div>
+            </div>
+
+            <!-- STEP 3: 동적 생성 편집기 -->
+            <div id="editorContainer" style="display: none;">
+                <div class="step">
+                    <h2>✏️ STEP 3: 콘텐츠 편집</h2>
+                    <div id="editorContent"></div>
+                    
+                    <div style="margin-top: 30px; padding-top: 30px; border-top: 2px solid #e9ecef;">
+                        <button class="btn btn-primary" onclick="deployChanges()" id="deployBtn" style="width: 100%;">
+                            🚀 저장 및 배포 (모든 변경사항 적용)
+                        </button>
+                        <div id="deployStatus" class="status"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let siteData = {
+            originalHTML: '',
+            sha: '',
+            patterns: {},
+            config: {}
+        };
+
+        // 설정 저장
+        function saveConfig() {
+            const config = {
+                username: document.getElementById('githubUsername').value.trim(),
+                repo: document.getElementById('githubRepo').value.trim(),
+                token: document.getElementById('githubToken').value.trim()
+            };
+
+            if (!config.username || !config.repo || !config.token) {
+                showStatus('configStatus', '❌ 모든 항목을 입력해주세요', 'error');
+                return;
+            }
+
+            localStorage.setItem('githubConfig', JSON.stringify(config));
+            siteData.config = config;
+            showStatus('configStatus', '✅ 설정이 저장되었습니다!', 'success');
+            
+            document.getElementById('mainAlert').className = 'alert alert-success';
+            document.getElementById('mainAlert').innerHTML = '<h3 style="margin-bottom: 10px;">✅ 설정 완료!</h3><p>이제 "🔍 사이트 분석 및 데이터 불러오기" 버튼을 클릭하세요</p>';
+        }
+
+        // 설정 불러오기
+        function loadConfig() {
+            const config = JSON.parse(localStorage.getItem('githubConfig') || '{}');
+            if (config.username) document.getElementById('githubUsername').value = config.username;
+            if (config.repo) document.getElementById('githubRepo').value = config.repo;
+            if (config.token) document.getElementById('githubToken').value = config.token;
+            siteData.config = config;
+        }
+
+        window.addEventListener('load', loadConfig);
+
+        // 상태 메시지 표시
+        function showStatus(elementId, message, type = 'info') {
+            const statusEl = document.getElementById(elementId);
+            statusEl.textContent = message;
+            statusEl.className = `status ${type}`;
+            statusEl.style.display = 'block';
+            setTimeout(() => statusEl.style.display = 'none', 5000);
+        }
+
+        // 로딩 표시
+        function showLoading(text = '처리 중...') {
+            document.getElementById('loadingText').textContent = text;
+            document.getElementById('loadingOverlay').classList.add('active');
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingOverlay').classList.remove('active');
+        }
+
+        // 사이트 분석
+        async function analyzeSite() {
+            const config = siteData.config;
+            
+            if (!config.token) {
+                showStatus('analyzeStatus', '❌ GitHub 설정을 먼저 저장해주세요', 'error');
+                return;
+            }
+
+            showLoading('사이트 분석 중...');
+
+            try {
+                // index.html 가져오기
+                const response = await fetch(
+                    `https://api.github.com/repos/${config.username}/${config.repo}/contents/index.html`,
+                    {
+                        headers: {
+                            'Authorization': `token ${config.token}`,
+                            'Accept': 'application/vnd.github.v3+json'
+                        }
+                    }
+                );
+
+                if (!response.ok) throw new Error(`API 에러: ${response.status}`);
+
+                const data = await response.json();
+                const content = decodeURIComponent(escape(atob(data.content)));
+                
+                siteData.originalHTML = content;
+                siteData.sha = data.sha;
+
+                // 패턴 분석
+                analyzePatterns(content);
+
+                // 편집기 생성
+                generateEditor();
+
+                showStatus('analyzeStatus', '✅ 분석 완료! 아래에서 내용을 수정하세요', 'success');
+                
+                document.getElementById('mainAlert').className = 'alert alert-success';
+                document.getElementById('mainAlert').innerHTML = '<h3 style="margin-bottom: 10px;">✅ 분석 완료!</h3><p>아래에서 콘텐츠를 수정하고 "🚀 저장 및 배포" 버튼을 클릭하세요</p>';
+
+            } catch (error) {
+                console.error('분석 실패:', error);
+                showStatus('analyzeStatus', `❌ 분석 실패: ${error.message}`, 'error');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // 패턴 분석
+        function analyzePatterns(html) {
+            const patterns = {};
+            let debugInfo = '<strong>🔍 감지된 패턴:</strong><br><br>';
+
+            // 전화번호
+            const phoneMatch = html.match(/010-\d{4}-\d{4}/);
+            if (phoneMatch) {
+                patterns.phone = { value: phoneMatch[0], pattern: /010-\d{4}-\d{4}/g };
+                debugInfo += `📱 전화번호: ${phoneMatch[0]}<br>`;
+            }
+
+            // 카카오톡
+            const kakaoIdMatch = html.match(/making\d+/);
+            if (kakaoIdMatch) {
+                patterns.kakaoId = { value: kakaoIdMatch[0], pattern: /making\d+/g };
+                debugInfo += `💬 카카오톡 ID: ${kakaoIdMatch[0]}<br>`;
+            }
+
+            // 메인 타이틀 (여러 패턴 시도)
+            let titleMatch = html.match(/<span class="hero-main">(.*?)<\/span>/s) ||
+                           html.match(/<h1[^>]*class="[^"]*hero[^"]*"[^>]*>(.*?)<\/h1>/s) ||
+                           html.match(/<h1[^>]*>(.*?)<\/h1>/s);
+            if (titleMatch) {
+                patterns.mainTitle = { 
+                    value: titleMatch[1].trim(),
+                    pattern: titleMatch[0],
+                    tag: titleMatch[0].match(/<(span|h1)/)[1]
+                };
+                debugInfo += `📝 메인 타이틀: ${titleMatch[1].trim()}<br>`;
+            }
+
+            // 후기 분석 (여러 패턴 모두 시도)
+            const reviewPatterns = [
+                /<div class="review-card">([\s\S]*?)<\/div>\s*<\/div>\s*<\/div>/g,
+                /<div class="review-item">([\s\S]*?)<\/div>\s*<\/div>/g,
+                /<div class="testimonial">([\s\S]*?)<\/div>\s*<\/div>/g,
+                /<article class="review">([\s\S]*?)<\/article>/g
+            ];
+
+            patterns.reviews = [];
+            
+            for (let pattern of reviewPatterns) {
+                const matches = [...html.matchAll(pattern)];
+                if (matches.length > 0) {
+                    debugInfo += `<br>⭐ 후기 패턴 감지: ${matches.length}개<br>`;
+                    
+                    matches.forEach((match, index) => {
+                        const reviewHTML = match[0];
+                        const reviewContent = match[1];
+                        
+                        // 이름 추출
+                        let nameMatch = reviewContent.match(/<div class="author-initial">(.*?)<\/div>/) ||
+                                      reviewContent.match(/<div class="author-name">(.*?)<\/div>/) ||
+                                      reviewContent.match(/<h4>(.*?)<\/h4>/) ||
+                                      reviewContent.match(/<strong>(.*?)<\/strong>/);
+                        
+                        // 타입 추출
+                        let typeMatch = reviewContent.match(/<div class="review-type">(.*?)<\/div>/) ||
+                                       reviewContent.match(/<span class="type">(.*?)<\/span>/);
+                        
+                        // 텍스트 추출
+                        let textMatch = reviewContent.match(/<p class="review-text">(.*?)<\/p>/s) ||
+                                       reviewContent.match(/<p>(.*?)<\/p>/s);
+                        
+                        patterns.reviews.push({
+                            fullHTML: reviewHTML,
+                            name: nameMatch ? nameMatch[1].replace(/\*+/g, '').trim() : '',
+                            type: typeMatch ? typeMatch[1].trim() : '',
+                            text: textMatch ? textMatch[1].trim() : ''
+                        });
+                        
+                        debugInfo += `  후기 ${index + 1}: ${nameMatch ? nameMatch[1].replace(/\*+/g, '').trim() : '(이름없음)'}<br>`;
+                    });
+                    
+                    break; // 패턴 찾으면 중단
+                }
+            }
+
+            if (patterns.reviews.length === 0) {
+                debugInfo += '<br>⚠️ 후기를 찾을 수 없습니다. HTML 구조를 확인해주세요.<br>';
+            }
+
+            // 가격 패턴
+            const priceMatches = html.match(/<span class="price-amount">(.*?)<\/span>/g);
+            if (priceMatches) {
+                patterns.prices = priceMatches.map(m => m.replace(/<[^>]+>/g, '').trim());
+                debugInfo += `<br>💰 가격: ${patterns.prices.length}개 감지<br>`;
+            }
+
+            siteData.patterns = patterns;
+            
+            document.getElementById('debugInfo').style.display = 'block';
+            document.getElementById('debugContent').innerHTML = debugInfo;
+        }
+
+        // 편집기 생성
+        function generateEditor() {
+            let editorHTML = '';
+
+            // 연락처
+            if (siteData.patterns.phone || siteData.patterns.kakaoId) {
+                editorHTML += `
+                    <div class="review-editor">
+                        <h4>📞 연락처 정보</h4>
+                        ${siteData.patterns.phone ? `
+                        <div class="form-group">
+                            <label>전화번호</label>
+                            <input type="text" id="edit_phone" value="${siteData.patterns.phone.value}">
+                        </div>
+                        ` : ''}
+                        ${siteData.patterns.kakaoId ? `
+                        <div class="form-group">
+                            <label>카카오톡 ID</label>
+                            <input type="text" id="edit_kakaoId" value="${siteData.patterns.kakaoId.value}">
+                        </div>
+                        ` : ''}
+                    </div>
+                `;
+            }
+
+            // 메인 타이틀
+            if (siteData.patterns.mainTitle) {
+                editorHTML += `
+                    <div class="review-editor">
+                        <h4>📝 메인 타이틀</h4>
+                        <div class="form-group">
+                            <label>타이틀</label>
+                            <input type="text" id="edit_mainTitle" value="${siteData.patterns.mainTitle.value}">
+                        </div>
+                    </div>
+                `;
+            }
+
+            // 가격
+            if (siteData.patterns.prices && siteData.patterns.prices.length > 0) {
+                editorHTML += `
+                    <div class="review-editor">
+                        <h4>💰 가격 정보</h4>
+                        <div class="grid-2">
+                `;
+                siteData.patterns.prices.forEach((price, index) => {
+                    const labels = ['소형', '중형', '대형', '풀슬리브'];
+                    editorHTML += `
+                        <div class="form-group">
+                            <label>${labels[index] || `가격 ${index + 1}`}</label>
+                            <input type="text" id="edit_price${index}" value="${price}">
+                        </div>
+                    `;
+                });
+                editorHTML += `
+                        </div>
+                    </div>
+                `;
+            }
+
+            // 후기
+            if (siteData.patterns.reviews && siteData.patterns.reviews.length > 0) {
+                editorHTML += '<div class="review-editor"><h4>⭐ 고객 후기 (' + siteData.patterns.reviews.length + '개)</h4>';
+                
+                siteData.patterns.reviews.forEach((review, index) => {
+                    editorHTML += `
+                        <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                            <strong style="color: #667eea;">후기 ${index + 1}</strong>
+                            <div style="margin-top: 15px;">
+                                <div class="grid-2">
+                                    <div class="form-group">
+                                        <label>고객명</label>
+                                        <input type="text" id="edit_review${index}_name" value="${review.name}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>작업 유형</label>
+                                        <input type="text" id="edit_review${index}_type" value="${review.type}">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>후기 내용</label>
+                                    <textarea id="edit_review${index}_text" rows="3">${review.text}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                editorHTML += '</div>';
+            }
+
+            document.getElementById('editorContent').innerHTML = editorHTML;
+            document.getElementById('editorContainer').style.display = 'block';
+        }
+
+        // 변경사항 배포
+        async function deployChanges() {
+            showLoading('배포 중...');
+
+            try {
+                let html = siteData.originalHTML;
+
+                // 전화번호
+                if (siteData.patterns.phone) {
+                    const newPhone = document.getElementById('edit_phone').value;
+                    html = html.replace(siteData.patterns.phone.pattern, newPhone);
+                }
+
+                // 카카오톡
+                if (siteData.patterns.kakaoId) {
+                    const newKakao = document.getElementById('edit_kakaoId').value;
+                    html = html.replace(siteData.patterns.kakaoId.pattern, newKakao);
+                }
+
+                // 메인 타이틀
+                if (siteData.patterns.mainTitle) {
+                    const newTitle = document.getElementById('edit_mainTitle').value;
+                    html = html.replace(siteData.patterns.mainTitle.pattern, 
+                        siteData.patterns.mainTitle.pattern.replace(siteData.patterns.mainTitle.value, newTitle));
+                }
+
+                // 가격
+                if (siteData.patterns.prices) {
+                    const priceMatches = html.match(/<span class="price-amount">.*?<\/span>/g);
+                    siteData.patterns.prices.forEach((price, index) => {
+                        const newPrice = document.getElementById(`edit_price${index}`).value;
+                        html = html.replace(priceMatches[index], `<span class="price-amount">${newPrice}</span>`);
+                    });
+                }
+
+                // 후기
+                if (siteData.patterns.reviews) {
+                    siteData.patterns.reviews.forEach((review, index) => {
+                        const newName = document.getElementById(`edit_review${index}_name`).value;
+                        const newType = document.getElementById(`edit_review${index}_type`).value;
+                        const newText = document.getElementById(`edit_review${index}_text`).value;
+                        
+                        let newReviewHTML = review.fullHTML;
+                        
+                        // 이름 교체
+                        if (review.name) {
+                            newReviewHTML = newReviewHTML.replace(
+                                new RegExp(`<(div|h4|strong)[^>]*>${review.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(\\*+)?</(div|h4|strong)>`),
+                                `<$1>${newName}$2</$3>`
+                            );
+                        }
+                        
+                        // 타입 교체
+                        if (review.type) {
+                            newReviewHTML = newReviewHTML.replace(
+                                new RegExp(`<(div|span)[^>]*class="[^"]*type[^"]*"[^>]*>${review.type}</(div|span)>`),
+                                `<$1 class="review-type">${newType}</$2>`
+                            );
+                        }
+                        
+                        // 텍스트 교체
+                        if (review.text) {
+                            newReviewHTML = newReviewHTML.replace(
+                                new RegExp(`<p[^>]*>${review.text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}</p>`),
+                                `<p class="review-text">${newText}</p>`
+                            );
+                        }
+                        
+                        html = html.replace(review.fullHTML, newReviewHTML);
+                    });
+                }
+
+                // GitHub에 커밋
+                const encodedContent = btoa(unescape(encodeURIComponent(html)));
+                const config = siteData.config;
+
+                const response = await fetch(
+                    `https://api.github.com/repos/${config.username}/${config.repo}/contents/index.html`,
+                    {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': `token ${config.token}`,
+                            'Accept': 'application/vnd.github.v3+json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            message: '[CMS] 콘텐츠 자동 업데이트',
+                            content: encodedContent,
+                            sha: siteData.sha
+                        })
+                    }
+                );
+
+                if (!response.ok) throw new Error(`커밋 실패: ${response.status}`);
+
+                showStatus('deployStatus', '✅ 배포 완료! 1-2분 후 사이트에 반영됩니다', 'success');
+                
+                document.getElementById('mainAlert').className = 'alert alert-success';
+                document.getElementById('mainAlert').innerHTML = `<h3 style="margin-bottom: 10px;">✅ 배포 완료!</h3><p>🌐 사이트: <a href="https://${config.username}.github.io/${config.repo}/" target="_blank" style="color: #667eea;">https://${config.username}.github.io/${config.repo}/</a></p><p>1-2분 후 변경사항이 반영됩니다. 새로고침 해보세요!</p>`;
+
+            } catch (error) {
+                console.error('배포 실패:', error);
+                showStatus('deployStatus', `❌ 배포 실패: ${error.message}`, 'error');
+            } finally {
+                hideLoading();
+            }
+        }
+    </script>
+</body>
+</html>
