@@ -1,0 +1,64 @@
+{
+  "contact": {
+    "phone": "",
+    "kakao": "",
+    "insta": "",
+    "linktree": "",
+    "notice": ""
+  },
+  "price": [
+    {
+      "title": "1단계: 미니 타투",
+      "size": "5cm 이하",
+      "price": ""
+    },
+    {
+      "title": "2단계: 스몰 사이즈",
+      "size": "5~10cm",
+      "price": ""
+    },
+    {
+      "title": "3단계: 미디엄 사이즈",
+      "size": "10~20cm",
+      "price": ""
+    },
+    {
+      "title": "4단계: 대형 작업",
+      "size": "20cm 이상",
+      "price": ""
+    }
+  ],
+  "reviews": [
+    {
+      "name": "",
+      "type": "",
+      "content": ""
+    },
+    {
+      "name": "",
+      "type": "",
+      "content": ""
+    },
+    {
+      "name": "",
+      "type": "",
+      "content": ""
+    },
+    {
+      "name": "",
+      "type": "",
+      "content": ""
+    },
+    {
+      "name": "",
+      "type": "",
+      "content": ""
+    },
+    {
+      "name": "",
+      "type": "",
+      "content": ""
+    }
+  ],
+  "updatedAt": "2026-05-25T07:29:26.452Z"
+}
