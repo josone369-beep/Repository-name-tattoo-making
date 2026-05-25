@@ -41,21 +41,21 @@
       {
         "title": "대형",
         "size": "하프슬리브",
-        "price": "150만원~",
+        "price": "80만원~",
         "desc": "팔 반",
         "popular": true
       },
       {
         "title": "특대형",
         "size": "풀슬리브/등판",
-        "price": "300만원~",
+        "price": "280만원~",
         "desc": "대형 작업",
         "popular": false
       }
     ],
     "notes": [
       "커버업 작업은 기존 가격의 +20%",
-      "컬러 작업은 기존 가격의 +30%",
+      "컬러 작업은 기존 가격의 +20%",
       "카드 결제 가능 (무이자 할부 가능)",
       "최종 금액은 디자인 상담 후 결정"
     ]
@@ -153,5 +153,5 @@
       "imgUrl": "https://raw.githubusercontent.com/josone369-beep/Repository-name-tattoo-making/main/이미지/portfolio/1779705484023_KakaoTalk_20250306_151625561.jpg"
     }
   ],
-  "updatedAt": "2026-05-25T10:38:17.788Z"
+  "updatedAt": "2026-05-25T10:39:14.260Z"
 }
