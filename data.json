@@ -111,7 +111,47 @@
     "sub": "부산 블랙&그레이 리얼리즘 전문 타투샵",
     "year": "2024"
   },
-  "portfolioImages": [],
-  "designImages": [],
-  "updatedAt": "2026-05-25T10:27:16.725Z"
+  "portfolio": [
+    {
+      "category": "블랙앤그레이 ",
+      "title": "등판 한야 ",
+      "imgUrl": "https://raw.githubusercontent.com/josone369-beep/Repository-name-tattoo-making/main/이미지/portfolio/1779705018690_KakaoTalk_20260124_145454096.jpg"
+    },
+    {
+      "category": "블랙앤그레이",
+      "title": "등판 호랑이",
+      "imgUrl": "https://raw.githubusercontent.com/josone369-beep/Repository-name-tattoo-making/main/이미지/portfolio/1779705080849_KakaoTalk_20260123_171206077.jpg"
+    },
+    {
+      "category": "블랙앤그레이",
+      "title": "등판 용호 상박",
+      "imgUrl": "https://raw.githubusercontent.com/josone369-beep/Repository-name-tattoo-making/main/이미지/portfolio/1779705164889_KakaoTalk_20231024_171537322111213.jpg"
+    },
+    {
+      "category": "치카노",
+      "title": "등판 치카노",
+      "imgUrl": "https://raw.githubusercontent.com/josone369-beep/Repository-name-tattoo-making/main/이미지/portfolio/1779705207823_KakaoTalk_20251212_204532386.jpg"
+    },
+    {
+      "category": "폴리네시안 ",
+      "title": "가슴 긴팔 ",
+      "imgUrl": "https://raw.githubusercontent.com/josone369-beep/Repository-name-tattoo-making/main/이미지/portfolio/1779705304129_KakaoTalk_20251213_164602725.jpg"
+    },
+    {
+      "category": "블랙앤그레이 ",
+      "title": "양 가슴 긴팔 ",
+      "imgUrl": "https://raw.githubusercontent.com/josone369-beep/Repository-name-tattoo-making/main/이미지/portfolio/1779705363006_KakaoTalk_20241210_124556288.jpg"
+    },
+    {
+      "category": "블랙앤그레이",
+      "title": "긴 바지 ",
+      "imgUrl": "https://raw.githubusercontent.com/josone369-beep/Repository-name-tattoo-making/main/이미지/portfolio/1779705395694_KakaoTalk_20251213_164605463.jpg"
+    },
+    {
+      "category": "이레즈미 ",
+      "title": "등판 전신",
+      "imgUrl": "https://raw.githubusercontent.com/josone369-beep/Repository-name-tattoo-making/main/이미지/portfolio/1779705484023_KakaoTalk_20250306_151625561.jpg"
+    }
+  ],
+  "updatedAt": "2026-05-25T10:38:17.788Z"
 }
