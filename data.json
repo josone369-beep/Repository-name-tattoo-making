@@ -2,7 +2,7 @@
   "hero": {
     "tagline": "",
     "title": "",
-    "desc": "부산 블랙&그레이 리얼리즘 전문\n1:1 맞춤 디자인으로 당신만의 특별한 이야기를 새깁니다",
+    "desc": "\n\n\n1:1 맞춤 디자인으로 당신만의 특별한 이야기를 새깁니다",
     "kakaoUrl": "https://open.kakao.com/o/sVVHM32g"
   },
   "about": {
@@ -165,5 +165,5 @@
       "imgUrl": "https://raw.githubusercontent.com/josone369-beep/Repository-name-tattoo-making/main/이미지/portfolio/1779705484023_KakaoTalk_20250306_151625561.jpg"
     }
   ],
-  "updatedAt": "2026-05-27T06:55:05.381Z"
+  "updatedAt": "2026-05-27T06:55:57.891Z"
 }
