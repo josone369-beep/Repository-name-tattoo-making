@@ -94,40 +94,8 @@
 <div style="max-width:1400px;margin:0 auto">
 <h2 style="font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;text-align:center;margin-bottom:20px;color:#fff">타투 수강 안내</h2>
 <div style="width:80px;height:4px;background:#c9a45c;margin:0 auto 60px"></div>
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:30px">
-<div style="background:#1a1a1a;padding:40px;border-radius:16px;border:2px solid rgba(201,164,92,0.2)">
-<h3 style="font-size:1.8rem;font-weight:700;color:#c9a45c;margin-bottom:10px;text-align:center">기초반</h3>
-<p style="color:#999;text-align:center;margin-bottom:30px">4주 / 주 2회</p>
-<ul style="list-style:none;padding:0;margin:0">
-<li style="padding:10px 0;color:#e0e0e0">✓ 타투 머신 다루기</li>
-<li style="padding:10px 0;color:#e0e0e0">✓ 기초 라인 워크</li>
-<li style="padding:10px 0;color:#e0e0e0">✓ 쉐이딩 기법</li>
-<li style="padding:10px 0;color:#e0e0e0">✓ 위생 관리</li>
-<li style="padding:10px 0;color:#e0e0e0">✓ 실습용 재료 제공</li>
-</ul>
-</div>
-<div style="background:#1a1a1a;padding:40px;border-radius:16px;border:2px solid rgba(201,164,92,0.2)">
-<h3 style="font-size:1.8rem;font-weight:700;color:#c9a45c;margin-bottom:10px;text-align:center">심화반</h3>
-<p style="color:#999;text-align:center;margin-bottom:30px">8주 / 주 3회</p>
-<ul style="list-style:none;padding:0;margin:0">
-<li style="padding:10px 0;color:#e0e0e0">✓ 블랙&amp;그레이 리얼리즘</li>
-<li style="padding:10px 0;color:#e0e0e0">✓ 디자인 제작 실습</li>
-<li style="padding:10px 0;color:#e0e0e0">✓ 커버업 기법</li>
-<li style="padding:10px 0;color:#e0e0e0">✓ 실제 작업 참관</li>
-<li style="padding:10px 0;color:#e0e0e0">✓ 포트폴리오 제작</li>
-</ul>
-</div>
-<div style="background:#1a1a1a;padding:40px;border-radius:16px;border:2px solid rgba(201,164,92,0.2)">
-<h3 style="font-size:1.8rem;font-weight:700;color:#c9a45c;margin-bottom:10px;text-align:center">이레즈미 특화반</h3>
-<p style="color:#999;text-align:center;margin-bottom:30px">12주 / 주 2회</p>
-<ul style="list-style:none;padding:0;margin:0">
-<li style="padding:10px 0;color:#e0e0e0">✓ 일본 전통 문양 이해</li>
-<li style="padding:10px 0;color:#e0e0e0">✓ 이레즈미 기법</li>
-<li style="padding:10px 0;color:#e0e0e0">✓ 대형 작업 기획</li>
-<li style="padding:10px 0;color:#e0e0e0">✓ 1:1 맞춤 지도</li>
-<li style="padding:10px 0;color:#e0e0e0">✓ 수료 후 멘토링</li>
-</ul>
-</div>
+<div id="class-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:30px">
+<!-- CMS에서 자동 생성 -->
 </div>
 </div>
 </section>
@@ -233,6 +201,25 @@
         var s2l=document.getElementById('about-stat2-label');if(s2l)s2l.textContent=d.about.stats[1].label;
         var s3=document.getElementById('about-stat3');       if(s3)s3.textContent=d.about.stats[2].num;
         var s3l=document.getElementById('about-stat3-label');if(s3l)s3l.textContent=d.about.stats[2].label;
+      }
+    }
+
+    /* ── 수강 안내 ── */
+    if(d.classes&&d.classes.length){
+      var cg=document.getElementById('class-grid');
+      if(cg){
+        cg.innerHTML='';
+        d.classes.forEach(function(cls){
+          var card=document.createElement('div');
+          card.style.cssText='background:#1a1a1a;padding:40px;border-radius:16px;border:2px solid rgba(201,164,92,0.2)';
+          var liHtml=cls.items.map(function(item){
+            return '<li style="padding:10px 0;color:#e0e0e0">✓ '+item+'</li>';
+          }).join('');
+          card.innerHTML='<h3 style="font-size:1.8rem;font-weight:700;color:#c9a45c;margin-bottom:10px;text-align:center">'+cls.title+'</h3>'
+            +'<p style="color:#999;text-align:center;margin-bottom:30px">'+cls.period+'</p>'
+            +'<ul style="list-style:none;padding:0;margin:0">'+liHtml+'</ul>';
+          cg.appendChild(card);
+        });
       }
     }
 
