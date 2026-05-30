@@ -115,9 +115,11 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
     <div class="nav-item" onclick="goPage('hero')"><span>◎</span> 히어로 섹션</div>
     <div class="nav-item" onclick="goPage('about')"><span>◇</span> ABOUT</div>
     <div class="nav-item" onclick="goPage('portfolio')"><span>◫</span> 포트폴리오</div>
+    <div class="nav-item" onclick="goPage('class')"><span>◐</span> 수강 안내</div>
     <div class="nav-item" onclick="goPage('pricing')"><span>◈</span> 가격 안내</div>
     <div class="nav-item" onclick="goPage('reviews')"><span>◉</span> 고객 후기 <span class="nav-badge">6</span></div>
     <div class="nav-item" onclick="goPage('contact')"><span>◎</span> CONTACT</div>
+    <div class="nav-item" onclick="goPage('map')"><span>◉</span> 지도 설정</div>
     <div class="nav-item" onclick="goPage('deploy')"><span>▶</span> 배포</div>
   </div>
   <div class="sidebar-footer">
@@ -249,6 +251,18 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
   </div>
 </div>
 
+<!-- 수강 안내 -->
+<div class="page" id="page-class">
+  <div class="page-title">수강 안내</div>
+  <div class="page-sub">타투 수강 과정 3개를 수정합니다</div>
+  <div class="preview-bar"><span>📍 사이트: 타투 수강 안내 섹션 (#class)</span></div>
+  <div id="class-blocks"></div>
+  <div class="btn-group" style="margin-top:4px">
+    <button class="btn btn-primary" onclick="saveAndDeploy()">🚀 저장 및 배포</button>
+    <button class="btn btn-secondary" onclick="loadFromGithub()">↺ 불러오기</button>
+  </div>
+</div>
+
 <!-- 가격 안내 -->
 <div class="page" id="page-pricing">
   <div class="page-title">가격 안내</div>
@@ -307,6 +321,62 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
   <div class="btn-group">
     <button class="btn btn-primary" onclick="saveAndDeploy()">🚀 저장 및 배포</button>
     <button class="btn btn-secondary" onclick="loadFromGithub()">↺ 불러오기</button>
+  </div>
+</div>
+
+<!-- 지도 설정 -->
+<div class="page" id="page-map">
+  <div class="page-title">지도 설정</div>
+  <div class="page-sub">CONTACT 섹션 지도를 수정합니다</div>
+  <div class="preview-bar"><span>📍 사이트: CONTACT 섹션 지도 (#contact)</span></div>
+
+  <div class="card">
+    <div class="card-title">📍 주소로 지도 찾기 <span class="site-tag">자동 변환</span></div>
+    <div class="form-row">
+      <label>주소 입력</label>
+      <input id="map-address" placeholder="예: 부산광역시 해운대구 중동 1234" value="부산광역시 해운대구">
+      <div class="form-hint">주소를 입력하고 아래 검색 버튼을 누르면 지도가 자동 설정됩니다</div>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="searchMap()">🔍 지도 검색</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔗 Google Maps Embed URL 직접 입력</div>
+    <p style="font-size:12px;color:var(--text2);margin-bottom:12px">
+      Google Maps에서 원하는 위치 검색 → 공유 → 지도 퍼가기 → URL 복사 후 붙여넣기
+    </p>
+    <div class="form-row">
+      <label>Embed URL</label>
+      <textarea id="map-embed-url" style="min-height:100px;font-size:11px;word-break:break-all"></textarea>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-secondary" onclick="applyMapUrl()">✓ URL 적용</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">👁 미리보기</div>
+    <div style="border-radius:8px;overflow:hidden;height:300px;background:var(--surface2);border:1px solid var(--border)">
+      <iframe id="map-preview" src="" style="width:100%;height:100%;border:none" allowfullscreen loading="lazy"></iframe>
+    </div>
+    <div style="margin-top:12px;font-size:12px;color:var(--text2)" id="map-current-address"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📋 Google Maps Embed URL 얻는 방법</div>
+    <ol style="font-size:13px;color:var(--text2);line-height:2.2;padding-left:18px">
+      <li>Google Maps (maps.google.com) 접속</li>
+      <li>원하는 주소/장소 검색</li>
+      <li>공유 버튼 클릭 → <strong style="color:var(--text)">지도 퍼가기</strong> 탭 선택</li>
+      <li>iframe 코드에서 <strong style="color:var(--accent)">src="..."</strong> 안의 URL만 복사</li>
+      <li>위 Embed URL 칸에 붙여넣기 → URL 적용 클릭</li>
+    </ol>
+  </div>
+
+  <div class="btn-group">
+    <button class="btn btn-primary" onclick="saveAndDeploy()">🚀 저장 및 배포</button>
   </div>
 </div>
 
@@ -394,6 +464,27 @@ const D = {
     linktree: 'https://linktr.ee/tattoomaking'
   },
   footer: { sub: '부산 블랙&그레이 리얼리즘 전문 타투샵', year: '2024' },
+  map: {
+    address: '부산광역시 해운대구',
+    embedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3262.4087437854814!2d129.0403!3d35.1028!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3568eb5f3e4c78e5%3A0x3e2c5e6a5d6b8c9d!2sBusan%2C%20South%20Korea!5e0!3m2!1sen!2sus!4v1234567890123!5m2!1sen!2sus'
+  },
+  classes: [
+    {
+      title: '기초반',
+      period: '4주 / 주 2회',
+      items: ['타투 머신 다루기','기초 라인 워크','쉐이딩 기법','위생 관리','실습용 재료 제공']
+    },
+    {
+      title: '심화반',
+      period: '8주 / 주 3회',
+      items: ['블랙&그레이 리얼리즘','디자인 제작 실습','커버업 기법','실제 작업 참관','포트폴리오 제작']
+    },
+    {
+      title: '이레즈미 특화반',
+      period: '12주 / 주 2회',
+      items: ['일본 전통 문양 이해','이레즈미 기법','대형 작업 기획','1:1 맞춤 지도','수료 후 멘토링']
+    }
+  ],
   portfolio: [
     {category:'이레즈미',   title:'풀슬리브 이레즈미',    imgUrl:'https://images.unsplash.com/photo-1565058379802-bbe93b2f703f?w=800&h=800&fit=crop'},
     {category:'폴리네시안', title:'폴리네시안 하프슬리브', imgUrl:'https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?w=800&h=800&fit=crop'},
@@ -494,6 +585,16 @@ async function ghPutFile(path, content, msg) {
 // 수집 (폼 → 객체)
 // ============================================================
 function collectAll() {
+  // classes
+  D.classes.forEach(function(_,i){
+    D.classes[i].title  = v('cl-title-'+i);
+    D.classes[i].period = v('cl-period-'+i);
+    D.classes[i].items  = [];
+    for(var j=0;j<6;j++){
+      var val=v('cl-item-'+i+'-'+j);
+      if(val.trim()) D.classes[i].items.push(val.trim());
+    }
+  });
   // portfolio
   D.portfolio.forEach(function(_,i){
     D.portfolio[i].category = v('pf-cat-'+i);
@@ -537,6 +638,9 @@ function collectAll() {
   D.contact.linktree = v('c-linktree');
   D.footer.sub  = v('footer-sub');
   D.footer.year = v('footer-year');
+  // map
+  D.map.address  = v('map-address');
+  D.map.embedUrl = v('map-embed-url');
 }
 function v(id) { const el=document.getElementById(id); return el ? el.value : ''; }
 
@@ -630,6 +734,16 @@ function applyData(d) {
     }
   }
   if (d.reviews) { Object.assign(D, {reviews: d.reviews}); renderReviewBlocks(); }
+  if (d.classes)   { D.classes   = d.classes;   // 지도 초기화
+  if(D.map.embedUrl) {
+    const prev = document.getElementById('map-preview');
+    if(prev) prev.src = D.map.embedUrl;
+    si('map-embed-url', D.map.embedUrl);
+    si('map-address', D.map.address);
+    const addr = document.getElementById('map-current-address');
+    if(addr) addr.textContent = '현재 주소: ' + D.map.address;
+  }
+  renderClassBlocks(); }
   if (d.portfolio) { D.portfolio = d.portfolio; renderPortfolioBlocks(); }
   if (d.contact) {
     si('c-phone', d.contact.phone);     si('c-hours', d.contact.hours);
@@ -638,9 +752,52 @@ function applyData(d) {
     si('c-linktree', d.contact.linktree);
   }
   if (d.footer) { si('footer-sub', d.footer.sub); si('footer-year', d.footer.year); }
+  if (d.map) {
+    si('map-address', d.map.address);
+    si('map-embed-url', d.map.embedUrl);
+    if(d.map.embedUrl) {
+      const prev = document.getElementById('map-preview');
+      if(prev) prev.src = d.map.embedUrl;
+      const addr = document.getElementById('map-current-address');
+      if(addr) addr.textContent = '현재 주소: ' + (d.map.address||'');
+    }
+  }
   updateStats();
 }
 function si(id, val) { const el=document.getElementById(id); if(el&&val!==undefined) el.value=val; }
+
+// ============================================================
+// 수강 안내 블록 렌더링
+// ============================================================
+function renderClassBlocks() {
+  const c = document.getElementById('class-blocks');
+  if(!c) return;
+  c.innerHTML = '';
+  D.classes.forEach((cls, i) => {
+    const d = document.createElement('div');
+    d.className = 'card';
+    // 항목 최대 6개 (부족하면 빈 칸으로 채움)
+    const items = [...cls.items];
+    while(items.length < 6) items.push('');
+    const itemsHtml = items.map((item, j) => `
+      <div class="form-row">
+        <label>항목 ${j+1}</label>
+        <input id="cl-item-${i}-${j}" value="${item}" placeholder="예: 타투 머신 다루기">
+      </div>`).join('');
+    d.innerHTML = `
+      <div class="card-title">
+        <span style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:3px 10px;font-size:11px;color:var(--text2)">과정 ${i+1}</span>
+        <span class="site-tag">사이트 직접 반영</span>
+      </div>
+      <div class="grid2">
+        <div class="form-row"><label>과정 이름</label><input id="cl-title-${i}" value="${cls.title}" placeholder="기초반"></div>
+        <div class="form-row"><label>기간/횟수</label><input id="cl-period-${i}" value="${cls.period}" placeholder="4주 / 주 2회"></div>
+      </div>
+      <div class="card-title" style="margin-top:8px">커리큘럼 항목 (최대 6개)</div>
+      ${itemsHtml}`;
+    c.appendChild(d);
+  });
+}
 
 // ============================================================
 // 포트폴리오 블록 렌더링
@@ -906,7 +1063,35 @@ async function doPatch(fileJson, fileName, sha, el){
       html=html.replace(/\n?<!-- CMS DATA LOADER -->[\s\S]*?<\/script>/,'');
       el.textContent='기존 패치 코드 제거 후 재패치 중...'; el.style.color='var(--text2)';
     }
-    const patch=`\n<!-- CMS DATA LOADER -->\n<script id="cms-data-loader">\n(function(){\n  var REPO='https://raw.githubusercontent.com/${GH.user}/${GH.repo}/${GH.branch}/data.json';\n  fetch(REPO+'?t='+Date.now())\n    .then(function(r){return r.json()})\n    .then(function(d){\n\n      /* ── 히어로 ── */\n      if(d.hero){\n        var tl=document.querySelector('#home p');if(tl)tl.textContent=d.hero.tagline;\n        var h1=document.querySelector('#home h1');if(h1)h1.textContent=d.hero.title;\n        var ps=document.querySelectorAll('#home p');if(ps[1])ps[1].innerHTML=d.hero.desc.replace(/\\n/g,'<br>');\n        document.querySelectorAll('a[href*=\"open.kakao\"]').forEach(function(a){a.href=d.hero.kakaoUrl;});\n      }\n\n      /* ── 포트폴리오: 카드 전체 재생성 ── */\n      if(d.portfolio&&d.portfolio.length){\n        var pfSec=document.querySelector('#portfolio');\n        if(pfSec){\n          var pfGrid=pfSec.querySelector('[style*=\"grid\"]');\n          if(pfGrid){\n            pfGrid.innerHTML='';\n            d.portfolio.forEach(function(item){\n              var card=document.createElement('div');\n              card.setAttribute('style','position:relative;overflow:hidden;border-radius:8px;aspect-ratio:1;background:#121212');\n              var imgPart=item.imgUrl\n                ? '<img src=\"'+item.imgUrl+'\" alt=\"'+item.category+'\" style=\"width:100%;height:100%;object-fit:cover\" loading=\"lazy\">'\n                : '<div style=\"width:100%;height:100%;background:#1a1a1a;display:flex;align-items:center;justify-content:center;color:#333;font-size:2rem\">+</div>';\n              card.innerHTML=imgPart\n                +'<div style=\"position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(to top,rgba(0,0,0,0.9),transparent)\">'\n                +'<span style=\"color:#c9a45c;font-size:0.9rem;text-transform:uppercase;letter-spacing:0.1em\">'+item.category+'</span>'\n                +'<h3 style=\"color:#fff;font-size:1.3rem;margin-top:5px\">'+item.title+'</h3>'\n                +'</div>';\n              pfGrid.appendChild(card);\n            });\n          }\n        }\n      }\n\n      /* ── About ── */\n      if(d.about){\n        var ap=document.querySelector('#about p');if(ap)ap.innerHTML=d.about.desc.replace(/\\n/g,'<br>');\n        var nums=document.querySelectorAll('#about [style*=\"font-size:3rem\"],[style*=\"font-size: 3rem\"]');\n        var lbls=document.querySelectorAll('#about [style*=\"color:#999\"]');\n        if(d.about.stats)d.about.stats.forEach(function(s,i){if(nums[i])nums[i].textContent=s.num;if(lbls[i])lbls[i].textContent=s.label;});\n      }\n\n      /* ── 가격 ── */\n      if(d.pricing&&d.pricing.items){\n        var pSec=document.querySelector('#pricing');if(!pSec)return;\n        var pCards=pSec.querySelectorAll('[style*=\"background:#1a1a1a\"]');\n        d.pricing.items.forEach(function(item,i){\n          var c=pCards[i];if(!c)return;\n          var h3=c.querySelector('h3');if(h3)h3.textContent=item.title;\n          var allP=c.querySelectorAll('p');\n          if(allP[0])allP[0].textContent=item.size;\n          var prEl=c.querySelector('[style*=\"2.5rem\"]');if(prEl)prEl.textContent=item.price;\n          if(allP[1])allP[1].textContent=item.desc;\n        });\n        var noteSec=pSec.querySelector('[style*=\"background:#1a1a1a\"]:last-of-type');\n        if(noteSec&&d.pricing.notes){var lis=noteSec.querySelectorAll('li');d.pricing.notes.forEach(function(n,i){if(lis[i])lis[i].textContent='\\u2713 '+n;});}\n      }\n\n      /* ── 후기: 카드 전체 재생성 ── */\n      if(d.reviews&&d.reviews.length){\n        var rSec=document.querySelector('#reviews');\n        if(rSec){\n          var rGrid=rSec.querySelector('[style*=\"grid\"]');\n          if(rGrid){\n            rGrid.innerHTML='';\n            d.reviews.forEach(function(rv){\n              if(!rv.name&&!rv.content)return;\n              var card=document.createElement('div');\n              card.setAttribute('style','background:#1a1a1a;padding:30px;border-radius:8px;border:1px solid rgba(201,164,92,0.2)');\n              var stars='\\u2605\\u2605\\u2605\\u2605\\u2605'.slice(0,rv.stars||5);\n              card.innerHTML='<div style=\"color:#c9a45c;font-size:1.2rem;margin-bottom:15px\">'+stars+'</div>'\n                +'<p style=\"color:#e0e0e0;line-height:1.8;margin-bottom:20px\">\"'+rv.content+'\"</p>'\n                +'<div style=\"display:flex;justify-content:space-between;padding-top:15px;border-top:1px solid rgba(201,164,92,0.2)\">'\n                +'<span style=\"font-weight:700;color:#c9a45c\">'+rv.name+'</span>'\n                +'<span style=\"color:#999\">'+rv.type+'</span>'\n                +'</div>';\n              rGrid.appendChild(card);\n            });\n          }\n        }\n      }\n\n      /* ── 연락처 ── */\n      if(d.contact){\n        var ph=document.querySelector('.fa-phone');if(ph){var s=ph.parentElement.querySelector('strong');if(s)s.textContent=d.contact.phone;}\n        var kk=document.querySelector('.fa-comment-dots');if(kk){var s2=kk.parentElement.querySelector('strong');if(s2)s2.textContent='카카오톡 ID: '+d.contact.kakaoId;}\n        document.querySelectorAll('a[href*=\"open.kakao\"]').forEach(function(a){a.href=d.contact.kakaoUrl;});\n        document.querySelectorAll('a[href*=\"instagram.com\"]').forEach(function(a){a.href=d.contact.instaUrl;if(a.textContent.trim().startsWith('@'))a.textContent=d.contact.insta;});\n        document.querySelectorAll('a[href*=\"linktr.ee\"]').forEach(function(a){a.href=d.contact.linktree;});\n      }\n\n      /* ── 푸터 ── */\n      if(d.footer){\n        var fPs=document.querySelectorAll('footer p');\n        if(fPs[1])fPs[1].textContent=d.footer.sub;\n        if(fPs[2])fPs[2].textContent='\\u00a9 '+d.footer.year+' TATTOO MAKING. All rights reserved.';\n      }\n\n    }).catch(function(e){console.warn('CMS load error:',e);});\n})();\n<\/script>`;
+    const patch=`\n<!-- CMS DATA LOADER -->\n<script id="cms-data-loader">\n(function(){\n  var REPO='https://raw.githubusercontent.com/${GH.user}/${GH.repo}/${GH.branch}/data.json';\n  fetch(REPO+'?t='+Date.now())\n    .then(function(r){return r.json()})\n    .then(function(d){\n\n      /* ── 히어로 ── */\n      if(d.hero){\n        var tl=document.querySelector('#home p');if(tl)tl.textContent=d.hero.tagline;\n        var h1=document.querySelector('#home h1');if(h1)h1.textContent=d.hero.title;\n        var ps=document.querySelectorAll('#home p');if(ps[1])ps[1].innerHTML=d.hero.desc.replace(/\\n/g,'<br>');\n        document.querySelectorAll('a[href*=\"open.kakao\"]').forEach(function(a){a.href=d.hero.kakaoUrl;});\n      }\n\n      /* ── 포트폴리오: 카드 전체 재생성 ── */\n      if(d.portfolio&&d.portfolio.length){\n        var pfSec=document.querySelector('#portfolio');\n        if(pfSec){\n          var pfGrid=pfSec.querySelector('[style*=\"grid\"]');\n          if(pfGrid){\n            pfGrid.innerHTML='';\n            d.portfolio.forEach(function(item){\n              var card=document.createElement('div');\n              card.setAttribute('style','position:relative;overflow:hidden;border-radius:8px;aspect-ratio:1;background:#121212');\n              var imgPart=item.imgUrl\n                ? '<img src=\"'+item.imgUrl+'\" alt=\"'+item.category+'\" style=\"width:100%;height:100%;object-fit:cover\" loading=\"lazy\">'\n                : '<div style=\"width:100%;height:100%;background:#1a1a1a;display:flex;align-items:center;justify-content:center;color:#333;font-size:2rem\">+</div>';\n              card.innerHTML=imgPart\n                +'<div style=\"position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(to top,rgba(0,0,0,0.9),transparent)\">'\n                +'<span style=\"color:#c9a45c;font-size:0.9rem;text-transform:uppercase;letter-spacing:0.1em\">'+item.category+'</span>'\n                +'<h3 style=\"color:#fff;font-size:1.3rem;margin-top:5px\">'+item.title+'</h3>'\n                +'</div>';\n              pfGrid.appendChild(card);\n            });\n          }\n        }\n      }\n\n      /* ── About ── */\n      if(d.about){\n        var ap=document.querySelector('#about p');if(ap)ap.innerHTML=d.about.desc.replace(/\\n/g,'<br>');\n        var nums=document.querySelectorAll('#about [style*=\"font-size:3rem\"],[style*=\"font-size: 3rem\"]');\n        var lbls=document.querySelectorAll('#about [style*=\"color:#999\"]');\n        if(d.about.stats)d.about.stats.forEach(function(s,i){if(nums[i])nums[i].textContent=s.num;if(lbls[i])lbls[i].textContent=s.label;});\n      }\n\n      /* ── 수강 안내 ── */
+      if(d.classes&&d.classes.length){
+        var clSec=document.querySelector('#class');
+        if(clSec){
+          var clGrid=clSec.querySelector('[style*="grid"]');
+          if(clGrid){
+            clGrid.innerHTML='';
+            d.classes.forEach(function(cls){
+              var card=document.createElement('div');
+              card.setAttribute('style','background:#1a1a1a;padding:40px;border-radius:16px;border:2px solid rgba(201,164,92,0.2)');
+              var liHtml=cls.items.map(function(item){
+                return '<li style="padding:10px 0;color:#e0e0e0">\u2713 '+item+'</li>';
+              }).join('');
+              card.innerHTML='<h3 style="font-size:1.8rem;font-weight:700;color:#c9a45c;margin-bottom:10px;text-align:center">'+cls.title+'</h3>'
+                +'<p style="color:#999;text-align:center;margin-bottom:30px">'+cls.period+'</p>'
+                +'<ul style="list-style:none;padding:0;margin:0">'+liHtml+'</ul>';
+              clGrid.appendChild(card);
+            });
+          }
+        }
+      }
+
+      /* ── 가격 ── */\n      if(d.pricing&&d.pricing.items){\n        var pSec=document.querySelector('#pricing');if(!pSec)return;\n        var pCards=pSec.querySelectorAll('[style*=\"background:#1a1a1a\"]');\n        d.pricing.items.forEach(function(item,i){\n          var c=pCards[i];if(!c)return;\n          var h3=c.querySelector('h3');if(h3)h3.textContent=item.title;\n          var allP=c.querySelectorAll('p');\n          if(allP[0])allP[0].textContent=item.size;\n          var prEl=c.querySelector('[style*=\"2.5rem\"]');if(prEl)prEl.textContent=item.price;\n          if(allP[1])allP[1].textContent=item.desc;\n        });\n        var noteSec=pSec.querySelector('[style*=\"background:#1a1a1a\"]:last-of-type');\n        if(noteSec&&d.pricing.notes){var lis=noteSec.querySelectorAll('li');d.pricing.notes.forEach(function(n,i){if(lis[i])lis[i].textContent='\\u2713 '+n;});}\n      }\n\n      /* ── 후기: 카드 전체 재생성 ── */\n      if(d.reviews&&d.reviews.length){\n        var rSec=document.querySelector('#reviews');\n        if(rSec){\n          var rGrid=rSec.querySelector('[style*=\"grid\"]');\n          if(rGrid){\n            rGrid.innerHTML='';\n            d.reviews.forEach(function(rv){\n              if(!rv.name&&!rv.content)return;\n              var card=document.createElement('div');\n              card.setAttribute('style','background:#1a1a1a;padding:30px;border-radius:8px;border:1px solid rgba(201,164,92,0.2)');\n              var stars='\\u2605\\u2605\\u2605\\u2605\\u2605'.slice(0,rv.stars||5);\n              card.innerHTML='<div style=\"color:#c9a45c;font-size:1.2rem;margin-bottom:15px\">'+stars+'</div>'\n                +'<p style=\"color:#e0e0e0;line-height:1.8;margin-bottom:20px\">\"'+rv.content+'\"</p>'\n                +'<div style=\"display:flex;justify-content:space-between;padding-top:15px;border-top:1px solid rgba(201,164,92,0.2)\">'\n                +'<span style=\"font-weight:700;color:#c9a45c\">'+rv.name+'</span>'\n                +'<span style=\"color:#999\">'+rv.type+'</span>'\n                +'</div>';\n              rGrid.appendChild(card);\n            });\n          }\n        }\n      }\n\n      /* ── 연락처 ── */\n      if(d.contact){\n        var ph=document.querySelector('.fa-phone');if(ph){var s=ph.parentElement.querySelector('strong');if(s)s.textContent=d.contact.phone;}\n        var kk=document.querySelector('.fa-comment-dots');if(kk){var s2=kk.parentElement.querySelector('strong');if(s2)s2.textContent='카카오톡 ID: '+d.contact.kakaoId;}\n        document.querySelectorAll('a[href*=\"open.kakao\"]').forEach(function(a){a.href=d.contact.kakaoUrl;});\n        document.querySelectorAll('a[href*=\"instagram.com\"]').forEach(function(a){a.href=d.contact.instaUrl;if(a.textContent.trim().startsWith('@'))a.textContent=d.contact.insta;});\n        document.querySelectorAll('a[href*=\"linktr.ee\"]').forEach(function(a){a.href=d.contact.linktree;});\n      }\n\n      /* ── 지도 ── */
+      if(d.map&&d.map.embedUrl){
+        var mapIframe=document.querySelector('#contact iframe');
+        if(mapIframe)mapIframe.src=d.map.embedUrl;
+      }
+
+      /* ── 푸터 ── */\n      if(d.footer){\n        var fPs=document.querySelectorAll('footer p');\n        if(fPs[1])fPs[1].textContent=d.footer.sub;\n        if(fPs[2])fPs[2].textContent='\\u00a9 '+d.footer.year+' TATTOO MAKING. All rights reserved.';\n      }\n\n    }).catch(function(e){console.warn('CMS load error:',e);});\n})();\n<\/script>`;
     html=html.replace('</body>',patch+'\n</body>');
     // SHA로 업데이트
     const body={message:'CMS 패치: data.json 자동 로드 ('+fileName+')',content:btoa(unescape(encodeURIComponent(html))),branch:GH.branch,sha:sha};
@@ -934,6 +1119,27 @@ function updateStats(){
 }
 
 // ============================================================
+// 지도 관련 함수
+// ============================================================
+function searchMap() {
+  const addr = document.getElementById('map-address').value.trim();
+  if(!addr) { toast('주소를 입력하세요','error'); return; }
+  const encoded = encodeURIComponent(addr);
+  const embedUrl = 'https://maps.google.com/maps?q='+encoded+'&output=embed&hl=ko';
+  document.getElementById('map-embed-url').value = embedUrl;
+  document.getElementById('map-preview').src = embedUrl;
+  document.getElementById('map-current-address').textContent = '현재 주소: ' + addr;
+  toast('지도 검색 완료! 미리보기를 확인하세요','success');
+}
+
+function applyMapUrl() {
+  const url = document.getElementById('map-embed-url').value.trim();
+  if(!url) { toast('URL을 입력하세요','error'); return; }
+  document.getElementById('map-preview').src = url;
+  toast('URL 적용됨','success');
+}
+
+// ============================================================
 // 초기화
 // ============================================================
 function init(){
@@ -957,6 +1163,16 @@ function init(){
     }catch(e){}
   }
   // UI 렌더
+  // 지도 초기화
+  if(D.map.embedUrl) {
+    const prev = document.getElementById('map-preview');
+    if(prev) prev.src = D.map.embedUrl;
+    si('map-embed-url', D.map.embedUrl);
+    si('map-address', D.map.address);
+    const addr = document.getElementById('map-current-address');
+    if(addr) addr.textContent = '현재 주소: ' + D.map.address;
+  }
+  renderClassBlocks();
   renderPortfolioBlocks();
   renderPriceBlocks();
   renderReviewBlocks();
