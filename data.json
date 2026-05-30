@@ -123,6 +123,45 @@
     "sub": "부산 블랙&그레이 리얼리즘 전문 타투샵",
     "year": "2024"
   },
+  "map": {
+    "address": "부산진구 부전동 220-6",
+    "embedUrl": "https://maps.google.com/maps?q=%EB%B6%80%EC%82%B0%EC%A7%84%EA%B5%AC%20%EB%B6%80%EC%A0%84%EB%8F%99%20220-6&output=embed&hl=ko"
+  },
+  "classes": [
+    {
+      "title": "기초반",
+      "period": "4주 / 주 2회",
+      "items": [
+        "타투 머신 다루기",
+        "기초 라인 워크",
+        "쉐이딩 기법",
+        "위생 관리",
+        "실습용 재료 제공"
+      ]
+    },
+    {
+      "title": "심화반",
+      "period": "8주 / 주 3회",
+      "items": [
+        "블랙&그레이 리얼리즘",
+        "디자인 제작 실습",
+        "커버업 기법",
+        "실제 작업 참관",
+        "포트폴리오 제작"
+      ]
+    },
+    {
+      "title": "이레즈미 특화반",
+      "period": "12주 / 주 2회",
+      "items": [
+        "일본 전통 문양 이해",
+        "이레즈미 기법",
+        "대형 작업 기획",
+        "1:1 맞춤 지도",
+        "수료 후 멘토링"
+      ]
+    }
+  ],
   "portfolio": [
     {
       "category": "블랙앤그레이 ",
@@ -165,5 +204,5 @@
       "imgUrl": "https://raw.githubusercontent.com/josone369-beep/Repository-name-tattoo-making/main/이미지/portfolio/1779705484023_KakaoTalk_20250306_151625561.jpg"
     }
   ],
-  "updatedAt": "2026-05-30T05:30:28.380Z"
+  "updatedAt": "2026-05-30T05:39:03.044Z"
 }
