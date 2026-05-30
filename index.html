@@ -158,7 +158,7 @@
 </div>
 </div>
 <div style="border-radius:8px;overflow:hidden;min-height:400px">
-<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3262.4087437854814!2d129.0403!3d35.1028!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3568eb5f3e4c78e5%3A0x3e2c5e6a5d6b8c9d!2sBusan%2C%20South%20Korea!5e0!3m2!1sen!2sus!4v1234567890123!5m2!1sen!2sus" style="width:100%;height:100%;border:none" allowfullscreen loading="lazy"></iframe>
+<iframe id="map-iframe" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3262.4087437854814!2d129.0403!3d35.1028!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3568eb5f3e4c78e5%3A0x3e2c5e6a5d6b8c9d!2sBusan%2C%20South%20Korea!5e0!3m2!1sen!2sus!4v1234567890123!5m2!1sen!2sus" style="width:100%;height:100%;border:none" allowfullscreen loading="lazy"></iframe>
 </div>
 </div>
 </div>
@@ -300,16 +300,49 @@
 
     /* ── 연락처 ── */
     if(d.contact){
-      var cp=document.getElementById('contact-phone');      if(cp)cp.textContent=d.contact.phone;
-      var ch=document.getElementById('contact-hours');      if(ch)ch.innerHTML=d.contact.hours.replace(' / ','<br>');
-      var ck=document.getElementById('contact-kakao-id');   if(ck)ck.textContent='카카오톡 ID: '+d.contact.kakaoId;
-      var cu=document.getElementById('contact-kakao-url');  if(cu)cu.href=d.contact.kakaoUrl;
-      var ci=document.getElementById('contact-insta-url');  if(ci){ci.href=d.contact.instaUrl; ci.textContent=d.contact.insta;}
-      var si=document.getElementById('social-insta');       if(si)si.href=d.contact.instaUrl;
-      var sk=document.getElementById('social-kakao');       if(sk)sk.href=d.contact.kakaoUrl;
-      var sl=document.getElementById('social-linktree');    if(sl)sl.href=d.contact.linktree;
-      var il=document.getElementById('insta-link');         if(il)il.href=d.contact.instaUrl;
-      var hk=document.getElementById('hero-kakao-btn');     if(hk)hk.href=d.contact.kakaoUrl;
+      // 전화번호
+      var cp=document.getElementById('contact-phone');
+      if(cp)cp.textContent=d.contact.phone;
+      // 운영시간
+      var ch=document.getElementById('contact-hours');
+      if(ch)ch.innerHTML=d.contact.hours.replace(' / ','<br>');
+      // 카카오 ID 텍스트
+      var ck=document.getElementById('contact-kakao-id');
+      if(ck)ck.textContent='카카오톡 ID: '+d.contact.kakaoId;
+      // 카카오 오픈채팅 링크 (모든 요소)
+      var kakaoUrl=d.contact.kakaoUrl||'';
+      if(kakaoUrl){
+        document.getElementById('contact-kakao-url') && (document.getElementById('contact-kakao-url').href=kakaoUrl);
+        document.getElementById('social-kakao')      && (document.getElementById('social-kakao').href=kakaoUrl);
+        document.getElementById('hero-kakao-btn')    && (document.getElementById('hero-kakao-btn').href=kakaoUrl);
+        // href에 open.kakao 포함된 모든 a태그도 업데이트
+        document.querySelectorAll('a[href*="open.kakao"]').forEach(function(a){a.href=kakaoUrl;});
+      }
+      // 인스타그램
+      var instaUrl=d.contact.instaUrl||'';
+      if(instaUrl){
+        var ci=document.getElementById('contact-insta-url');
+        if(ci){ci.href=instaUrl; if(d.contact.insta)ci.textContent=d.contact.insta;}
+        document.getElementById('social-insta') && (document.getElementById('social-insta').href=instaUrl);
+        document.getElementById('insta-link')   && (document.getElementById('insta-link').href=instaUrl);
+        document.querySelectorAll('a[href*="instagram.com"]').forEach(function(a){a.href=instaUrl;});
+      }
+      // 링크트리
+      var ltUrl=d.contact.linktree||'';
+      if(ltUrl){
+        document.getElementById('social-linktree') && (document.getElementById('social-linktree').href=ltUrl);
+        document.querySelectorAll('a[href*="linktr.ee"]').forEach(function(a){a.href=ltUrl;});
+      }
+    }
+
+    /* ── 지도 ── */
+    if(d.map&&d.map.embedUrl){
+      var mapIframe=document.getElementById('map-iframe');
+      if(!mapIframe)mapIframe=document.querySelector('#contact iframe');
+      if(mapIframe){
+        mapIframe.src='';
+        setTimeout(function(){ mapIframe.src=d.map.embedUrl; },100);
+      }
     }
 
     /* ── 푸터 ── */
